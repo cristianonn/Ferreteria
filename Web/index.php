@@ -4,9 +4,6 @@
      * Creado: 18/11/16 Gabriela Garro
      */
     session_start();
-    if (isset($_SESSION['userID'])) {
-        echo $_SESSION['userID'];
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">

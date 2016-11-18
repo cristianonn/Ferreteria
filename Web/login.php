@@ -29,7 +29,7 @@
 
 			if ($numrows!=0) {
 				while ($row = mysqli_fetch_assoc($query)){
-				    if ($row['contrasena'] == $pass) {
+				    if ($row['contrasenacliente'] == $pass) {
 
 				    	//Store the userID
 				    	$_SESSION['userID'] = $row['idUsuarioCliente'];
