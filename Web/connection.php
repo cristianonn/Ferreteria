@@ -3,7 +3,7 @@
 	$dbhost = "localhost";
 	$dbuser = "usuarionormal";
 	$dbpass = "12345";
-	$dbname = "myscrum";
+	$dbname = "ferreterias";
 	$dberror = "No se pudo conectar a la base de datos.";
 
 	$conn = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname) or die($dberror);
