@@ -23,6 +23,11 @@
     <!-- Font Awesome -->
     <script src="https://use.fontawesome.com/554db7ace5.js"></script>
 
+    <!-- Custom Fonts -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -33,7 +38,7 @@
 </head>
 
 <body>
-
+    
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
@@ -47,16 +52,18 @@
                 </button>
                 
                 <a class="navbar-brand" href="#"><img src="img/icono40x40.png" class="img-responsive"></a>
-                <a class="navbar-brand" href="#"> FerreteríaOnline</a>
+                <a class="navbar-brand" href="#page-top"> FerreteríaOnline</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#">Enlace</a>
+                        <a href="#"></a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    
+                    <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i> Buscar productos </a></li>
                     <li><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Carrito: 0 </a></li>
                     <?php //To do: pegar la cantidad de productos con el valor de la sesión ?>
                     <li><a href="#"><i class="fa fa-user" aria-hidden="true"></i> Iniciar sesión</a></li>

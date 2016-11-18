@@ -6,17 +6,46 @@
 
 body {
     padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
+}
+p {
+  font-size: 20px;
+}
+p.small {
+  font-size: 16px;
+}
+a,
+a:hover,
+a:focus,
+a:active,
+a.active {
+  color: #1A237E;
+  outline: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 .navbar-inverse {
-    background-color: #D32F2F;
-    border-color: #C62828;
+    background-color: #C62828;
+    border-color: #B71C1C;
+    font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
 }
 .navbar-inverse .navbar-brand {
     color: #ECEFF1;
 }
 .navbar-inverse .navbar-toggle {
-    border-color: #C62828;
+    border-color: #B71C1C;
 }
 .navbar-inverse .navbar-nav>li>a {
     color: #ECEFF1;
