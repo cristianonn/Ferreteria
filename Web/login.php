@@ -22,9 +22,10 @@
 			$user = $_POST['usuario'];
 			$pass = $_POST['contrasena'];
 
-			$query = mysqli_query($conn, "SELECT idUsuarioCliente, usuariocliente, contrasenacliente
-			 FROM usuariocliente
-			 WHERE usuariocliente = '$user';");
+			$query = mysqli_query($conn, "SELECT idUsuarioCliente, usuariocliente, contrasenacliente, nombreCliente
+			 FROM usuariocliente, cliente
+			 WHERE usuariocliente = '$user'
+			 AND cliente_idCliente = idCliente;");
 			$numrows = mysqli_num_rows($query);
 
 			if ($numrows!=0) {
@@ -37,7 +38,9 @@
 				    	//Store the user's name
 				    	$_SESSION['correo'] = $row['usuariocliente'];
 
-				    	header("Location: index.php");
+				    	$_SESSION['nombreCliente'] = $row['nombreCliente'];
+
+				    	header("Location: index.php#Welcome");
 				    }
 				}
 			    die("Usuario o contraseña incorrectos.");
