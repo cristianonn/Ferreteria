@@ -25,4 +25,4 @@ END
 CREATE DEFINER=`root`@`localhost` PROCEDURE `seleccionarTodosProductos`()
 BEGIN
  select * from Producto;
-END$$
+END
