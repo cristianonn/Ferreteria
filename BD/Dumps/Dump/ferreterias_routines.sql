@@ -22,6 +22,55 @@
 --
 -- Dumping routines for database 'ferreterias'
 --
+/*!50003 DROP PROCEDURE IF EXISTS `agregarACarrito` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarACarrito`(IN pId varchar(20), IN fId INT, IN cId VARCHAR(25))
+BEGIN
+	INSERT INTO `ferreterias`.`productoporcarrito`
+		(`Producto_idProducto`,
+		`ferreteria_idFerreteria`,
+		`cliente_idCliente`)
+		VALUES
+		(pId,
+		fId,
+		cId);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `estaEnCarrito` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `estaEnCarrito`(IN pId varchar(20), IN fId INT, IN cId VARCHAR(25))
+BEGIN
+	select COUNT(Producto_idProducto) as cantidad
+	from ProductoPorCarrito
+    where Producto_idProducto = pId
+    AND ferreteria_idFerreteria = fId
+    AND cliente_idCliente = cId;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `getCantidadCarrito` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -38,10 +87,8 @@ select  count(p.Producto_idProducto) as cantidad
 from cliente c 
 join usuariocliente u
 on u.cliente_idCliente = c.idCliente
-join carrito K
-on k.Cliente_idCliente = c.idCliente
-join productoporcarrito p 
-on p.carrito_idcarrito = k.idCarrito 
+join productoporcarrito p
+on p.Cliente_idCliente = c.idCliente
 where u.idusuarioCliente = userid;
 END ;;
 DELIMITER ;
@@ -65,10 +112,8 @@ select  p.Producto_idProducto
 from cliente c 
 join usuariocliente u
 on u.cliente_idCliente = c.idCliente
-join carrito K
-on k.Cliente_idCliente = c.idCliente
-join productoporcarrito p 
-on p.carrito_idcarrito = k.idCarrito 
+join productoporcarrito p
+on p.Cliente_idCliente = c.idCliente
 where u.usuarioCliente = username;
 END ;;
 DELIMITER ;
@@ -110,11 +155,13 @@ BEGIN
 	select idProducto, nombreProducto, precioProducto, fotoProducto,
 		descripcionProducto, marcaProducto, aspectosTecnicosProducto,
 		utilidadProducto, garantia, nombreDepartamento,
-		inventarioPorFerreteria.cantidad AS cantidad
-	from Producto, Departamento, inventarioPorFerreteria
+		inventarioPorFerreteria.cantidad AS cantidad,
+		nombreFerreteria
+	from Producto, Departamento, inventarioPorFerreteria, Ferreteria
     where pId = Producto.idProducto
     AND Producto_idProducto = idProducto
     AND ferreteria_idFerreteria = fId
+    AND ferreteria_idFerreteria = idFerreteria
     AND departamento_idDepartamento = idDepartamento;
 END ;;
 DELIMITER ;
@@ -244,4 +291,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-21 15:43:09
+-- Dump completed on 2016-11-21 17:53:26

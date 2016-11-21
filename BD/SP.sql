@@ -73,10 +73,8 @@ select  p.Producto_idProducto
 from cliente c 
 join usuariocliente u
 on u.cliente_idCliente = c.idCliente
-join carrito K
-on k.Cliente_idCliente = c.idCliente
-join productoporcarrito p 
-on p.carrito_idcarrito = k.idCarrito 
+join productoporcarrito p
+on p.Cliente_idCliente = c.idCliente
 where u.usuarioCliente = username;
 END$$
 
@@ -93,10 +91,8 @@ select  count(p.Producto_idProducto) as cantidad
 from cliente c 
 join usuariocliente u
 on u.cliente_idCliente = c.idCliente
-join carrito K
-on k.Cliente_idCliente = c.idCliente
-join productoporcarrito p 
-on p.carrito_idcarrito = k.idCarrito 
+join productoporcarrito p
+on p.Cliente_idCliente = c.idCliente
 where u.idusuarioCliente = userid;
 END$$
 
@@ -146,12 +142,52 @@ BEGIN
 	select idProducto, nombreProducto, precioProducto, fotoProducto,
 		descripcionProducto, marcaProducto, aspectosTecnicosProducto,
 		utilidadProducto, garantia, nombreDepartamento,
-		inventarioPorFerreteria.cantidad AS cantidad
-	from Producto, Departamento, inventarioPorFerreteria
+		inventarioPorFerreteria.cantidad AS cantidad,
+		nombreFerreteria
+	from Producto, Departamento, inventarioPorFerreteria, Ferreteria
     where pId = Producto.idProducto
     AND Producto_idProducto = idProducto
     AND ferreteria_idFerreteria = fId
+    AND ferreteria_idFerreteria = idFerreteria
     AND departamento_idDepartamento = idDepartamento;
 END$$
 
 DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure estaEnCarrito
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `estaEnCarrito`
+(IN pId varchar(20), IN fId INT, IN cId VARCHAR(25))
+BEGIN
+	select COUNT(Producto_idProducto) as cantidad
+	from ProductoPorCarrito
+    where Producto_idProducto = pId
+    AND ferreteria_idFerreteria = fId
+    AND cliente_idCliente = cId;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure agregarACarrito
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarACarrito`
+(IN pId varchar(20), IN fId INT, IN cId VARCHAR(25))
+BEGIN
+	INSERT INTO `ferreterias`.`productoporcarrito`
+		(`Producto_idProducto`,
+		`ferreteria_idFerreteria`,
+		`cliente_idCliente`)
+		VALUES
+		(pId,
+		fId,
+		cId);
+END$$
+
+DELIMITER ;
+

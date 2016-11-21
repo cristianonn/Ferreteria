@@ -104,24 +104,6 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `ferreterias`.`carrito`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ferreterias`.`carrito` (
-  `idcarrito` INT(11) NOT NULL AUTO_INCREMENT,
-  `Cliente_idCliente` VARCHAR(25) NOT NULL,
-  PRIMARY KEY (`idcarrito`),
-  INDEX `fk_carrito_Cliente1_idx` (`Cliente_idCliente` ASC),
-  CONSTRAINT `fk_carrito_Cliente1`
-    FOREIGN KEY (`Cliente_idCliente`)
-    REFERENCES `ferreterias`.`cliente` (`idCliente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 4
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
 -- Table `ferreterias`.`departamento`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ferreterias`.`departamento` (
@@ -326,25 +308,25 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `ferreterias`.`productoporcarrito` (
   `idProductoPorCarrito` INT(11) NOT NULL AUTO_INCREMENT,
   `Producto_idProducto` VARCHAR(20) NOT NULL,
-  `carrito_idcarrito` INT(11) NOT NULL,
   `ferreteria_idFerreteria` INT NOT NULL,
+  `cliente_idCliente` VARCHAR(25) NOT NULL,
   PRIMARY KEY (`idProductoPorCarrito`),
   INDEX `fk_ProductoPorCarrito_Producto1_idx` (`Producto_idProducto` ASC),
-  INDEX `fk_ProductoPorCarrito_carrito1_idx` (`carrito_idcarrito` ASC),
   INDEX `fk_productoporcarrito_ferreteria1_idx` (`ferreteria_idFerreteria` ASC),
+  INDEX `fk_productoporcarrito_cliente1_idx` (`cliente_idCliente` ASC),
   CONSTRAINT `fk_ProductoPorCarrito_Producto1`
     FOREIGN KEY (`Producto_idProducto`)
     REFERENCES `ferreterias`.`producto` (`idProducto`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ProductoPorCarrito_carrito1`
-    FOREIGN KEY (`carrito_idcarrito`)
-    REFERENCES `ferreterias`.`carrito` (`idcarrito`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_productoporcarrito_ferreteria1`
     FOREIGN KEY (`ferreteria_idFerreteria`)
     REFERENCES `ferreterias`.`ferreteria` (`idFerreteria`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_productoporcarrito_cliente1`
+    FOREIGN KEY (`cliente_idCliente`)
+    REFERENCES `ferreterias`.`cliente` (`idCliente`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

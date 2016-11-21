@@ -5,21 +5,52 @@
      */
     include("session.php");
     $carpetaImagenes = "../BD/Images/";
-    //Obtener aquí toda la información del producto
-    $idProducto = $_GET['idp'];
-    $idFerreteria = $_GET['idf'];
-    $arrayProducto = getProductoEnFerreteria($idProducto, $idFerreteria);
-    $nombreProducto = $arrayProducto['nombreProducto'];
-    $precioProducto = $arrayProducto['precioProducto'];
-    $fotoProducto = $carpetaImagenes . $arrayProducto['fotoProducto'];
-    $descripcionProducto = $arrayProducto['descripcionProducto'];
-    $marcaProducto = $arrayProducto['marcaProducto'];
-    $aspectosTecnicosProducto = $arrayProducto['aspectosTecnicosProducto'];
-    $utilidadProducto = $arrayProducto['utilidadProducto'];
-    $garantia = $arrayProducto['garantia'];
-    $nombreDepartamento = $arrayProducto['nombreDepartamento'];
-    $cantidad = $arrayProducto['cantidad'];
 
+    //Agarrar los valores desde arriba
+    if (isset($_GET['idp']) && isset($_GET['idf'])) {
+        $idProducto = $_GET['idp'];
+        $idFerreteria = $_GET['idf'];
+        //Presetear todo en caso de que los parámetros vengan malos
+        $nombreProducto = "";
+        $precioProducto = "";
+        $fotoProducto = "";
+        $descripcionProducto = "";
+        $marcaProducto = "";
+        $aspectosTecnicosProducto = "";
+        $utilidadProducto = "";
+        $garantia = "";
+        $nombreDepartamento = "";
+        $cantidad = "";
+        $nombreFerreteria = "";
+        $cantidadCarrito = -1;
+        //Obtener aquí toda la información del producto
+        $arrayProducto = getProductoEnFerreteria($idProducto, $idFerreteria);
+        if ($arrayProducto != null) {
+            $nombreProducto = $arrayProducto['nombreProducto'];
+            $precioProducto = $arrayProducto['precioProducto'];
+            $fotoProducto = $carpetaImagenes . $arrayProducto['fotoProducto'];
+            $descripcionProducto = $arrayProducto['descripcionProducto'];
+            $marcaProducto = $arrayProducto['marcaProducto'];
+            $aspectosTecnicosProducto = $arrayProducto['aspectosTecnicosProducto'];
+            $utilidadProducto = $arrayProducto['utilidadProducto'];
+            $garantia = $arrayProducto['garantia'];
+            $nombreDepartamento = $arrayProducto['nombreDepartamento'];
+            $cantidad = $arrayProducto['cantidad'];
+            $nombreFerreteria = $arrayProducto['nombreFerreteria'];
+            //Y si todo está bien con el producto, chequear si el usuario pidió meterlo en el carrito
+            if (isset($_GET['carrito'])) {
+                agregarACarrito($idProducto, $idFerreteria);
+            }
+            //Obtener la cantidad de veces que este producto está en el carrito
+            if (isset($_SESSION['userID'])) {
+                $cantidadCarrito = estaEnCarrito($idProducto, $idFerreteria);
+            }
+        }
+        else {
+            echo "Producto no existente";
+        }
+    }
+        
 
 ?>
 <!DOCTYPE html>
@@ -106,13 +137,25 @@
                             <td><?php echo $nombreDepartamento; ?></td>
                         </tr>
                         <tr>
-                            <th>Cantidad en Ferretería</th>
+                            <th>Cantidad en Ferretería <?php echo $nombreFerreteria;?></th>
                             <td><?php echo $cantidad; ?></td>
                         </tr>
                     </tbody>
                 </table>
                 <br>
-                <input name="carrito" type="submit" class="btn btn-danger" value = "Añadir a carrito">
+                <form role="form" action="producto.php" method="GET" class="registration-form">
+                <input type="hidden" name="idf" value=<?php echo "\"" . $_GET['idf'] . "\""; ?>>
+                <input type="hidden" name="idp" value=<?php echo "\"" . $_GET['idp'] . "\""; ?>>
+                <?php 
+                    if ($cantidadCarrito != 0) {
+                        echo "<button type=\"button\" class=\"btn btn-danger\" disabled=\"disabled\">Añadir a carrito</button>";
+                    }
+                    else {
+                        echo "<input name=\"carrito\" type=\"submit\" class=\"btn btn-danger\" value = \"Añadir a carrito\">";
+                    }
+                    
+                ?>
+                </form>
             </div>
         </div>
 
