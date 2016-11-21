@@ -4,6 +4,18 @@
      * Creado: 18/11/16 Gabriela Garro
      */
     session_start();
+    include("connection.php");
+    $conn = $_SESSION['conn'];
+    $query = mysqli_query($conn, "CALL seleccionar6Random()");
+    $arrayProductos = array();
+    while ($row = mysqli_fetch_assoc($query)) {
+        $arrayProductos[] = ["id" => $row['idProducto'],
+                            "nombre" => $row['nombreProducto'],
+                            "descripcion" => $row['descripcionProducto'],
+                            "precio" => $row['precioProducto'],
+                            "foto" => $row['fotoProducto']];
+    $carpetaImagenes = "../BD/Images/";
+    } 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -98,15 +110,21 @@
                 </div>
 
                 <div class="row">
+                <h2>Productos aleatorios</h1><br>
 
                     <div class="col-sm-4 col-lg-4 col-md-4">
                         <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
+                            <img src=<?php echo "\"" . $carpetaImagenes . $arrayProductos[0]["foto"] . "\""; ?> alt="">
                             <div class="caption">
-                                <h4 class="pull-right">$24.99</h4>
-                                <h4><a href="#">First Product</a>
-                                </h4>
-                                <p>See more snippets like this online store item at <a target="_blank" href="http://www.bootsnipp.com">Bootsnipp - http://bootsnipp.com</a>.</p>
+                                <h4 class="pull-right"><?php 
+                                    echo "₡" . $arrayProductos[0]["precio"]; 
+                                ?></h4><br>
+                                <h4><a href="#"><?php 
+                                    echo $arrayProductos[0]["nombre"]; 
+                                ?></a></h4>
+                                <p><?php 
+                                    echo $arrayProductos[0]["descripcion"]; 
+                                ?></p>
                             </div>
                             <div class="ratings">
                                 <p class="pull-right">15 reviews</p>
@@ -123,12 +141,17 @@
 
                     <div class="col-sm-4 col-lg-4 col-md-4">
                         <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
+                            <img src=<?php echo "\"" . $carpetaImagenes . $arrayProductos[1]["foto"] . "\""; ?> alt="">
                             <div class="caption">
-                                <h4 class="pull-right">$64.99</h4>
-                                <h4><a href="#">Second Product</a>
-                                </h4>
-                                <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <h4 class="pull-right"><?php 
+                                    echo "₡" . $arrayProductos[1]["precio"]; 
+                                ?></h4><br>
+                                <h4><a href="#"><?php 
+                                    echo $arrayProductos[1]["nombre"]; 
+                                ?></a></h4>
+                                <p><?php 
+                                    echo $arrayProductos[1]["descripcion"]; 
+                                ?></p>
                             </div>
                             <div class="ratings">
                                 <p class="pull-right">12 reviews</p>
@@ -145,12 +168,17 @@
 
                     <div class="col-sm-4 col-lg-4 col-md-4">
                         <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
+                            <img src=<?php echo "\"" . $carpetaImagenes . $arrayProductos[2]["foto"] . "\""; ?> alt="">
                             <div class="caption">
-                                <h4 class="pull-right">$74.99</h4>
-                                <h4><a href="#">Third Product</a>
-                                </h4>
-                                <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <h4 class="pull-right"><?php 
+                                    echo "₡" . $arrayProductos[2]["precio"]; 
+                                ?></h4><br>
+                                <h4><a href="#"><?php 
+                                    echo $arrayProductos[2]["nombre"]; 
+                                ?></a></h4>
+                                <p><?php 
+                                    echo $arrayProductos[2]["descripcion"]; 
+                                ?></p>
                             </div>
                             <div class="ratings">
                                 <p class="pull-right">31 reviews</p>
@@ -167,12 +195,17 @@
 
                     <div class="col-sm-4 col-lg-4 col-md-4">
                         <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
+                            <img src=<?php echo "\"" . $carpetaImagenes . $arrayProductos[3]["foto"] . "\""; ?> alt="">
                             <div class="caption">
-                                <h4 class="pull-right">$84.99</h4>
-                                <h4><a href="#">Fourth Product</a>
-                                </h4>
-                                <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <h4 class="pull-right"><?php 
+                                    echo "₡" . $arrayProductos[3]["precio"]; 
+                                ?></h4><br>
+                                <h4><a href="#"><?php 
+                                    echo $arrayProductos[3]["nombre"]; 
+                                ?></a></h4>
+                                <p><?php 
+                                    echo $arrayProductos[3]["descripcion"]; 
+                                ?></p>
                             </div>
                             <div class="ratings">
                                 <p class="pull-right">6 reviews</p>
@@ -189,12 +222,17 @@
 
                     <div class="col-sm-4 col-lg-4 col-md-4">
                         <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
+                            <img src=<?php echo "\"" . $carpetaImagenes . $arrayProductos[4]["foto"] . "\""; ?> alt="">
                             <div class="caption">
-                                <h4 class="pull-right">$94.99</h4>
-                                <h4><a href="#">Fifth Product</a>
-                                </h4>
-                                <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <h4 class="pull-right"><?php 
+                                    echo "₡" . $arrayProductos[4]["precio"]; 
+                                ?></h4><br>
+                                <h4><a href="#"><?php 
+                                    echo $arrayProductos[4]["nombre"]; 
+                                ?></a></h4>
+                                <p><?php 
+                                    echo $arrayProductos[4]["descripcion"]; 
+                                ?></p>
                             </div>
                             <div class="ratings">
                                 <p class="pull-right">18 reviews</p>
@@ -211,12 +249,17 @@
 
                     <div class="col-sm-4 col-lg-4 col-md-4">
                         <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
+                            <img src=<?php echo "\"" . $carpetaImagenes . $arrayProductos[5]["foto"] . "\""; ?> alt="">
                             <div class="caption">
-                                <h4 class="pull-right">$97.99</h4>
-                                <h4><a href="#">Sixth Product</a>
-                                </h4>
-                                <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <h4 class="pull-right"><?php 
+                                    echo "₡" . $arrayProductos[5]["precio"]; 
+                                ?></h4><br>
+                                <h4><a href="#"><?php 
+                                    echo $arrayProductos[5]["nombre"]; 
+                                ?></a></h4>
+                                <p><?php 
+                                    echo $arrayProductos[5]["descripcion"]; 
+                                ?></p>
                             </div>
                             <div class="ratings">
                                 <p class="pull-right">8 reviews</p>
