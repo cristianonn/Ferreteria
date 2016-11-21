@@ -27,7 +27,7 @@ CREATE TABLE `productoporpedido` (
   `Producto_idProducto` varchar(20) NOT NULL,
   `Pedido_idPedido` int(11) NOT NULL,
   `vistoBueno` tinyint(1) DEFAULT NULL,
-  `ferreteria_idFerreteria` varchar(45) NOT NULL,
+  `ferreteria_idFerreteria` int(11) NOT NULL,
   PRIMARY KEY (`idProductoPorPedido`),
   KEY `fk_ProductoPorPedido_Producto1_idx` (`Producto_idProducto`),
   KEY `fk_ProductoPorPedido_Pedido1_idx` (`Pedido_idPedido`),
@@ -44,7 +44,7 @@ CREATE TABLE `productoporpedido` (
 
 LOCK TABLES `productoporpedido` WRITE;
 /*!40000 ALTER TABLE `productoporpedido` DISABLE KEYS */;
-INSERT INTO `productoporpedido` VALUES (18,'1',5,0,''),(19,'2',5,0,''),(20,'3',5,0,'');
+INSERT INTO `productoporpedido` VALUES (18,'1',5,0,1),(19,'2',5,0,1),(20,'3',5,0,1);
 /*!40000 ALTER TABLE `productoporpedido` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-21  0:50:06
+-- Dump completed on 2016-11-21  3:56:39

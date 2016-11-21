@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `ferreteria`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ferreteria` (
-  `idFerreteria` varchar(45) NOT NULL,
+  `idFerreteria` int(11) NOT NULL,
   `nombreFerreteria` varchar(45) DEFAULT NULL,
   `telefonoFerreteria` varchar(45) DEFAULT NULL,
   `latitud` float DEFAULT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE `ferreteria` (
 
 LOCK TABLES `ferreteria` WRITE;
 /*!40000 ALTER TABLE `ferreteria` DISABLE KEYS */;
-INSERT INTO `ferreteria` VALUES ('1','Hermanos clavo','22225236',NULL,NULL),('2','Tornillos mil','22229658',NULL,NULL),('3','Constru bien','22221536',NULL,NULL),('4','Cementico','22220125',NULL,NULL);
+INSERT INTO `ferreteria` VALUES (1,'Hermanos clavo','22225236',NULL,NULL),(2,'Tornillos mil','22229658',NULL,NULL),(3,'Constru bien','22221536',NULL,NULL),(4,'Cementico','22220125',NULL,NULL);
 /*!40000 ALTER TABLE `ferreteria` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-21  0:50:08
+-- Dump completed on 2016-11-21  3:56:40

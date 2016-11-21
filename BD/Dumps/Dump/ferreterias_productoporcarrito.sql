@@ -26,7 +26,7 @@ CREATE TABLE `productoporcarrito` (
   `idProductoPorCarrito` int(11) NOT NULL AUTO_INCREMENT,
   `Producto_idProducto` varchar(20) NOT NULL,
   `carrito_idcarrito` int(11) NOT NULL,
-  `ferreteria_idFerreteria` varchar(45) NOT NULL,
+  `ferreteria_idFerreteria` int(11) NOT NULL,
   PRIMARY KEY (`idProductoPorCarrito`),
   KEY `fk_ProductoPorCarrito_Producto1_idx` (`Producto_idProducto`),
   KEY `fk_ProductoPorCarrito_carrito1_idx` (`carrito_idcarrito`),
@@ -43,7 +43,7 @@ CREATE TABLE `productoporcarrito` (
 
 LOCK TABLES `productoporcarrito` WRITE;
 /*!40000 ALTER TABLE `productoporcarrito` DISABLE KEYS */;
-INSERT INTO `productoporcarrito` VALUES (1,'2',1,''),(2,'5',1,''),(3,'8',1,''),(4,'12',2,''),(5,'4',2,'');
+INSERT INTO `productoporcarrito` VALUES (1,'2',1,1),(2,'5',1,1),(3,'8',1,1),(4,'12',2,1),(5,'4',2,1);
 /*!40000 ALTER TABLE `productoporcarrito` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-21  0:50:07
+-- Dump completed on 2016-11-21  3:56:39

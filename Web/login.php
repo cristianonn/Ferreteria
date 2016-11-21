@@ -35,17 +35,10 @@
 			if ($numrows!=0) {
 				while ($row = mysqli_fetch_assoc($query)){
 				    if ($row['contrasenaCliente'] == $pass) {
-
-				    	//Store the userID
 				    	$_SESSION['userID'] = $row['userID'];
-
-				    	//Store the user's name
 				    	$_SESSION['correo'] = $row['usuarioCliente'];
-
 				    	$_SESSION['nombreCliente'] = $row['nombreCliente'];
-
 				    	$_SESSION['apellidosCliente'] = $row['apellidosCliente'];
-
 				    	header("Location: index.php#Welcome");
 				    }
 				}

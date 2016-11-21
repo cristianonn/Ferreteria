@@ -16,34 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `prodcutoporbackorder`
+-- Table structure for table `productoporbackorder`
 --
 
-DROP TABLE IF EXISTS `prodcutoporbackorder`;
+DROP TABLE IF EXISTS `productoporbackorder`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `prodcutoporbackorder` (
-  `idProdcutoPorBackOrder` int(11) NOT NULL AUTO_INCREMENT,
-  `BackOrder_idBackOrder` int(11) NOT NULL,
-  `Producto_idProducto` varchar(20) NOT NULL,
-  `ferreteria_idFerreteria` varchar(45) NOT NULL,
-  PRIMARY KEY (`idProdcutoPorBackOrder`),
-  KEY `fk_ProdcutoPorBackOrder_BackOrder1_idx` (`BackOrder_idBackOrder`),
-  KEY `fk_ProdcutoPorBackOrder_Producto1_idx` (`Producto_idProducto`),
-  KEY `fk_prodcutoporbackorder_ferreteria1_idx` (`ferreteria_idFerreteria`),
-  CONSTRAINT `fk_ProdcutoPorBackOrder_BackOrder1` FOREIGN KEY (`BackOrder_idBackOrder`) REFERENCES `backorder` (`idBackOrder`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ProdcutoPorBackOrder_Producto1` FOREIGN KEY (`Producto_idProducto`) REFERENCES `producto` (`idProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_prodcutoporbackorder_ferreteria1` FOREIGN KEY (`ferreteria_idFerreteria`) REFERENCES `ferreteria` (`idFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION
+CREATE TABLE `productoporbackorder` (
+  `idProductoPorBackOrder` int(11) NOT NULL AUTO_INCREMENT,
+  `ferreteria_idFerreteria` int(11) NOT NULL,
+  `producto_idProducto` varchar(20) NOT NULL,
+  `backorder_idBackOrder` int(11) NOT NULL,
+  PRIMARY KEY (`idProductoPorBackOrder`),
+  KEY `fk_productoporbackorder_ferreteria1_idx` (`ferreteria_idFerreteria`),
+  KEY `fk_productoporbackorder_producto1_idx` (`producto_idProducto`),
+  KEY `fk_productoporbackorder_backorder1_idx` (`backorder_idBackOrder`),
+  CONSTRAINT `fk_productoporbackorder_backorder1` FOREIGN KEY (`backorder_idBackOrder`) REFERENCES `backorder` (`idBackOrder`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_productoporbackorder_ferreteria1` FOREIGN KEY (`ferreteria_idFerreteria`) REFERENCES `ferreteria` (`idFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_productoporbackorder_producto1` FOREIGN KEY (`producto_idProducto`) REFERENCES `producto` (`idProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `prodcutoporbackorder`
+-- Dumping data for table `productoporbackorder`
 --
 
-LOCK TABLES `prodcutoporbackorder` WRITE;
-/*!40000 ALTER TABLE `prodcutoporbackorder` DISABLE KEYS */;
-/*!40000 ALTER TABLE `prodcutoporbackorder` ENABLE KEYS */;
+LOCK TABLES `productoporbackorder` WRITE;
+/*!40000 ALTER TABLE `productoporbackorder` DISABLE KEYS */;
+/*!40000 ALTER TABLE `productoporbackorder` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-21  0:50:08
+-- Dump completed on 2016-11-21  3:56:38

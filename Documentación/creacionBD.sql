@@ -133,6 +133,20 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `ferreterias`.`ferreteria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ferreterias`.`ferreteria` (
+  `idFerreteria` INT NOT NULL,
+  `nombreFerreteria` VARCHAR(45) NULL DEFAULT NULL,
+  `telefonoFerreteria` VARCHAR(45) NULL DEFAULT NULL,
+  `latitud` FLOAT NULL DEFAULT NULL,
+  `longitud` FLOAT NULL DEFAULT NULL,
+  PRIMARY KEY (`idFerreteria`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
 -- Table `ferreterias`.`producto`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ferreterias`.`producto` (
@@ -146,71 +160,15 @@ CREATE TABLE IF NOT EXISTS `ferreterias`.`producto` (
   `utilidadProducto` VARCHAR(100) NULL DEFAULT NULL,
   `garantia` INT(11) NULL DEFAULT NULL,
   `cantidad` INT(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`idProducto`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `ferreterias`.`catalogo`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ferreterias`.`catalogo` (
-  `idDepartamento` VARCHAR(45) NOT NULL,
   `departamento_idDepartamento` VARCHAR(45) NOT NULL,
-  `producto_idProducto` VARCHAR(20) NOT NULL,
-  PRIMARY KEY (`idDepartamento`),
-  INDEX `fk_catalogo_departamento1_idx` (`departamento_idDepartamento` ASC),
-  INDEX `fk_catalogo_producto1_idx` (`producto_idProducto` ASC),
-  CONSTRAINT `fk_catalogo_departamento1`
+  PRIMARY KEY (`idProducto`),
+  INDEX `fk_producto_departamento1_idx` (`departamento_idDepartamento` ASC),
+  CONSTRAINT `fk_producto_departamento1`
     FOREIGN KEY (`departamento_idDepartamento`)
     REFERENCES `ferreterias`.`departamento` (`idDepartamento`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_catalogo_producto1`
-    FOREIGN KEY (`producto_idProducto`)
-    REFERENCES `ferreterias`.`producto` (`idProducto`)
-    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `ferreterias`.`ferreteria`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ferreterias`.`ferreteria` (
-  `idFerreteria` VARCHAR(45) NOT NULL,
-  `nombreFerreteria` VARCHAR(45) NULL DEFAULT NULL,
-  `telefonoFerreteria` VARCHAR(45) NULL DEFAULT NULL,
-  `latitud` FLOAT NULL DEFAULT NULL,
-  `longitud` FLOAT NULL DEFAULT NULL,
-  PRIMARY KEY (`idFerreteria`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `ferreterias`.`empleadoporferreteria`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ferreterias`.`empleadoporferreteria` (
-  `idEmpleadoPorFerreteria` INT(11) NOT NULL AUTO_INCREMENT,
-  `Empleado_idEmpleado` VARCHAR(15) NOT NULL,
-  `Ferreteria_idFerreteria` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idEmpleadoPorFerreteria`),
-  INDEX `fk_EmpleadoPorFerreteria_Empleado1_idx` (`Empleado_idEmpleado` ASC),
-  INDEX `fk_EmpleadoPorFerreteria_Ferreteria1_idx` (`Ferreteria_idFerreteria` ASC),
-  CONSTRAINT `fk_EmpleadoPorFerreteria_Empleado1`
-    FOREIGN KEY (`Empleado_idEmpleado`)
-    REFERENCES `ferreterias`.`empleado` (`idEmpleado`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_EmpleadoPorFerreteria_Ferreteria1`
-    FOREIGN KEY (`Ferreteria_idFerreteria`)
-    REFERENCES `ferreterias`.`ferreteria` (`idFerreteria`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 9
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -221,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `ferreterias`.`inventarioporferreteria` (
   `idinventarioPorFerreteria` INT(11) NOT NULL AUTO_INCREMENT,
   `cantidad` INT(11) NULL DEFAULT NULL,
   `producto_idProducto` VARCHAR(20) NOT NULL,
-  `ferreteria_idFerreteria` VARCHAR(45) NOT NULL,
+  `ferreteria_idFerreteria` INT NOT NULL,
   PRIMARY KEY (`idinventarioPorFerreteria`),
   INDEX `fk_inventarioPorFerreteria_producto1_idx` (`producto_idProducto` ASC),
   INDEX `fk_inventarioPorFerreteria_ferreteria1_idx` (`ferreteria_idFerreteria` ASC),
@@ -249,17 +207,17 @@ CREATE TABLE IF NOT EXISTS `ferreterias`.`pedidoonline` (
   `precioPedido` FLOAT NULL DEFAULT NULL,
   `estadoPedido` VARCHAR(15) NULL DEFAULT NULL,
   `Cliente_idCliente` VARCHAR(25) NOT NULL,
-  `Ferreteria_idFerreteria` VARCHAR(45) NOT NULL,
+  `ferreteria_idFerreteria` INT NOT NULL,
   PRIMARY KEY (`idPedido`),
   INDEX `fk_Pedido_Cliente1_idx` (`Cliente_idCliente` ASC),
-  INDEX `fk_Pedido_Ferreteria1_idx` (`Ferreteria_idFerreteria` ASC),
+  INDEX `fk_pedidoonline_ferreteria1_idx` (`ferreteria_idFerreteria` ASC),
   CONSTRAINT `fk_Pedido_Cliente1`
     FOREIGN KEY (`Cliente_idCliente`)
     REFERENCES `ferreterias`.`cliente` (`idCliente`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Pedido_Ferreteria1`
-    FOREIGN KEY (`Ferreteria_idFerreteria`)
+  CONSTRAINT `fk_pedidoonline_ferreteria1`
+    FOREIGN KEY (`ferreteria_idFerreteria`)
     REFERENCES `ferreterias`.`ferreteria` (`idFerreteria`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -313,7 +271,7 @@ CREATE TABLE IF NOT EXISTS `ferreterias`.`premioporferreteria` (
   `idPremioPorFerreteria` INT(11) NOT NULL AUTO_INCREMENT,
   `fechaPremioPorFerreteria` DATE NULL DEFAULT NULL,
   `Premio_idPremio` INT(11) NOT NULL,
-  `Ferreteria_idFerreteria` VARCHAR(45) NOT NULL,
+  `Ferreteria_idFerreteria` INT NOT NULL,
   PRIMARY KEY (`idPremioPorFerreteria`),
   INDEX `fk_PremioPorFerreteria_Premio1_idx` (`Premio_idPremio` ASC),
   INDEX `fk_PremioPorFerreteria_Ferreteria1_idx` (`Ferreteria_idFerreteria` ASC),
@@ -333,23 +291,30 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `ferreterias`.`prodcutoporbackorder`
+-- Table `ferreterias`.`productoporbackorder`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ferreterias`.`prodcutoporbackorder` (
-  `idProdcutoPorBackOrder` INT(11) NOT NULL AUTO_INCREMENT,
-  `BackOrder_idBackOrder` INT(11) NOT NULL,
-  `Producto_idProducto` VARCHAR(20) NOT NULL,
-  PRIMARY KEY (`idProdcutoPorBackOrder`),
-  INDEX `fk_ProdcutoPorBackOrder_BackOrder1_idx` (`BackOrder_idBackOrder` ASC),
-  INDEX `fk_ProdcutoPorBackOrder_Producto1_idx` (`Producto_idProducto` ASC),
-  CONSTRAINT `fk_ProdcutoPorBackOrder_BackOrder1`
-    FOREIGN KEY (`BackOrder_idBackOrder`)
-    REFERENCES `ferreterias`.`backorder` (`idBackOrder`)
+CREATE TABLE IF NOT EXISTS `ferreterias`.`productoporbackorder` (
+  `idProductoPorBackOrder` INT(11) NOT NULL AUTO_INCREMENT,
+  `ferreteria_idFerreteria` INT NOT NULL,
+  `producto_idProducto` VARCHAR(20) NOT NULL,
+  `backorder_idBackOrder` INT(11) NOT NULL,
+  PRIMARY KEY (`idProductoPorBackOrder`),
+  INDEX `fk_productoporbackorder_ferreteria1_idx` (`ferreteria_idFerreteria` ASC),
+  INDEX `fk_productoporbackorder_producto1_idx` (`producto_idProducto` ASC),
+  INDEX `fk_productoporbackorder_backorder1_idx` (`backorder_idBackOrder` ASC),
+  CONSTRAINT `fk_productoporbackorder_ferreteria1`
+    FOREIGN KEY (`ferreteria_idFerreteria`)
+    REFERENCES `ferreterias`.`ferreteria` (`idFerreteria`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ProdcutoPorBackOrder_Producto1`
-    FOREIGN KEY (`Producto_idProducto`)
+  CONSTRAINT `fk_productoporbackorder_producto1`
+    FOREIGN KEY (`producto_idProducto`)
     REFERENCES `ferreterias`.`producto` (`idProducto`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_productoporbackorder_backorder1`
+    FOREIGN KEY (`backorder_idBackOrder`)
+    REFERENCES `ferreterias`.`backorder` (`idBackOrder`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -363,9 +328,11 @@ CREATE TABLE IF NOT EXISTS `ferreterias`.`productoporcarrito` (
   `idProductoPorCarrito` INT(11) NOT NULL AUTO_INCREMENT,
   `Producto_idProducto` VARCHAR(20) NOT NULL,
   `carrito_idcarrito` INT(11) NOT NULL,
+  `ferreteria_idFerreteria` INT NOT NULL,
   PRIMARY KEY (`idProductoPorCarrito`),
   INDEX `fk_ProductoPorCarrito_Producto1_idx` (`Producto_idProducto` ASC),
   INDEX `fk_ProductoPorCarrito_carrito1_idx` (`carrito_idcarrito` ASC),
+  INDEX `fk_productoporcarrito_ferreteria1_idx` (`ferreteria_idFerreteria` ASC),
   CONSTRAINT `fk_ProductoPorCarrito_Producto1`
     FOREIGN KEY (`Producto_idProducto`)
     REFERENCES `ferreterias`.`producto` (`idProducto`)
@@ -374,6 +341,11 @@ CREATE TABLE IF NOT EXISTS `ferreterias`.`productoporcarrito` (
   CONSTRAINT `fk_ProductoPorCarrito_carrito1`
     FOREIGN KEY (`carrito_idcarrito`)
     REFERENCES `ferreterias`.`carrito` (`idcarrito`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_productoporcarrito_ferreteria1`
+    FOREIGN KEY (`ferreteria_idFerreteria`)
+    REFERENCES `ferreterias`.`ferreteria` (`idFerreteria`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -389,9 +361,11 @@ CREATE TABLE IF NOT EXISTS `ferreterias`.`productoporpedido` (
   `Producto_idProducto` VARCHAR(20) NOT NULL,
   `Pedido_idPedido` INT(11) NOT NULL,
   `vistoBueno` TINYINT(1) NULL DEFAULT NULL,
+  `ferreteria_idFerreteria` INT NOT NULL,
   PRIMARY KEY (`idProductoPorPedido`),
   INDEX `fk_ProductoPorPedido_Producto1_idx` (`Producto_idProducto` ASC),
   INDEX `fk_ProductoPorPedido_Pedido1_idx` (`Pedido_idPedido` ASC),
+  INDEX `fk_productoporpedido_ferreteria1_idx` (`ferreteria_idFerreteria` ASC),
   CONSTRAINT `fk_ProductoPorPedido_Pedido1`
     FOREIGN KEY (`Pedido_idPedido`)
     REFERENCES `ferreterias`.`pedidoonline` (`idPedido`)
@@ -400,6 +374,11 @@ CREATE TABLE IF NOT EXISTS `ferreterias`.`productoporpedido` (
   CONSTRAINT `fk_ProductoPorPedido_Producto1`
     FOREIGN KEY (`Producto_idProducto`)
     REFERENCES `ferreterias`.`producto` (`idProducto`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_productoporpedido_ferreteria1`
+    FOREIGN KEY (`ferreteria_idFerreteria`)
+    REFERENCES `ferreterias`.`ferreteria` (`idFerreteria`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

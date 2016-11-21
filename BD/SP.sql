@@ -101,3 +101,35 @@ where u.idusuarioCliente = userid;
 END$$
 
 DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getFerreterias
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getFerreterias`()
+BEGIN
+SELECT * FROM Ferreteria;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure seleccionarProductosPorFerreteria
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `seleccionarProductosPorFerreteria`
+( IN pidFerreteria INT )
+BEGIN
+	SELECT idProducto, nombreProducto, precioProducto, fotoProducto,
+		descripcionProducto, marcaProducto, nombreDepartamento,
+		inventarioPorFerreteria.cantidad AS cantidad
+	FROM Producto, Departamento, inventarioPorFerreteria
+	WHERE ferreteria_idFerreteria = pidFerreteria
+	AND Producto_idProducto = idProducto
+	AND departamento_idDepartamento = idDepartamento;
+END$$
+
+DELIMITER ;

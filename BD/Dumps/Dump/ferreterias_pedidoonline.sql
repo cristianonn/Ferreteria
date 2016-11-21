@@ -28,12 +28,12 @@ CREATE TABLE `pedidoonline` (
   `precioPedido` float DEFAULT NULL,
   `estadoPedido` varchar(15) DEFAULT NULL,
   `Cliente_idCliente` varchar(25) NOT NULL,
-  `Ferreteria_idFerreteria` varchar(45) NOT NULL,
+  `ferreteria_idFerreteria` int(11) NOT NULL,
   PRIMARY KEY (`idPedido`),
   KEY `fk_Pedido_Cliente1_idx` (`Cliente_idCliente`),
-  KEY `fk_Pedido_Ferreteria1_idx` (`Ferreteria_idFerreteria`),
+  KEY `fk_pedidoonline_ferreteria1_idx` (`ferreteria_idFerreteria`),
   CONSTRAINT `fk_Pedido_Cliente1` FOREIGN KEY (`Cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Pedido_Ferreteria1` FOREIGN KEY (`Ferreteria_idFerreteria`) REFERENCES `ferreteria` (`idFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_pedidoonline_ferreteria1` FOREIGN KEY (`ferreteria_idFerreteria`) REFERENCES `ferreteria` (`idFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -43,7 +43,7 @@ CREATE TABLE `pedidoonline` (
 
 LOCK TABLES `pedidoonline` WRITE;
 /*!40000 ALTER TABLE `pedidoonline` DISABLE KEYS */;
-INSERT INTO `pedidoonline` VALUES (5,'2016-11-19',5000,'entregado','1','1'),(6,'2016-11-19',3600,'pendiente','2','1');
+INSERT INTO `pedidoonline` VALUES (5,'2016-11-19',5000,'entregado','1',1),(6,'2016-11-19',3600,'pendiente','2',1);
 /*!40000 ALTER TABLE `pedidoonline` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-21  0:50:06
+-- Dump completed on 2016-11-21  3:56:39

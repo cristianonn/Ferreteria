@@ -35,7 +35,7 @@ CREATE TABLE `departamento` (
 
 LOCK TABLES `departamento` WRITE;
 /*!40000 ALTER TABLE `departamento` DISABLE KEYS */;
-INSERT INTO `departamento` VALUES ('1','Cocina'),('2','Pisos'),('3','Grifos'),('4','Maderas');
+INSERT INTO `departamento` VALUES ('1','Cocina'),('2','Pisos'),('3','Grifos'),('4','Maderas'),('5','Hogar');
 /*!40000 ALTER TABLE `departamento` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -48,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-21  0:50:06
+-- Dump completed on 2016-11-21  3:56:39

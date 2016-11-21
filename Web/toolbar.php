@@ -22,7 +22,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 
-                <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i> Buscar productos </a></li>
+                <li><a href="buscarProductos.php"><i class="fa fa-search" aria-hidden="true"></i> Buscar productos </a></li>
                 <li><a href="#"><i class="fa fa-comments" aria-hidden="true"></i> Chat</a></li>
                 <li><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Carrito:
                 <?php
