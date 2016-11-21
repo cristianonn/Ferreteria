@@ -79,3 +79,23 @@ where u.usuarioCliente = username;
 END$$
 
 DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getCantidadProductos
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCantidadProductos`(in username varchar(50))
+BEGIN
+select  COUNT(p.Producto_idProducto)
+from cliente c 
+join usuariocliente u
+on u.cliente_idCliente = c.idCliente
+join carrito K
+on k.Cliente_idCliente = c.idCliente
+join productoporcarrito p 
+on p.carrito_idcarrito = k.idCarrito 
+where u.usuarioCliente = username;
+END$$
+
+DELIMITER ;
