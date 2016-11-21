@@ -27,11 +27,14 @@ CREATE TABLE `productoporpedido` (
   `Producto_idProducto` varchar(20) NOT NULL,
   `Pedido_idPedido` int(11) NOT NULL,
   `vistoBueno` tinyint(1) DEFAULT NULL,
+  `ferreteria_idFerreteria` varchar(45) NOT NULL,
   PRIMARY KEY (`idProductoPorPedido`),
   KEY `fk_ProductoPorPedido_Producto1_idx` (`Producto_idProducto`),
   KEY `fk_ProductoPorPedido_Pedido1_idx` (`Pedido_idPedido`),
+  KEY `fk_productoporpedido_ferreteria1_idx` (`ferreteria_idFerreteria`),
   CONSTRAINT `fk_ProductoPorPedido_Pedido1` FOREIGN KEY (`Pedido_idPedido`) REFERENCES `pedidoonline` (`idPedido`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ProductoPorPedido_Producto1` FOREIGN KEY (`Producto_idProducto`) REFERENCES `producto` (`idProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_ProductoPorPedido_Producto1` FOREIGN KEY (`Producto_idProducto`) REFERENCES `producto` (`idProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_productoporpedido_ferreteria1` FOREIGN KEY (`ferreteria_idFerreteria`) REFERENCES `ferreteria` (`idFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -41,7 +44,7 @@ CREATE TABLE `productoporpedido` (
 
 LOCK TABLES `productoporpedido` WRITE;
 /*!40000 ALTER TABLE `productoporpedido` DISABLE KEYS */;
-INSERT INTO `productoporpedido` VALUES (18,'1',5,0),(19,'2',5,0),(20,'3',5,0);
+INSERT INTO `productoporpedido` VALUES (18,'1',5,0,''),(19,'2',5,0,''),(20,'3',5,0,'');
 /*!40000 ALTER TABLE `productoporpedido` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-20 22:40:36
+-- Dump completed on 2016-11-21  0:50:06

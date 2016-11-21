@@ -3,19 +3,21 @@
      * index.php - Landing page
      * Creado: 18/11/16 Gabriela Garro
      */
-    session_start();
-    include("connection.php");
-    $conn = $_SESSION['conn'];
+    include("session.php");
     $query = mysqli_query($conn, "CALL seleccionar6Random()");
     $arrayProductos = array();
-    while ($row = mysqli_fetch_assoc($query)) {
-        $arrayProductos[] = ["id" => $row['idProducto'],
-                            "nombre" => $row['nombreProducto'],
-                            "descripcion" => $row['descripcionProducto'],
-                            "precio" => $row['precioProducto'],
-                            "foto" => $row['fotoProducto']];
+    $numrows = mysqli_num_rows($query);
+    if ($numrows!=0) {
+        while ($row = mysqli_fetch_assoc($query)) {
+            $arrayProductos[] = ["id" => $row['idProducto'],
+                                "nombre" => $row['nombreProducto'],
+                                "descripcion" => $row['descripcionProducto'],
+                                "precio" => $row['precioProducto'],
+                                "foto" => $row['fotoProducto']];
+        } 
+    }
     $carpetaImagenes = "../BD/Images/";
-    } 
+    mysqli_next_result($conn); //TIENE que ir o hay error
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -22,7 +22,7 @@
 --
 -- Dumping routines for database 'ferreterias'
 --
-/*!50003 DROP PROCEDURE IF EXISTS `getCantidadProductos` */;
+/*!50003 DROP PROCEDURE IF EXISTS `getCantidadCarrito` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -32,9 +32,9 @@
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getCantidadProductos`(in username varchar(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCantidadCarrito`(in userid INT)
 BEGIN
-select  COUNT(p.Producto_idProducto)
+select  count(p.Producto_idProducto) as cantidad
 from cliente c 
 join usuariocliente u
 on u.cliente_idCliente = c.idCliente
@@ -42,7 +42,7 @@ join carrito K
 on k.Cliente_idCliente = c.idCliente
 join productoporcarrito p 
 on p.carrito_idcarrito = k.idCarrito 
-where u.usuarioCliente = username;
+where u.idusuarioCliente = userid;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -61,7 +61,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCarrito`(in username varchar(50))
 BEGIN
-select  u.usuarioCliente, p.Producto_idProducto
+select  p.Producto_idProducto
 from cliente c 
 join usuariocliente u
 on u.cliente_idCliente = c.idCliente
@@ -88,7 +88,9 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUser`(in username varchar(50))
 BEGIN
-select c.nombreCliente, c.apellidosCliente, u.usuarioCliente, u.contrasenaCliente
+select u.idUsuarioCliente AS userID , c.nombreCliente AS nombreCliente, 
+c.apellidosCliente AS apellidosCliente, u.usuarioCliente AS usuariocliente, 
+u.contrasenaCliente AS contrasenaCliente
 from cliente c 
 join usuariocliente u
 on u.cliente_idCliente = c.idCliente 
@@ -171,4 +173,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-20 22:40:44
+-- Dump completed on 2016-11-21  0:50:09

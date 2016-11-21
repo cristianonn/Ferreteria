@@ -30,7 +30,7 @@ CREATE TABLE `usuariocliente` (
   PRIMARY KEY (`idUsuarioCliente`),
   KEY `fk_UsuarioCliente_cliente1_idx` (`cliente_idCliente`),
   CONSTRAINT `fk_UsuarioCliente_cliente1` FOREIGN KEY (`cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `usuariocliente` (
 
 LOCK TABLES `usuariocliente` WRITE;
 /*!40000 ALTER TABLE `usuariocliente` DISABLE KEYS */;
-INSERT INTO `usuariocliente` VALUES (1,'lck@gmail.com','fatbaby','1');
+INSERT INTO `usuariocliente` VALUES (1,'lck@gmail.com','fatbaby','1'),(2,'CVH@gmail.com','12345','2'),(3,'BBU@hotmail.com','12345','3'),(4,'ALL@gmail.com','12345','4');
 /*!40000 ALTER TABLE `usuariocliente` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-20 22:40:36
+-- Dump completed on 2016-11-21  0:50:06

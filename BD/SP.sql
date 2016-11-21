@@ -44,14 +44,16 @@ DELIMITER ;
 
 
 -- -----------------------------------------------------
--- procedure getUser
+-- procedure getUser (para iniciar sesión)
 -- -----------------------------------------------------
 
 DELIMITER $$
 USE `ferreterias`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUser`(in username varchar(50))
 BEGIN
-select c.nombreCliente, c.apellidosCliente, u.usuarioCliente, u.contrasenaCliente
+select u.idUsuarioCliente AS userID , c.nombreCliente AS nombreCliente, 
+c.apellidosCliente AS apellidosCliente, u.usuarioCliente AS usuariocliente, 
+u.contrasenaCliente AS contrasenaCliente
 from cliente c 
 join usuariocliente u
 on u.cliente_idCliente = c.idCliente 
@@ -67,7 +69,7 @@ DELIMITER $$
 USE `ferreterias`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCarrito`(in username varchar(50))
 BEGIN
-select  u.usuarioCliente, p.Producto_idProducto
+select  p.Producto_idProducto
 from cliente c 
 join usuariocliente u
 on u.cliente_idCliente = c.idCliente
@@ -81,13 +83,13 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
--- procedure getCantidadProductos
+-- procedure getCantidadCarrito
 -- -----------------------------------------------------
 DELIMITER $$
 USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getCantidadProductos`(in username varchar(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCantidadCarrito`(in userid INT)
 BEGIN
-select  COUNT(p.Producto_idProducto)
+select  count(p.Producto_idProducto) as cantidad
 from cliente c 
 join usuariocliente u
 on u.cliente_idCliente = c.idCliente
@@ -95,7 +97,7 @@ join carrito K
 on k.Cliente_idCliente = c.idCliente
 join productoporcarrito p 
 on p.carrito_idcarrito = k.idCarrito 
-where u.usuarioCliente = username;
+where u.idusuarioCliente = userid;
 END$$
 
 DELIMITER ;

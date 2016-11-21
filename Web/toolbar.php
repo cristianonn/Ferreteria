@@ -26,8 +26,9 @@
                 <li><a href="#"><i class="fa fa-comments" aria-hidden="true"></i> Chat</a></li>
                 <li><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Carrito:
                 <?php
-                    if (isset($_SESSION['numCarrito'])) {
-                        echo " " . $_SESSION['numCarrito'];
+                    if (isset($_SESSION['userID'])) {
+                        $_SESSION['cantidadCarrito'] = getCantidadCarrito();
+                        echo " " . $_SESSION['cantidadCarrito'];
                     }
                     else {
                         echo " 0";

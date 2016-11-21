@@ -1,5 +1,9 @@
 <?php
 	header('Content-type: text/html; charset=utf-8');
+	header('Content-type: text/html; charset=utf-8');
+	if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
 	$dbhost = "localhost";
 	$dbuser = "usuarionormal";
 	$dbpass = "12345";

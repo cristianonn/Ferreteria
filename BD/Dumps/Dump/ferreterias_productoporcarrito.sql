@@ -26,11 +26,14 @@ CREATE TABLE `productoporcarrito` (
   `idProductoPorCarrito` int(11) NOT NULL AUTO_INCREMENT,
   `Producto_idProducto` varchar(20) NOT NULL,
   `carrito_idcarrito` int(11) NOT NULL,
+  `ferreteria_idFerreteria` varchar(45) NOT NULL,
   PRIMARY KEY (`idProductoPorCarrito`),
   KEY `fk_ProductoPorCarrito_Producto1_idx` (`Producto_idProducto`),
   KEY `fk_ProductoPorCarrito_carrito1_idx` (`carrito_idcarrito`),
+  KEY `fk_productoporcarrito_ferreteria1_idx` (`ferreteria_idFerreteria`),
   CONSTRAINT `fk_ProductoPorCarrito_Producto1` FOREIGN KEY (`Producto_idProducto`) REFERENCES `producto` (`idProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ProductoPorCarrito_carrito1` FOREIGN KEY (`carrito_idcarrito`) REFERENCES `carrito` (`idcarrito`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_ProductoPorCarrito_carrito1` FOREIGN KEY (`carrito_idcarrito`) REFERENCES `carrito` (`idcarrito`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_productoporcarrito_ferreteria1` FOREIGN KEY (`ferreteria_idFerreteria`) REFERENCES `ferreteria` (`idFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -40,7 +43,7 @@ CREATE TABLE `productoporcarrito` (
 
 LOCK TABLES `productoporcarrito` WRITE;
 /*!40000 ALTER TABLE `productoporcarrito` DISABLE KEYS */;
-INSERT INTO `productoporcarrito` VALUES (1,'2',1),(2,'5',1),(3,'8',1),(4,'12',2),(5,'4',2);
+INSERT INTO `productoporcarrito` VALUES (1,'2',1,''),(2,'5',1,''),(3,'8',1,''),(4,'12',2,''),(5,'4',2,'');
 /*!40000 ALTER TABLE `productoporcarrito` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-20 22:40:37
+-- Dump completed on 2016-11-21  0:50:07
