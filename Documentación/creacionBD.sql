@@ -491,6 +491,44 @@ DEFAULT CHARACTER SET = utf8;
 USE `ferreterias` ;
 
 -- -----------------------------------------------------
+-- procedure getCarrito
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCarrito`(in username varchar(50))
+BEGIN
+select  u.usuarioCliente, p.Producto_idProducto
+from cliente c 
+join usuariocliente u
+on u.cliente_idCliente = c.idCliente
+join carrito K
+on k.Cliente_idCliente = c.idCliente
+join productoporcarrito p 
+on p.carrito_idcarrito = k.idCarrito 
+where u.usuarioCliente = username;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getUser
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUser`(in username varchar(50))
+BEGIN
+select c.nombreCliente, c.apellidosCliente, u.usuarioCliente, u.contrasenaCliente
+from cliente c 
+join usuariocliente u
+on u.cliente_idCliente = c.idCliente 
+where u.usuarioCliente = username;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
 -- procedure seleccionar6Random
 -- -----------------------------------------------------
 
@@ -501,6 +539,19 @@ BEGIN
  select idProducto,nombreProducto, descripcionProducto, precioProducto, fotoProducto FROM Producto
  ORDER BY RAND()
  LIMIT 6;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure seleccionarFerreteria
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `seleccionarFerreteria`()
+BEGIN
+	select * from ferrteria;
 END$$
 
 DELIMITER ;

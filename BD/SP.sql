@@ -14,17 +14,33 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
+-- procedure seleccionarFerreteria
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `seleccionarFerreteria`()
+BEGIN
+	select * from ferrteria;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
 -- procedure seleccionarProducto
 -- -----------------------------------------------------
 
 DELIMITER $$
 USE `ferreterias`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `seleccionarProducto`(
-IN pId varchar(20)
+IN pId varchar(20),
+IN pFerreteria VARCHAR(45)
 )
 BEGIN
-	select * from Producto
-    where pId = Producto.idProducto;
+	select p.idProducto, p.nombreProducto, p.precioProducto, p.descripcionProducto,i.cantidad from Producto p
+    JOIN inventarioporferreteria i
+    ON producto_idProducto = pId
+    where pId = p.idProducto AND i.ferreteria_idFerreteria = pFerreteria;
 END$$
 
 DELIMITER ;
@@ -41,6 +57,11 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
 
 
 -- -----------------------------------------------------
