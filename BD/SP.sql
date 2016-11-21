@@ -133,3 +133,25 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getProductoENFerreteria
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductoEnFerreteria`
+(IN pId varchar(20), IN fId INT)
+BEGIN
+	select idProducto, nombreProducto, precioProducto, fotoProducto,
+		descripcionProducto, marcaProducto, aspectosTecnicosProducto,
+		utilidadProducto, garantia, nombreDepartamento,
+		inventarioPorFerreteria.cantidad AS cantidad
+	from Producto, Departamento, inventarioPorFerreteria
+    where pId = Producto.idProducto
+    AND Producto_idProducto = idProducto
+    AND ferreteria_idFerreteria = fId
+    AND departamento_idDepartamento = idDepartamento;
+END$$
+
+DELIMITER ;

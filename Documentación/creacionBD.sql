@@ -159,7 +159,6 @@ CREATE TABLE IF NOT EXISTS `ferreterias`.`producto` (
   `aspectosTecnicosProducto` VARCHAR(100) NULL DEFAULT NULL,
   `utilidadProducto` VARCHAR(100) NULL DEFAULT NULL,
   `garantia` INT(11) NULL DEFAULT NULL,
-  `cantidad` INT(11) NULL DEFAULT NULL,
   `departamento_idDepartamento` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idProducto`),
   INDEX `fk_producto_departamento1_idx` (`departamento_idDepartamento` ASC),

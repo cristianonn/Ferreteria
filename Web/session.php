@@ -66,4 +66,21 @@
         return $arrayProductos;
     }
 
+    function getProductoEnFerreteria($idProducto, $idFerreteria) {
+        $conn = $_SESSION['conn'];
+        $arrayProducto = [];
+        $query = mysqli_query($conn, "CALL getProductoEnFerreteria('$idProducto', '$idFerreteria');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayProducto = $row;
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayProducto;
+    }
+
 ?>

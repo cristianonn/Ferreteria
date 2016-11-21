@@ -16,8 +16,9 @@
                                 "foto" => $row['fotoProducto']];
         } 
     }
-    $carpetaImagenes = "../BD/Images/";
     mysqli_next_result($conn); //TIENE que ir o hay error
+
+    $carpetaImagenes = "../BD/Images/";
 ?>
 <!DOCTYPE html>
 <html lang="en">
