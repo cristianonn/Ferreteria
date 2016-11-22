@@ -26,12 +26,12 @@ CREATE TABLE `productoporbackorder` (
   `idProductoPorBackOrder` int(11) NOT NULL AUTO_INCREMENT,
   `ferreteria_idFerreteria` int(11) NOT NULL,
   `producto_idProducto` varchar(20) NOT NULL,
-  `backorder_idBackOrder` int(11) NOT NULL,
+  `cliente_idCliente` varchar(25) NOT NULL,
   PRIMARY KEY (`idProductoPorBackOrder`),
   KEY `fk_productoporbackorder_ferreteria1_idx` (`ferreteria_idFerreteria`),
   KEY `fk_productoporbackorder_producto1_idx` (`producto_idProducto`),
-  KEY `fk_productoporbackorder_backorder1_idx` (`backorder_idBackOrder`),
-  CONSTRAINT `fk_productoporbackorder_backorder1` FOREIGN KEY (`backorder_idBackOrder`) REFERENCES `backorder` (`idBackOrder`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `fk_productoporbackorder_cliente1_idx` (`cliente_idCliente`),
+  CONSTRAINT `fk_productoporbackorder_cliente1` FOREIGN KEY (`cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_productoporbackorder_ferreteria1` FOREIGN KEY (`ferreteria_idFerreteria`) REFERENCES `ferreteria` (`idFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_productoporbackorder_producto1` FOREIGN KEY (`producto_idProducto`) REFERENCES `producto` (`idProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-21 17:53:24
+-- Dump completed on 2016-11-21 18:07:28

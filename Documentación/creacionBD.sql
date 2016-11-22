@@ -278,11 +278,11 @@ CREATE TABLE IF NOT EXISTS `ferreterias`.`productoporbackorder` (
   `idProductoPorBackOrder` INT(11) NOT NULL AUTO_INCREMENT,
   `ferreteria_idFerreteria` INT NOT NULL,
   `producto_idProducto` VARCHAR(20) NOT NULL,
-  `backorder_idBackOrder` INT(11) NOT NULL,
+  `cliente_idCliente` VARCHAR(25) NOT NULL,
   PRIMARY KEY (`idProductoPorBackOrder`),
   INDEX `fk_productoporbackorder_ferreteria1_idx` (`ferreteria_idFerreteria` ASC),
   INDEX `fk_productoporbackorder_producto1_idx` (`producto_idProducto` ASC),
-  INDEX `fk_productoporbackorder_backorder1_idx` (`backorder_idBackOrder` ASC),
+  INDEX `fk_productoporbackorder_cliente1_idx` (`cliente_idCliente` ASC),
   CONSTRAINT `fk_productoporbackorder_ferreteria1`
     FOREIGN KEY (`ferreteria_idFerreteria`)
     REFERENCES `ferreterias`.`ferreteria` (`idFerreteria`)
@@ -293,9 +293,9 @@ CREATE TABLE IF NOT EXISTS `ferreterias`.`productoporbackorder` (
     REFERENCES `ferreterias`.`producto` (`idProducto`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_productoporbackorder_backorder1`
-    FOREIGN KEY (`backorder_idBackOrder`)
-    REFERENCES `ferreterias`.`backorder` (`idBackOrder`)
+  CONSTRAINT `fk_productoporbackorder_cliente1`
+    FOREIGN KEY (`cliente_idCliente`)
+    REFERENCES `ferreterias`.`cliente` (`idCliente`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
