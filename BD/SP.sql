@@ -191,3 +191,48 @@ END$$
 
 DELIMITER ;
 
+-- -----------------------------------------------------
+-- procedure productosCarrito
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `productosCarrito`(in username varchar(50))
+BEGIN
+select s.nombreProducto, s.precioProducto, s.descripcionProducto, s.idProducto, s.fotoProducto
+from cliente c 
+join usuariocliente u
+on u.cliente_idCliente = c.idCliente
+join carrito K
+on k.Cliente_idCliente = c.idCliente
+join productoporcarrito p 
+on p.carrito_idcarrito = k.idCarrito
+join producto s 
+on s.idProducto = p.producto_idproducto 
+where u.usuarioCliente = username;
+END$$
+
+DELIMITER ;
+
+
+-- -----------------------------------------------------
+-- procedure productosBackorder
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `productosbackorder`(in username varchar(50))
+BEGIN
+select s.nombreProducto, s.precioProducto, s.descripcionProducto, s.idProducto, s.fotoProducto
+from cliente c
+join usuariocliente u
+on u.cliente_idCliente = c.idCliente
+join backorder K
+on k.Cliente_idCliente = c.idCliente
+join productoporbackorder p 
+on p.backorder_idbackorder = k.idbackorder
+join producto s 
+on s.idProducto = p.producto_idproducto 
+where u.usuarioCliente = username;
+END$$
+
+DELIMITER ;
+
