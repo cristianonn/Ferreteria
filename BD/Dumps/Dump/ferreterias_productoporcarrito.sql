@@ -34,7 +34,7 @@ CREATE TABLE `productoporcarrito` (
   CONSTRAINT `fk_ProductoPorCarrito_Producto1` FOREIGN KEY (`Producto_idProducto`) REFERENCES `producto` (`idProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_productoporcarrito_cliente1` FOREIGN KEY (`cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_productoporcarrito_ferreteria1` FOREIGN KEY (`ferreteria_idFerreteria`) REFERENCES `ferreteria` (`idFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +43,7 @@ CREATE TABLE `productoporcarrito` (
 
 LOCK TABLES `productoporcarrito` WRITE;
 /*!40000 ALTER TABLE `productoporcarrito` DISABLE KEYS */;
-INSERT INTO `productoporcarrito` VALUES (1,'2',1,'1'),(2,'5',1,'1'),(3,'8',1,'1'),(4,'12',1,'2'),(5,'4',1,'2'),(7,'1',1,'1'),(8,'3',2,'1'),(9,'2',3,'1'),(10,'4',2,'1');
+INSERT INTO `productoporcarrito` VALUES (1,'2',1,'1'),(2,'5',1,'1'),(3,'8',1,'1'),(4,'12',1,'2'),(5,'4',1,'2'),(7,'1',1,'1'),(8,'3',2,'1'),(9,'2',3,'1'),(10,'4',2,'1'),(11,'1',1,'1'),(12,'1',1,'1');
 /*!40000 ALTER TABLE `productoporcarrito` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-21 23:13:24
+-- Dump completed on 2016-11-23 16:18:38

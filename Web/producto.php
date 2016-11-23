@@ -42,10 +42,13 @@
             if (isset($_GET['carrito'])) {
                 agregarACarrito($idProducto, $idFerreteria);
             }
+            if (isset($_GET['backorder'])) {
+                agregarABackorder($idProducto, $idFerreteria);
+            }
             //Obtener la cantidad de veces que este producto está en el carrito
-            /*if (isset($_SESSION['userID'])) {
+            if (isset($_SESSION['userID'])) {
                 $cantidadCarrito = estaEnCarrito($idProducto, $idFerreteria);
-            }*/
+            }
             if (isset($_SESSION['userID'])) {
                 $cantidadBackOrder = estaEnBackOrder($idProducto, $idFerreteria);
             }
@@ -157,14 +160,11 @@
                     else {
                         echo "<input name=\"carrito\" type=\"submit\" class=\"btn btn-danger\" value = \"Añadir a carrito\">";
                     }
-                    
-                ?>
-                <?php 
                     if ($cantidadBackOrder != 0) {
                         echo "<button type=\"button\" class=\"btn btn-danger\" disabled=\"disabled\">Añadir a Back order</button>";
                     }
                     else {
-                        echo "<input name=\"carrito\" type=\"submit\" class=\"btn btn-danger\" value = \"Añadir a Back order\">";
+                        echo "<input name=\"backorder\" type=\"submit\" class=\"btn btn-danger\" value = \"Añadir a Back order\">";
                     }
                     
                 ?>

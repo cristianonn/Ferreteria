@@ -34,7 +34,7 @@
                         echo " 0";
                     }
                 ?> 
-                <li><a href="#"><i class="fa fa-list-alt" aria-hidden="true"></i> Back order
+                <li><a href="#"><i class="fa fa-list-alt" aria-hidden="true"></i> Backorder:
                 <?php
                     if (isset($_SESSION['userID'])) {
                         $_SESSION['cantidadBackOrder'] = getCantidadBackOrder();
