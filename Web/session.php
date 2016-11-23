@@ -24,6 +24,23 @@
     	mysqli_next_result($conn); //TIENE que ir o hay error
     	return $cantidadCarrito;
     }
+    function getCantidadBackOrder() {
+        $conn = $_SESSION['conn'];
+        $userID = $_SESSION['userID'];
+        $cantidadBackOrder = 0;
+        $query = mysqli_query($conn, "CALL getCantidadBackOrder('$userID');");
+        if (!$query) {
+            die("Error: ".mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows!=0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $cantidadBackOrder = $row['cantidad'];
+            }
+        }
+        mysqli_next_result($conn); //TIENE que ir o hay error
+        return $cantidadBackOrder;
+    }
 
     function getFerreterias() {
         $conn = $_SESSION['conn'];
@@ -105,6 +122,34 @@
         $conn = $_SESSION['conn'];
         $idCliente = $_SESSION['userID'];
         $query = mysqli_query($conn, "CALL agregarACarrito('$idProducto', '$idFerreteria', '$idCliente');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        //mysqli_next_result($conn);
+    }
+
+    function estaEnBackOrder($idProducto, $idFerreteria) {
+        $conn = $_SESSION['conn'];
+        $idCliente = $_SESSION['userID'];
+        $cantidad = 0;
+        $query = mysqli_query($conn, "CALL estaEnbackOrder('$idProducto', '$idFerreteria', '$idCliente');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $cantidad = $row['cantidad'];
+            }
+        }
+        mysqli_next_result($conn);
+        return $cantidad;
+    }
+
+    function agregarABackOrder($idProducto, $idFerreteria) {
+        $conn = $_SESSION['conn'];
+        $idCliente = $_SESSION['userID'];
+        $query = mysqli_query($conn, "CALL agregarABackOrder('$idProducto', '$idFerreteria', '$idCliente');");
         if (!$query) {
             die ("Error: " . mysqli_error($conn));
         }

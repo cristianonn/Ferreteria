@@ -257,3 +257,57 @@ END$$
 
 DELIMITER ;
 
+
+-- -----------------------------------------------------
+-- procedure estaEnBackOrder
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `estaEnBackOrder`(IN pId varchar(20), IN fId INT, IN cId VARCHAR(25))
+BEGIN
+	select COUNT(Producto_idProducto) as cantidad
+	from ProductoPorBackOrder
+    where Producto_idProducto = pId
+    AND ferreteria_idFerreteria = fId
+    AND cliente_idCliente = cId;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure agregarABackOrder
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarABackOrder`(IN pId varchar(20), IN fId INT, IN cId VARCHAR(25))
+BEGIN
+	INSERT INTO `ferreterias`.`productoporbackorder`
+		(`Producto_idProducto`,
+		`ferreteria_idFerreteria`,
+		`cliente_idCliente`)
+		VALUES
+		(pId,
+		fId,
+		cId);
+END$$
+
+DELIMITER ;
+
+
+-- -----------------------------------------------------
+-- procedure getCantidadBackOrder
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCantidadBackOrder`(in userid INT)
+BEGIN
+select  count(p.Producto_idProducto) as cantidad
+from cliente c 
+join usuariocliente u
+on u.cliente_idCliente = c.idCliente
+join productoporbackorder p
+on p.Cliente_idCliente = c.idCliente
+where u.idusuarioCliente = userid;
+END$$
+
+DELIMITER ;
