@@ -24,6 +24,9 @@
         $nombreFerreteria = "";
         $cantidadCarrito = -1;
         $cantidadBackOrder = -1;
+        $pasilloProducto = 0;
+        $estanteProducto = 0;
+        $posicionEstante = 0;
         //Obtener aquí toda la información del producto
         $arrayProducto = getProductoEnFerreteria($idProducto, $idFerreteria);
         if ($arrayProducto != null) {
@@ -38,6 +41,9 @@
             $nombreDepartamento = $arrayProducto['nombreDepartamento'];
             $cantidad = $arrayProducto['cantidad'];
             $nombreFerreteria = $arrayProducto['nombreFerreteria'];
+            /*$pasilloProducto = $arrayProducto['numeroPasillo'];
+            $estanteProducto = $arrayProducto['numeroEstante'];*/
+
             //Y si todo está bien con el producto, chequear si el usuario pidió meterlo en el carrito
             if (isset($_GET['carrito'])) {
                 agregarACarrito($idProducto, $idFerreteria);
@@ -142,6 +148,14 @@
                         <tr>
                             <th>Departamento</th>
                             <td><?php echo $nombreDepartamento; ?></td>
+                        </tr>
+                        <tr>
+                            <th>Pasillo</th>
+                            <td><?php echo $pasilloProducto; ?></td>
+                        </tr>
+                        <tr>
+                            <th>Estante</th>
+                            <td><?php echo $estanteProducto; ?></td>
                         </tr>
                         <tr>
                             <th>Cantidad en Ferretería <?php echo $nombreFerreteria;?></th>
