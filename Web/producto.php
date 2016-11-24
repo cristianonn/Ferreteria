@@ -41,8 +41,8 @@
             $nombreDepartamento = $arrayProducto['nombreDepartamento'];
             $cantidad = $arrayProducto['cantidad'];
             $nombreFerreteria = $arrayProducto['nombreFerreteria'];
-            /*$pasilloProducto = $arrayProducto['numeroPasillo'];
-            $estanteProducto = $arrayProducto['numeroEstante'];*/
+            $pasilloProducto = $arrayProducto['numeroPasillo'];
+            $estanteProducto = $arrayProducto['numeroEstante'];
 
             //Y si todo está bien con el producto, chequear si el usuario pidió meterlo en el carrito
             if (isset($_GET['carrito'])) {

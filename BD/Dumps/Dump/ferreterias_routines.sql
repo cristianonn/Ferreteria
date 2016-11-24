@@ -226,13 +226,20 @@ BEGIN
 		descripcionProducto, marcaProducto, aspectosTecnicosProducto,
 		utilidadProducto, garantia, nombreDepartamento,
 		inventarioPorFerreteria.cantidad AS cantidad,
-		nombreFerreteria
-	from Producto, Departamento, inventarioPorFerreteria, Ferreteria
+		nombreFerreteria,
+        numeroEstante,
+        numeroPasillo
+	from Producto, Departamento, inventarioPorFerreteria, Ferreteria, productoPorEstante, estantePorPasillo, estante, pasilloPorFerreteria, pasillo
     where pId = Producto.idProducto
     AND Producto_idProducto = idProducto
     AND ferreteria_idFerreteria = fId
     AND ferreteria_idFerreteria = idFerreteria
-    AND departamento_idDepartamento = idDepartamento;
+    AND departamento_idDepartamento = idDepartamento
+    AND producto_idProductoEnEstante = idProducto
+    AND estantePorpasillo_idestantePorpasillo = idestantePorpasillo
+    AND estante_idEstante = idEstante
+    AND idpasilloporferreteria = pasilloporferreteria_idpasilloporferreteria
+    AND pasillo_idPasillo = idPasillo;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -451,4 +458,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-24  0:35:43
+-- Dump completed on 2016-11-24 10:33:11

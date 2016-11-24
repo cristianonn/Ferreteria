@@ -24,15 +24,15 @@ DROP TABLE IF EXISTS `productoporestante`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `productoporestante` (
   `idproductoPorEstante` int(11) NOT NULL AUTO_INCREMENT,
-  `producto_idProducto` varchar(20) NOT NULL,
+  `producto_idProductoEnEstante` varchar(20) NOT NULL,
   `estantePorpasillo_idestantePorpasillo` int(11) NOT NULL,
   `posicion` int(11) DEFAULT NULL,
   PRIMARY KEY (`idproductoPorEstante`),
-  KEY `fk_productoPorEstante_producto1_idx` (`producto_idProducto`),
+  KEY `fk_productoPorEstante_producto1_idx` (`producto_idProductoEnEstante`),
   KEY `fk_productoPorEstante_estantePorpasillo1_idx` (`estantePorpasillo_idestantePorpasillo`),
   CONSTRAINT `fk_productoPorEstante_estantePorpasillo1` FOREIGN KEY (`estantePorpasillo_idestantePorpasillo`) REFERENCES `estanteporpasillo` (`idestantePorpasillo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_productoPorEstante_producto1` FOREIGN KEY (`producto_idProducto`) REFERENCES `producto` (`idProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+  CONSTRAINT `fk_productoPorEstante_producto1` FOREIGN KEY (`producto_idProductoEnEstante`) REFERENCES `producto` (`idProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-24  0:35:40
+-- Dump completed on 2016-11-24 10:33:08

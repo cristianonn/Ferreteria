@@ -24,15 +24,15 @@ DROP TABLE IF EXISTS `pasilloporferreteria`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pasilloporferreteria` (
   `idpasilloporferreteria` int(11) NOT NULL AUTO_INCREMENT,
-  `ferreteria_idFerreteria` int(11) NOT NULL,
+  `ferreteria_idFerreteriaEnPasillo` int(11) NOT NULL,
   `pasillo_idPasillo` int(11) NOT NULL,
-  `departamento_idDepartamento` varchar(45) NOT NULL,
+  `departamento_idDepartamentoEnPasillo` varchar(45) NOT NULL,
   PRIMARY KEY (`idpasilloporferreteria`),
-  KEY `fk_pasilloporferreteria_ferreteria1_idx` (`ferreteria_idFerreteria`),
+  KEY `fk_pasilloporferreteria_ferreteria1_idx` (`ferreteria_idFerreteriaEnPasillo`),
   KEY `fk_pasilloporferreteria_pasillo1_idx` (`pasillo_idPasillo`),
-  KEY `fk_pasilloporferreteria_departamento1_idx` (`departamento_idDepartamento`),
-  CONSTRAINT `fk_pasilloporferreteria_departamento1` FOREIGN KEY (`departamento_idDepartamento`) REFERENCES `departamento` (`idDepartamento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pasilloporferreteria_ferreteria1` FOREIGN KEY (`ferreteria_idFerreteria`) REFERENCES `ferreteria` (`idFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `fk_pasilloporferreteria_departamento1_idx` (`departamento_idDepartamentoEnPasillo`),
+  CONSTRAINT `fk_pasilloporferreteria_departamento1` FOREIGN KEY (`departamento_idDepartamentoEnPasillo`) REFERENCES `departamento` (`idDepartamento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pasilloporferreteria_ferreteria1` FOREIGN KEY (`ferreteria_idFerreteriaEnPasillo`) REFERENCES `ferreteria` (`idFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_pasilloporferreteria_pasillo1` FOREIGN KEY (`pasillo_idPasillo`) REFERENCES `pasillo` (`idPasillo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-24  0:35:42
+-- Dump completed on 2016-11-24 10:33:11
