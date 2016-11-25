@@ -340,7 +340,7 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
--- procedure getUsuarioEmpleado
+-- procedure eliminarLineaInventario
 -- -----------------------------------------------------
 
 DELIMITER $$

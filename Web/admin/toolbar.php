@@ -73,7 +73,7 @@
                             <a href="nuevoproducto.php">Nuevo producto</a>
                         </li>
                         <li>
-                            <a href="productos.php">Productos</a>
+                            <a href="productos.php">Catálogo de productos</a>
                         </li>
                         <li>
                             <a href="inventario.php">Inventario</a>
