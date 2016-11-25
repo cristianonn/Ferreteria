@@ -56,10 +56,10 @@
                     <a href="#"><i class="fa fa-users" aria-hidden="true"></i></i> Empleado<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="#">Empleados</a>
+                            <a href="empleados.php">Empleados</a>
                         </li>
                         <li>
-                            <a href="#">Tipos de empleado</a>
+                            <a href="tipoEmpleado">Tipos de empleado</a>
                         </li>
                         <li>
                             <a href="#">Vacaciones</a>

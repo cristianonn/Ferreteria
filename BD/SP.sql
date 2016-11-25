@@ -39,6 +39,57 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
+-- procedure agregarEmpleado
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarEmpleado`(
+IN pId varchar(15),
+IN pNombre varchar(45),
+IN pApellidos varchar(45),
+IN pTel varchar(15),
+IN pFechaI DATE,
+IN pVacas INT(11),
+IN pTipo INT(11)
+)
+BEGIN
+	INSERT INTO `ferreterias`.`empleado`
+(`idEmpleado`,
+`nombreEmpleado`,
+`apellidosEmpleado`,
+`telEmpleado`,
+`fechaEntrada`,
+`vacacionesEmpleado`,
+`TipoEmpleado_idTipoEmpleado`)
+	VALUES
+(pId,
+pNombre,
+pApellidos,
+pTel,
+pFechaI,
+pVacas,
+pTipo);
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure eliminarLineaInventario
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarLineaInventario`(in pidProducto varchar(20), IN pidFerreteria INT)
+BEGIN
+	DELETE FROM `ferreterias`.`inventarioporferreteria`
+	WHERE Producto_idProducto = pidProducto
+	AND ferreteria_idFerreteria = pidFerreteria;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
 -- procedure estaEnBackOrder
 -- -----------------------------------------------------
 
@@ -130,6 +181,19 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
+-- procedure getEmpleados
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getEmpleados`()
+BEGIN
+	Select * FROM empleado;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
 -- procedure getFerreterias
 -- -----------------------------------------------------
 
@@ -172,6 +236,36 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
+-- procedure getProductos
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductos`()
+BEGIN
+	SELECT idProducto, nombreProducto, precioProducto, descripcionProducto,
+	garantia, nombreDepartamento, nombreMarca
+	FROM Producto, Departamento, Marca 
+	WHERE departamento_idDepartamento = idDepartamento
+	AND Marca_idMarca = idMarca;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getTipoEmpleados
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTipoEmpleados`()
+BEGIN
+	Select * from tipoempleado;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
 -- procedure getUser
 -- -----------------------------------------------------
 
@@ -186,6 +280,25 @@ from cliente c
 join usuariocliente u
 on u.cliente_idCliente = c.idCliente 
 where u.usuarioCliente = username;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getUsuarioEmpleado
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsuarioEmpleado`(in username varchar(50))
+BEGIN
+select u.idUsuarioEmpleado AS userID , e.nombreEmpleado AS nombreEmpleado, 
+e.apellidosEmpleado AS apellidosEmpleado, u.nombreusuario AS usuarioEmpleado, 
+u.contrasennaUsuario AS contrasenaEmpleado
+from empleado e 
+join usuarioEmpleado u
+on u.empleado_idempleado = e.idEmpleado 
+where u.nombreUsuario = username;
 END$$
 
 DELIMITER ;
@@ -316,59 +429,6 @@ USE `ferreterias`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `seleccionarTodosProductos`()
 BEGIN
  select * from Producto;
-END$$
-
-DELIMITER ;
-
--- -----------------------------------------------------
--- procedure getUsuarioEmpleado
--- -----------------------------------------------------
-
-DELIMITER $$
-USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsuarioEmpleado`(in username varchar(50))
-BEGIN
-select u.idUsuarioEmpleado AS userID , e.nombreEmpleado AS nombreEmpleado, 
-e.apellidosEmpleado AS apellidosEmpleado, u.nombreusuario AS usuarioEmpleado, 
-u.contrasennaUsuario AS contrasenaEmpleado
-from empleado e 
-join usuarioEmpleado u
-on u.empleado_idempleado = e.idEmpleado 
-where u.nombreUsuario = username;
-END$$
-
-DELIMITER ;
-
--- -----------------------------------------------------
--- procedure eliminarLineaInventario
--- -----------------------------------------------------
-
-DELIMITER $$
-USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarLineaInventario`
-(in pidProducto varchar(20), IN pidFerreteria INT)
-BEGIN
-	DELETE FROM `ferreterias`.`inventarioporferreteria`
-	WHERE Producto_idProducto = pidProducto
-	AND ferreteria_idFerreteria = pidFerreteria;
-END$$
-
-DELIMITER ;
-
--- -----------------------------------------------------
--- procedure getProductos
--- -----------------------------------------------------
-
-DELIMITER $$
-USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductos`
-()
-BEGIN
-	SELECT idProducto, nombreProducto, precioProducto, descripcionProducto,
-	garantia, nombreDepartamento, nombreMarca
-	FROM Producto, Departamento, Marca 
-	WHERE departamento_idDepartamento = idDepartamento
-	AND Marca_idMarca = idMarca;
 END$$
 
 DELIMITER ;
