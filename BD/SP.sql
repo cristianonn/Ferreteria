@@ -354,3 +354,21 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getProductos
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductos`
+()
+BEGIN
+	SELECT idProducto, nombreProducto, precioProducto, descripcionProducto,
+	garantia, nombreDepartamento, nombreMarca
+	FROM Producto, Departamento, Marca 
+	WHERE departamento_idDepartamento = idDepartamento
+	AND Marca_idMarca = idMarca;
+END$$
+
+DELIMITER ;
