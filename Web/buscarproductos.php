@@ -69,9 +69,6 @@
         }
 
         function ferreteriaOnChange() {
-            /*if (typeof tabla != 'undefined') {
-                tabla.fnClearTable();
-            }*/
             idFerreteria = document.getElementById("idFerreteria").value;
             arrayProductosXFerreteria = arrayProductos[idFerreteria];
             if (typeof tabla === 'undefined') {
@@ -140,11 +137,6 @@
 
         <!-- Footer -->
         <footer>
-            <div class="row">
-                <div class="col-md-6">
-                    <a href="#">Enlaces de abajo</a>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-lg-12">
                     <p>Copyright &copy; Ferretería Online 2014</p>

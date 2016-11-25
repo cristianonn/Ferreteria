@@ -150,22 +150,23 @@ DELIMITER $$
 USE `ferreterias`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductoEnFerreteria`(IN pId varchar(20), IN fId INT)
 BEGIN
-	select idProducto, nombreProducto, precioProducto, fotoProducto,
-		descripcionProducto, marcaProducto, aspectosTecnicosProducto,
+	select idProducto, nombreProducto, precioProducto, imagenProducto AS fotoProducto,
+		descripcionProducto, nombreMarca AS marcaProducto, aspectosTecnicosProducto,
 		utilidadProducto, garantia, nombreDepartamento,
 		inventarioPorFerreteria.cantidad AS cantidad,
 		nombreFerreteria, numeroEstante, numeroPasillo
-	from Producto, Departamento, inventarioPorFerreteria, Ferreteria, estante, productoporestante, estanteporpasillo, pasilloporferreteria, pasillo
-    where pId = Producto.idProducto
-    AND Producto_idProducto = idProducto
-    AND ferreteria_idFerreteria = fId
-    AND ferreteria_idFerreteria = idFerreteria
-    AND producto_idProductoEnEstante = pId
-    AND estantePorpasillo_idestantePorpasillo = idestantePorpasillo
-    AND estante_idEstante = idEstante
-    AND pasilloporferreteria_idpasilloporferreteria = idpasilloporferreteria
-    AND idPasillo = pasillo_idPasillo
-    AND departamento_idDepartamento = idDepartamento;
+	from Producto, Departamento, inventarioPorFerreteria, Ferreteria, 
+	estante, estanteporpasillo, pasillo, imagenesProducto, Marca
+	WHERE pId = Producto.idProducto
+	AND Producto.idProducto = inventarioporferreteria.Producto_idProducto
+	AND fId = Ferreteria.idFerreteria
+	AND Ferreteria.idFerreteria = inventarioporferreteria.ferreteria_idFerreteria
+	AND Producto.idProducto = imagenesProducto.Producto_idProducto
+	AND Marca.idMarca = Producto.Marca_idMarca
+	AND Departamento.idDepartamento = Producto.departamento_idDepartamento
+	AND inventarioporferreteria.estanteporpasillo_idestantePorpasillo = estanteporpasillo.idestantePorpasillo
+	AND estanteporpasillo.estante_idEstante = Estante.idEstante
+	AND estanteporpasillo.pasillo_idPasillo = Pasillo.idPasillo;
 END$$
 
 DELIMITER ;
@@ -243,7 +244,10 @@ DELIMITER $$
 USE `ferreterias`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `seleccionar6Random`()
 BEGIN
- select idProducto,nombreProducto, descripcionProducto, precioProducto, fotoProducto FROM Producto
+ select idProducto, nombreProducto, descripcionProducto, precioProducto, 
+ imagenProducto AS fotoProducto 
+ FROM Producto, imagenesProducto
+ WHERE idProducto = producto_idproducto
  ORDER BY RAND()
  LIMIT 6;
 END$$
@@ -290,13 +294,15 @@ DELIMITER $$
 USE `ferreterias`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `seleccionarProductosPorFerreteria`( IN pidFerreteria INT )
 BEGIN
-	SELECT idProducto, nombreProducto, precioProducto, fotoProducto,
-		descripcionProducto, marcaProducto, nombreDepartamento,
+	SELECT idProducto, nombreProducto, precioProducto,
+		descripcionProducto, nombreMarca AS marcaProducto, 
+		nombreDepartamento,
 		inventarioPorFerreteria.cantidad AS cantidad
-	FROM Producto, Departamento, inventarioPorFerreteria
+	FROM Producto, Departamento, inventarioPorFerreteria, Marca
 	WHERE ferreteria_idFerreteria = pidFerreteria
 	AND Producto_idProducto = idProducto
-	AND departamento_idDepartamento = idDepartamento;
+	AND departamento_idDepartamento = idDepartamento
+	AND idMarca = Marca_idMarca;
 END$$
 
 DELIMITER ;
@@ -310,6 +316,41 @@ USE `ferreterias`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `seleccionarTodosProductos`()
 BEGIN
  select * from Producto;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getUsuarioEmpleado
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsuarioEmpleado`(in username varchar(50))
+BEGIN
+select u.idUsuarioEmpleado AS userID , e.nombreEmpleado AS nombreEmpleado, 
+e.apellidosEmpleado AS apellidosEmpleado, u.nombreusuario AS usuarioEmpleado, 
+u.contrasennaUsuario AS contrasenaEmpleado
+from empleado e 
+join usuarioEmpleado u
+on u.empleado_idempleado = e.idEmpleado 
+where u.nombreUsuario = username;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getUsuarioEmpleado
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarLineaInventario`
+(in pidProducto varchar(20), IN pidFerreteria INT)
+BEGIN
+	DELETE FROM `ferreterias`.`inventarioporferreteria`
+	WHERE Producto_idProducto = pidProducto
+	AND ferreteria_idFerreteria = pidFerreteria;
 END$$
 
 DELIMITER ;

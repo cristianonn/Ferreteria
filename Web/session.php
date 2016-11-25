@@ -75,7 +75,7 @@
                     $arrayProductos[$idFerreteria][] = ["<a href=\"producto.php?idf=" . $idFerreteria .
                     "&idp=" . $row['idProducto'] . "\">" . $row['nombreProducto'] . "</a>", 
                         $row['precioProducto'], $row['descripcionProducto'], 
-                        $row['marcaProducto'], $row['nombreDepartamento'], $row['cantidad'],];
+                        $row['marcaProducto'], $row['nombreDepartamento'], $row['cantidad']];
                 }
             }
             mysqli_next_result($conn);

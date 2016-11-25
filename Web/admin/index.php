@@ -1,12 +1,9 @@
 <?php
     /* Ferreteria - Bases de Datos II
-     * login.php - Validación de inicio de sesión (para empleado)
+     * index.php - Dashboard de empleado
      * Creado: 24/11/16 Gabriela Garro
      */
-    header('Content-type: text/html; charset=utf-8');
-    if (session_status() == PHP_SESSION_NONE) {
-        session_start();
-    }
+    include("session.php");
 ?>
 
 <!DOCTYPE html>
@@ -37,8 +34,8 @@
     <!-- Morris Charts CSS -->
     <link href="../vendor/morrisjs/morris.css" rel="stylesheet">
 
-    <!-- Custom Fonts -->
-    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- Font Awesome -->
+    <script src="https://use.fontawesome.com/554db7ace5.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

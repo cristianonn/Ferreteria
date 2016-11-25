@@ -70,7 +70,13 @@
                     <a href="#"><i class="fa fa-archive" aria-hidden="true"></i></i> Producto<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="#">Productos</a>
+                            <a href="nuevoproducto.php">Nuevo producto</a>
+                        </li>
+                        <li>
+                            <a href="productos.php">Productos</a>
+                        </li>
+                        <li>
+                            <a href="inventario.php">Inventario</a>
                         </li>
                         <li>
                             <a href="#">Marcas de productos</a>

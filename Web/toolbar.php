@@ -11,7 +11,7 @@
             </button>
             
             <a class="navbar-brand" href="#"><img src="img/icono40x40.png" class="img-responsive"></a>
-            <a class="navbar-brand" href="#page-top"> FerreteríaOnline</a>
+            <a class="navbar-brand" href="index.php"> FerreteríaOnline</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
