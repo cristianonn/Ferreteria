@@ -293,7 +293,8 @@
         <footer>
             <div class="row">
                 <div class="col-md-6">
-                    <a href="#">Enlaces de abajo</a>
+                    <a href="#" data-toggle="modal" data-target="#loginEmpleado">
+                    <i class="fa fa-user" aria-hidden="true"></i> Iniciar sesión (empleado)</a>
                 </div>
             </div>
             <div class="row">
@@ -329,6 +330,54 @@
                                 <div class="modal-body">
                                     <h2>Iniciar sesión</h2>
                                     <form role="form" action="login.php" method="POST" class="registration-form">
+                                        <div class="row control-group">
+                                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                                <label>Usuario</label>
+                                                <input type="text" class="form-control" placeholder="Usuario" name="usuario" id="usuario" required data-validation-required-message="Por favor ingrese su usuario.">
+                                                <p class="help-block text-danger"></p>
+                                            </div>
+                                        </div>
+                                        <div class="row control-group">
+                                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                                <label>Password</label>
+                                                <input type="password" class="form-control" placeholder="Contraseña" name="contrasena" id="contrasena" required data-validation-required-message="Por favor ingrese su contraseña.">
+                                                <p class="help-block text-danger"></p>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer text-center">
+                                            <div class = "container">
+                                                <div class="text-center">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Cerrar</button>
+                                                    <input name = "submit" type = "submit" class="btn btn-primary" value = "Iniciar sesión">
+                                                </div>  
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="portfolio-modal modal fade" id="loginEmpleado" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog vertical-align-center">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal">
+                        <div class="lr">
+                            <div class="rl">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-2">
+                                <div class="modal-body">
+                                    <h2>Iniciar sesión (empleado)</h2>
+                                    <form role="form" action="admin/login.php" method="POST" class="registration-form">
                                         <div class="row control-group">
                                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                                 <label>Usuario</label>

@@ -313,3 +313,22 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getUsuarioEmpleado
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsuarioEmpleado`(in username varchar(50))
+BEGIN
+select u.idUsuarioEmpleado AS userID , e.nombreEmpleado AS nombreEmpleado, 
+e.apellidosEmpleado AS apellidosEmpleado, u.nombreusuario AS usuarioEmpleado, 
+u.contrasennaUsuario AS contrasenaEmpleado
+from empleado e 
+join usuarioEmpleado u
+on u.empleado_idempleado = e.idEmpleado 
+where u.nombreUsuario = username;
+END$$
+
+DELIMITER ;

@@ -197,7 +197,6 @@
         <footer>
             <div class="row">
                 <div class="col-md-6">
-                    <a href="#">Enlaces de abajo</a>
                 </div>
             </div>
             <div class="row">
