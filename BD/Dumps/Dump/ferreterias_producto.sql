@@ -26,15 +26,16 @@ CREATE TABLE `producto` (
   `idProducto` varchar(20) NOT NULL,
   `nombreProducto` varchar(40) DEFAULT NULL,
   `precioProducto` float DEFAULT NULL,
-  `fotoProducto` varchar(100) DEFAULT NULL,
   `descripcionProducto` varchar(100) DEFAULT NULL,
-  `marcaProducto` varchar(25) DEFAULT NULL,
   `aspectosTecnicosProducto` varchar(100) DEFAULT NULL,
   `utilidadProducto` varchar(100) DEFAULT NULL,
   `garantia` int(11) DEFAULT NULL,
   `departamento_idDepartamento` varchar(45) NOT NULL,
+  `Marca_idMarca` int(11) NOT NULL,
   PRIMARY KEY (`idProducto`),
   KEY `fk_producto_departamento1_idx` (`departamento_idDepartamento`),
+  KEY `fk_producto_Marca1_idx` (`Marca_idMarca`),
+  CONSTRAINT `fk_producto_Marca1` FOREIGN KEY (`Marca_idMarca`) REFERENCES `marca` (`idMarca`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_producto_departamento1` FOREIGN KEY (`departamento_idDepartamento`) REFERENCES `departamento` (`idDepartamento`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -45,7 +46,7 @@ CREATE TABLE `producto` (
 
 LOCK TABLES `producto` WRITE;
 /*!40000 ALTER TABLE `producto` DISABLE KEYS */;
-INSERT INTO `producto` VALUES ('1','calentador magnifico',75000,'calentador.png','calienta agua diay nada mas','sencor','no hace nada mas que calentar agua a 5000 grados centigrados en 5 seg','calienta agua',31,'3'),('10','madera ceramica',17000,'madera1.jpg','piso ceramico con color de madera','leroy','de montado facil y sin pegamento','ser piso',31,'2'),('11','madera ceramica rustica',17000,'madera2.jpg','piso ceramico colo madera simple','leroy','facil de montar y de apariencia simple','ser piso',31,'2'),('12','microondas',35000,'microondas.png','microondas con temporizador de ruedita','sencor','varias potencias y de 110v','calienta rapidamente',62,'3'),('13','adorno planta simple',20000,'planta1.png','adorno de decoracion con castillo adentro de platas','cactus y suculentas','adorna ','adorna',31,'5'),('14','adorno planta diminuto',7500,'planta2.png','adorno diminuto de plantas multicolor','cactus y suculentas','adorna cocinas','adorna',31,'5'),('2','ceramica tipo piedra',10000,'ceramica1.jpg','cuadro de ceramica con apariencia a piedra','sentosa','util para pisos y paredes','embellece la casa',31,'2'),('3','ceramica simple',8500,'ceramica2.png','cuadro de ceramica de colores gris y dorado','sentosa','especial para cocinas y entradas de la casa','emebellece',31,'5'),('4','grifo minimalista',45000,'grifo1.png','grifo con apariencia minimalista de una sola entrada','american ','muy bonito','tira agua y se ve lindo',180,'5'),('5','grifo doble',23000,'grifo2.jpg','con de dos canales en un tubo','american','sencillo y bello','bota agua muy sofisticadamente',180,'3'),('6','grifo cobre ',41000,'grifo3.jpg','grifo para banno especialmente disennado para verse bieny funcionar facilmente','american','bello y junta dos tubos en uno','agua ',365,'3'),('7','horno con discos',26000,'hornito.png','hornito con dos disco encima para una cocina pequenna y completa','oseter','tosta y cocina','cocica muy chivamente',180,'1'),('8','lavado simple metal',30000,'lavado.jpg','lavado sencillo de un hueco','american','superficie deslizante','lavar los platos',365,'1'),('9','lavado amplio plastico',35000,'lavado2.jpg','lavado con area para poner los trstes','american','facil de lavar','lavar platos',365,'1');
+INSERT INTO `producto` VALUES ('1','calentador magnifico',75000,'calienta agua diay nada mas','no hace nada mas que calentar agua a 5000 grados centigrados en 5 seg','calienta agua',31,'3',0),('10','madera ceramica',17000,'piso ceramico con color de madera','de montado facil y sin pegamento','ser piso',31,'2',0),('11','madera ceramica rustica',17000,'piso ceramico colo madera simple','facil de montar y de apariencia simple','ser piso',31,'2',0),('12','microondas',35000,'microondas con temporizador de ruedita','varias potencias y de 110v','calienta rapidamente',62,'3',0),('13','adorno planta simple',20000,'adorno de decoracion con castillo adentro de platas','adorna ','adorna',31,'5',0),('14','adorno planta diminuto',7500,'adorno diminuto de plantas multicolor','adorna cocinas','adorna',31,'5',0),('2','ceramica tipo piedra',10000,'cuadro de ceramica con apariencia a piedra','util para pisos y paredes','embellece la casa',31,'2',0),('3','ceramica simple',8500,'cuadro de ceramica de colores gris y dorado','especial para cocinas y entradas de la casa','emebellece',31,'5',0),('4','grifo minimalista',45000,'grifo con apariencia minimalista de una sola entrada','muy bonito','tira agua y se ve lindo',180,'5',0),('5','grifo doble',23000,'con de dos canales en un tubo','sencillo y bello','bota agua muy sofisticadamente',180,'3',0),('6','grifo cobre ',41000,'grifo para banno especialmente disennado para verse bieny funcionar facilmente','bello y junta dos tubos en uno','agua ',365,'3',0),('7','horno con discos',26000,'hornito con dos disco encima para una cocina pequenna y completa','tosta y cocina','cocica muy chivamente',180,'1',0),('8','lavado simple metal',30000,'lavado sencillo de un hueco','superficie deslizante','lavar los platos',365,'1',0),('9','lavado amplio plastico',35000,'lavado con area para poner los trstes','facil de lavar','lavar platos',365,'1',0);
 /*!40000 ALTER TABLE `producto` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -58,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-24 17:12:34
+-- Dump completed on 2016-11-25  3:48:35

@@ -16,30 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `cliente`
+-- Table structure for table `marca`
 --
 
-DROP TABLE IF EXISTS `cliente`;
+DROP TABLE IF EXISTS `marca`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `cliente` (
-  `idCliente` varchar(25) NOT NULL,
-  `nombreCliente` varchar(25) DEFAULT NULL,
-  `apellidosCliente` varchar(45) DEFAULT NULL,
-  `telCliente` varchar(15) DEFAULT NULL,
-  `correoCliente` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idCliente`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `marca` (
+  `idMarca` int(11) NOT NULL AUTO_INCREMENT,
+  `nombreMarca` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`idMarca`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `cliente`
+-- Dumping data for table `marca`
 --
 
-LOCK TABLES `cliente` WRITE;
-/*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES ('1','Louis','CK','88888888','lck@gmail.com'),('2','Carlos','VH','89652145','CVH@gmail.com'),('3','bo burnham','BU','88695425','BBU@hotmail.com'),('4','Andres','LL','88663321','ALL@gmail.com');
-/*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
+LOCK TABLES `marca` WRITE;
+/*!40000 ALTER TABLE `marca` DISABLE KEYS */;
+INSERT INTO `marca` VALUES (0,'mamco'),(2,'sony'),(3,'senaza'),(4,'pinta'),(5,'pana'),(6,'pani');
+/*!40000 ALTER TABLE `marca` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-25  3:48:37
+-- Dump completed on 2016-11-25  3:48:33
