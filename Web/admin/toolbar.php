@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">Administración de Ferreterías</a>
+        <a class="navbar-brand" href="index.php">Administración de Ferreterías</a>
     </div>
     <!-- /.navbar-header -->
 
@@ -56,10 +56,13 @@
                     <a href="#"><i class="fa fa-users" aria-hidden="true"></i></i> Empleado<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="empleados.php">Empleados</a>
+                            <a href="nuevoempleado.php">Nuevo empleado</a>
                         </li>
                         <li>
-                            <a href="tipoEmpleado">Tipos de empleado</a>
+                            <a href="empleados.php">Planilla de empleados</a>
+                        </li>
+                        <li>
+                            <a href="tipoEmpleados.php">Tipos de empleado</a>
                         </li>
                         <li>
                             <a href="#">Vacaciones</a>

@@ -105,7 +105,7 @@
     }
 
 
-    function getTipoEmpleados() {
+    function getTipoEmpleadosEditar() {
         $conn = $_SESSION['conn'];
         $arrayTiposs = [];
         $query = mysqli_query($conn, "CALL getTipoEmpleados();");
@@ -120,17 +120,35 @@
                     "<a class=\"btn btn-default\" href=\"empleados.php?eliminar=" . $row['idTipoEmpleado'] . "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></a>"];
             }
         }
-        mysqli_next_result($conn); //TIENE que ir o hay error
+        mysqli_next_result($conn);
         return $arrayTipos;
     }
 
-    function agregarEmpleado($pId, $pNombre,$pApe,$pTel,$pFecha,$pVaca,$pTipo) {
+    function agregarEmpleado($pId,$pNombre,$pApe,$pTel,$pTipo) {
         $conn = $_SESSION['conn'];
-        $idCliente = $_SESSION['userID'];
-        $query = mysqli_query($conn, "CALL agregarEmpleado('$pId', '$pNombre','$pApe','$pTel','$pFecha','$pVaca','$pTipo');");
+        $query = mysqli_query($conn, "CALL agregarEmpleado('$pId', '$pNombre','$pApe','$pTel','$pTipo');");
         if (!$query) {
             die ("Error: " . mysqli_error($conn));
         }
-        //mysqli_next_result($conn);
+        else {
+            echo "Empleado " . $pId . " agregado.";
+        }
     }
-?>s
+
+    function getTiposEmpleado() {
+        $conn = $_SESSION['conn'];
+        $arrayTiposs = [];
+        $query = mysqli_query($conn, "CALL getTipoEmpleados();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayTipos[] = [$row['idTipoEmpleado'], $row['tipo']];
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayTipos;
+    }
+?>

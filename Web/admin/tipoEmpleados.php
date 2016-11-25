@@ -10,7 +10,7 @@
         eliminarLineaInventario($idProducto, $idFerreteria);
         echo "Producto " . $idProducto . " eliminado.";
     }*/
-    $arrayTipos = getTipoEmpleados();
+    $arrayTipos = getTipoEmpleadosEditar();
     
 ?>
 <!DOCTYPE html>
@@ -63,7 +63,9 @@
                 data: arrayTipos,
                 columns: [
                     {title: "Id."},
-                    {title: "Tipo"}
+                    {title: "Tipo"},
+                    {title: "Editar"},
+                    {title: "Eliminar"}
                 ]
             } );
         } );

@@ -1,7 +1,7 @@
 <?php
     /* Ferreteria - Bases de Datos II
-     * productos.php - Ver catálogo de productos
-     * Creado: 25/11/16 Gabriela Garro
+     * empleados.php - Ver catálogo de productos
+     * Creado: 25/11/16 Geovanni Villalobos
      */
     include("session.php");
     /*if (isset($_GET['eliminar']) || isset($_GET['idf'])) {
@@ -10,20 +10,6 @@
         eliminarLineaInventario($idProducto, $idFerreteria);
         echo "Producto " . $idProducto . " eliminado.";
     }*/
-    $arrayEmpleados = getEmpleados();
-    $idEmpleado = '';
-    $nombreEmpleado = '';
-    $apellidosEmpleado = '';
-    $telefonoEmpleado = '';
-    $fechaEntrada = '';
-    $vacaciones = 0;
-    $tipoEmpleado = '';
-
-
-    if (isset($_GET['empleado'])) {
-                agregarEmpleado($idEmpleado, $nombreEmpleado,$apellidosEmpleado,$telefonoEmpleado,$fechaEntrada,$vacaciones,$tipoEmpleado);
-                echo 'alert("message successfully sent")';
-            }
 
 ?>
 <!DOCTYPE html>
@@ -119,36 +105,6 @@
             </div>
             <!-- /.row -->
             <div>
-	            <form method="POST" action="empleados.php">
-	            <div>
-				    <table class="table">
-				      <tr>
-				      	<th>Id</th>
-				        <th>Nombre</th>
-				        <th>Apellidos</th>
-				        <th>Telefono</th>
-				        <th>FechaEntrada</th>
-				        <th>Vacaciones</th>
-				        <th>Tipo empleado</th>
-				      </tr>
-				      <tr>
-				      	<td contenteditable="true"><?php echo $idEmpleado; ?></td>
-				        <td contenteditable="true"><?php echo $nombreEmpleado; ?></td>
-				        <td contenteditable="true"><?php echo $apellidosEmpleado; ?></td>
-				        <td contenteditable="true"><?php echo $telefonoEmpleado; ?></td>
-				        <td contenteditable="true"><?php echo $fechaEntrada; ?></td>
-				        <td contenteditable="false"><?php echo $vacaciones; ?></td>
-				        <td contenteditable="true"><?php echo $tipoEmpleado; ?></td>
-				      </tr>
-				    </table>
-	            </div>
-            	<div>
-            		<?php echo "<input name=\"empleado\" type=\"submit\" class=\"btn btn-primary\" value = \"Añadir empleado\" >";
-            		?>
-            	</div>
-            </div>
-        </div>
-        </form>
         <!-- /#page-wrapper -->
 
     </div>
