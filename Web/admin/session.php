@@ -240,5 +240,47 @@
         }
     }
 
+/*------------- CLiente ----------*/
+    function agregarCliente($pId,$pNombre,$pApe,$pTel,$pCorreo) {
+        $conn = $_SESSION['conn'];
+        $query = mysqli_query($conn, "CALL agregarCliente('$pId', '$pNombre','$pApe','$pTel','$pCorreo');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        else {
+            echo "Cliente " . $pId . " agregado.";
+        }
+    }
 
+
+
+    function getClientes() {
+        $conn = $_SESSION['conn'];
+        $arrayClientes = [];
+        $query = mysqli_query($conn, "CALL getClientes();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows!=0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayClientes[] = [$row['idCliente'], $row['nombreCliente'], 
+                    $row['apellidosCliente'], $row['telCliente'], $row['correoCliente'],
+                    "<a class=\"btn btn-default\" href=\"clientes.php?eliminar=" . $row['idCliente'] . "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></a>"];
+            }
+        }
+        mysqli_next_result($conn); //TIENE que ir o hay error
+        return $arrayClientes;
+    }
+
+    function eliminarCliente($pId) {
+        $conn = $_SESSION['conn'];
+        $query = mysqli_query($conn, "CALL eliminarCliente('$pId');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        else {
+            echo "Cliente" . $pId . " eliminado.";
+        }
+    }
 ?>

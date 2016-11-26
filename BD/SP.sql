@@ -554,3 +554,64 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+
+-- -----------------------------------------------------
+-- procedure agregarCliente
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE PROCEDURE `agregarCliente` (
+IN pId VARCHAR(25),
+IN pNombre VARCHAR(25),
+IN pApellidos VARCHAR(45),
+IN pTel VARCHAR(15),
+IN pCorreo VARCHAR(45)
+)
+BEGIN
+SELECT * FROM ferreterias.usuarioempleado;INSERT INTO `ferreterias`.`cliente`
+(`idCliente`,
+`nombreCliente`,
+`apellidosCliente`,
+`telCliente`,
+`correoCliente`)
+VALUES
+(pId,
+pNombre,
+pApellidos,
+pTel,
+pCorreo);
+
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getClientes
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE PROCEDURE `getClientes` ()
+BEGIN
+	SELECT * from cliente;
+END$$
+
+DELIMITER ;
+
+
+
+-- -----------------------------------------------------
+-- procedure eliminarCliente
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarCliente`(IN pId INT)
+BEGIN
+	DELETE FROM `ferreterias`.`cliente`
+	WHERE idCliente = pId;
+    DELETE FROM `ferreterias`.`usuariocliente`
+	WHERE cliente_idCliente = pId;
+END$$
+
+DELIMITER ;
+

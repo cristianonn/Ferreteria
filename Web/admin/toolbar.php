@@ -95,6 +95,17 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="#"><i class="fa fa-users" aria-hidden="true"></i></i> Cliente<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="nuevocliente.php">Nuevo cliente</a>
+                        </li>
+                        <li>
+                            <a href="clientes.php">Ver clientes</a>
+                        </li>
+                    </ul>
+                </li>
                 
             </ul>
         </div>
