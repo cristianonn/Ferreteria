@@ -151,4 +151,94 @@
         mysqli_next_result($conn);
         return $arrayTipos;
     }
+
+    function getDepartamentos() {
+        $conn = $_SESSION['conn'];
+        $arrayDepartamentos = [];
+        $query = mysqli_query($conn, "CALL getDepartamentos();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayDepartamentos[] = [$row['idDepartamento'], $row['nombreDepartamento']];
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayDepartamentos;
+    }
+
+    function getMarcas() {
+        $conn = $_SESSION['conn'];
+        $arrayMarcas = [];
+        $query = mysqli_query($conn, "CALL getMarcas();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayMarcas[] = [$row['idMarca'], $row['nombreMarca']];
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayMarcas;
+    }
+
+    function agregarProducto($nombre, $precio, $descripcion, $aspectostecnicos, $utilidad,
+            $garantia, $idDepartamento, $idMarca, $carpeta, $arrayImagen) {
+        $conn = $_SESSION['conn'];
+        $idProducto = 0;
+        $query = mysqli_query($conn, "CALL agregarProducto('$nombre', '$precio', '$descripcion', 
+            '$aspectostecnicos', '$utilidad', '$garantia', '$idDepartamento', '$idMarca');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        else {
+            $numrows = mysqli_num_rows($query);
+            if ($numrows != 0) {
+                while($row = mysqli_fetch_assoc($query)) {
+                    $idProducto = $row['idProducto'];
+                }
+            }
+            echo "Producto " . $idProducto . " agregado.\n";
+            mysqli_next_result($conn);
+            //Agregar imagen
+            $nombreImagen = basename($arrayImagen['name']);
+            $query = mysqli_query($conn, "CALL agregarImagenProducto('$idProducto', '$nombreImagen');");
+            if (!$query) {
+                die ("Error: " . mysqli_error($conn));
+            }
+            else {
+                if (move_uploaded_file($arrayImagen['tmp_name'], $carpeta . $nombreImagen)) {
+                    echo "Imagen " . $nombreImagen . " subida.";
+                }
+                else {
+                    echo "Error subiendo imagen.";
+                }
+            }
+            //Agregar producto a todos los inventarios
+            $query = mysqli_query($conn, "CALL agregarProductoAInventarios('$idProducto');");
+            if (!$query) {
+                die ("Error: " . mysqli_error($conn));
+            }
+            else {
+                " Producto agregado a inventarios.";
+            }
+        }  
+    }
+
+    function eliminarProducto($pId) {
+        $conn = $_SESSION['conn'];
+        $query = mysqli_query($conn, "CALL eliminarProducto('$pId');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        else {
+            echo "Producto " . $pId . " eliminado.";
+        }
+    }
+
+
 ?>

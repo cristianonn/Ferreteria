@@ -4,12 +4,10 @@
      * Creado: 25/11/16 Gabriela Garro
      */
     include("session.php");
-    /*if (isset($_GET['eliminar']) || isset($_GET['idf'])) {
+    if (isset($_GET['eliminar'])) {
         $idProducto = $_GET['eliminar'];
-        $idFerreteria = $_GET['idf'];
-        eliminarLineaInventario($idProducto, $idFerreteria);
-        echo "Producto " . $idProducto . " eliminado.";
-    }*/
+        eliminarProducto($idProducto);
+    }
     $arrayProductos = getProductos();
     
 ?>
