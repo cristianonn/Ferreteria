@@ -169,6 +169,23 @@
         return $arrayDepartamentos;
     }
 
+    function getPasillos() {
+        $conn = $_SESSION['conn'];
+        $arrayPasillos = [];
+        $query = mysqli_query($conn, "CALL getPasillos();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayDepartamentos[] = [$row['idPasillo'], $row['numeroPasillo']];
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayDepartamentos;
+    }
+
     function getMarcas() {
         $conn = $_SESSION['conn'];
         $arrayMarcas = [];
@@ -283,4 +300,5 @@
             echo "Cliente" . $pId . " eliminado.";
         }
     }
+
 ?>

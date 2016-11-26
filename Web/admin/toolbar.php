@@ -85,10 +85,10 @@
                             <a href="#">Marcas de productos</a>
                         </li>
                         <li>
-                            <a href="#">Departamentos</a>
+                            <a href="departamentos.php">Departamentos</a>
                         </li>
                         <li>
-                            <a href="#">Pasillos</a>
+                            <a href="pasillos.php">Pasillos</a>
                         </li>
                         <li>
                             <a href="#">Estantes</a>

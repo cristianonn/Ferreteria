@@ -615,3 +615,50 @@ END$$
 
 DELIMITER ;
 
+
+
+-- -----------------------------------------------------
+-- procedure getDepartamentos
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE PROCEDURE `getDepartamento` ()
+BEGIN
+	SELECT * from departamentos;
+END$$
+
+DELIMITER ;
+
+
+-- -----------------------------------------------------
+-- procedure getPasillos
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE PROCEDURE `getPasillos` ()
+BEGIN
+	SELECT * FROM pasillo;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure verMejorFerreteria
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `verMejorFerreteria`()
+BEGIN
+	select ferreteria_idFerreteria,sum(precioPedido) 
+	from (
+	select ferreteria_idFerreteria, precioPedido
+	from pedidoonline) 
+    as precio
+    GROUP BY ferreteria_idferreteria
+    ORDER BY precioPedido DESC
+    LIMIT 1;
+END$$
+
+DELIMITER ;
+
+
