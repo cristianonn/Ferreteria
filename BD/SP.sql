@@ -4,7 +4,7 @@
 
 DELIMITER $$
 USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarABackOrder`(IN pId varchar(20), IN fId INT, IN cId VARCHAR(25))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarABackOrder`(IN pId INT, IN fId INT, IN cId VARCHAR(25))
 BEGIN
 	INSERT INTO `ferreterias`.`productoporbackorder`
 		(`Producto_idProducto`,
@@ -24,16 +24,15 @@ DELIMITER ;
 
 DELIMITER $$
 USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarACarrito`(IN pId varchar(20), IN fId INT, IN cId VARCHAR(25))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarACarrito`(IN pId INT, IN fId INT, IN cId VARCHAR(25))
 BEGIN
 	INSERT INTO `ferreterias`.`productoporcarrito`
-		(`Producto_idProducto`,
-		`ferreteria_idFerreteria`,
+		(`inventarioporferreteria_idinventarioPorFerreteria`,
 		`cliente_idCliente`)
-		VALUES
-		(pId,
-		fId,
-		cId);
+		SELECT idInventarioPorFerreteria, cId FROM InventarioPorFerreteria
+			WHERE Producto_idProducto = pId
+            AND Ferreteria_idFerreteria = fId 
+           	LIMIT 1;
 END$$
 
 DELIMITER ;
@@ -78,7 +77,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarLineaInventario`(in pidProducto varchar(20), IN pidFerreteria INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarLineaInventario`(in pidProducto INT, IN pidFerreteria INT)
 BEGIN
 	DELETE FROM `ferreterias`.`inventarioporferreteria`
 	WHERE Producto_idProducto = pidProducto
@@ -93,7 +92,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `estaEnBackOrder`(IN pId varchar(20), IN fId INT, IN cId VARCHAR(25))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `estaEnBackOrder`(IN pId INT, IN fId INT, IN cId VARCHAR(25))
 BEGIN
 	select COUNT(Producto_idProducto) as cantidad
 	from ProductoPorBackOrder
@@ -110,12 +109,13 @@ DELIMITER ;
 
 DELIMITER $$
 USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `estaEnCarrito`(IN pId varchar(20), IN fId INT, IN cId VARCHAR(25))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `estaEnCarrito`(IN pId INT, IN fId INT, IN cId VARCHAR(25))
 BEGIN
 	select COUNT(Producto_idProducto) as cantidad
-	from ProductoPorCarrito
-    where Producto_idProducto = pId
-    AND ferreteria_idFerreteria = fId
+	from ProductoPorCarrito, InventarioPorFerreteria
+    where idInventarioPorFerreteria = inventarioporferreteria_idinventarioPorFerreteria
+    AND InventarioPorFerreteria.ferreteria_idFerreteria = fId
+    AND InventarioPorFerreteria.Producto_idProducto = pId
     AND cliente_idCliente = cId;
 END$$
 
@@ -148,13 +148,11 @@ DELIMITER $$
 USE `ferreterias`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCantidadCarrito`(in userid INT)
 BEGIN
-select  count(p.Producto_idProducto) as cantidad
-from cliente c 
-join usuariocliente u
-on u.cliente_idCliente = c.idCliente
-join productoporcarrito p
-on p.Cliente_idCliente = c.idCliente
-where u.idusuarioCliente = userid;
+SELECT COUNT(idProductoPorCarrito) AS cantidad
+FROM ProductoPorCarrito, cliente, usuariocliente
+WHERE UsuarioCliente.cliente_idCliente = userid
+AND UsuarioCliente.cliente_idCliente = idCliente
+AND ProductoPorCarrito.Cliente_idCliente = idCliente;
 END$$
 
 DELIMITER ;
@@ -210,7 +208,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductoEnFerreteria`(IN pId varchar(20), IN fId INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductoEnFerreteria`(IN pId INT, IN fId INT)
 BEGIN
 	select idProducto, nombreProducto, precioProducto, imagenProducto AS fotoProducto,
 		descripcionProducto, nombreMarca AS marcaProducto, aspectosTecnicosProducto,
@@ -385,7 +383,7 @@ DELIMITER ;
 DELIMITER $$
 USE `ferreterias`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `seleccionarProducto`(
-IN pId varchar(20),
+IN pId INT,
 IN pFerreteria VARCHAR(45)
 )
 BEGIN
@@ -429,56 +427,4 @@ BEGIN
  select * from Producto;
 END$$
 
-DELIMITER ;
-
--- -----------------------------------------------------
--- procedure getUsuarioEmpleado
--- -----------------------------------------------------
-
-DELIMITER $$
-USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsuarioEmpleado`(in username varchar(50))
-BEGIN
-select u.idUsuarioEmpleado AS userID , e.nombreEmpleado AS nombreEmpleado, 
-e.apellidosEmpleado AS apellidosEmpleado, u.nombreusuario AS usuarioEmpleado, 
-u.contrasennaUsuario AS contrasenaEmpleado
-from empleado e 
-join usuarioEmpleado u
-on u.empleado_idempleado = e.idEmpleado 
-where u.nombreUsuario = username;
-END$$
-
-DELIMITER ;
-
--- -----------------------------------------------------
--- procedure eliminarLineaInventario
--- -----------------------------------------------------
-
-DELIMITER $$
-USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarLineaInventario`
-(in pidProducto varchar(20), IN pidFerreteria INT)
-BEGIN
-	DELETE FROM `ferreterias`.`inventarioporferreteria`
-	WHERE Producto_idProducto = pidProducto
-	AND ferreteria_idFerreteria = pidFerreteria;
-END$$
-
-DELIMITER ;
-
--- -----------------------------------------------------
--- procedure getProductos
--- -----------------------------------------------------
-
-DELIMITER $$
-USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductos`
-()
-BEGIN
-	SELECT idProducto, nombreProducto, precioProducto, descripcionProducto,
-	garantia, nombreDepartamento, nombreMarca
-	FROM Producto, Departamento, Marca 
-	WHERE departamento_idDepartamento = idDepartamento
-	AND Marca_idMarca = idMarca;
-END$$
 DELIMITER ;

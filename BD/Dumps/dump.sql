@@ -217,7 +217,7 @@ DROP TABLE IF EXISTS `imagenesproducto`;
 CREATE TABLE `imagenesproducto` (
   `idimagenesProducto` int(11) NOT NULL AUTO_INCREMENT,
   `imagenProducto` varchar(100) DEFAULT NULL,
-  `producto_idProducto` varchar(20) NOT NULL,
+  `producto_idProducto` int(11) NOT NULL,
   PRIMARY KEY (`idimagenesProducto`),
   KEY `fk_imagenesProducto_producto1_idx` (`producto_idProducto`),
   CONSTRAINT `fk_imagenesProducto_producto1` FOREIGN KEY (`producto_idProducto`) REFERENCES `producto` (`idProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -230,7 +230,7 @@ CREATE TABLE `imagenesproducto` (
 
 LOCK TABLES `imagenesproducto` WRITE;
 /*!40000 ALTER TABLE `imagenesproducto` DISABLE KEYS */;
-INSERT INTO `imagenesproducto` VALUES (1,'calentador.png','1'),(14,'ceramica1.jpg','2'),(15,'ceramica2.png','3'),(16,'grifo1.png','4'),(17,'grifo2.jpg','5'),(18,'grifo3.jpg','6'),(19,'hornito.png','7'),(20,'lavado2.jpg','8'),(21,'lavado2.jpg','9'),(22,'madera1.jpg','10'),(23,'madera2.jpg','11'),(24,'microondas.png','12'),(25,'planta2.png','13'),(26,'planta1.png','14');
+INSERT INTO `imagenesproducto` VALUES (1,'calentador.png',1),(14,'ceramica1.jpg',2),(15,'ceramica2.png',3),(16,'grifo1.png',4),(17,'grifo2.jpg',5),(18,'grifo3.jpg',6),(19,'hornito.png',7),(20,'lavado2.jpg',8),(21,'lavado2.jpg',9),(22,'madera1.jpg',10),(23,'madera2.jpg',11),(24,'microondas.png',12),(25,'planta2.png',13),(26,'planta1.png',14);
 /*!40000 ALTER TABLE `imagenesproducto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -244,7 +244,7 @@ DROP TABLE IF EXISTS `inventarioporferreteria`;
 CREATE TABLE `inventarioporferreteria` (
   `idinventarioPorFerreteria` int(11) NOT NULL AUTO_INCREMENT,
   `cantidad` int(11) DEFAULT NULL,
-  `producto_idProducto` varchar(20) NOT NULL,
+  `producto_idProducto` int(11) NOT NULL,
   `ferreteria_idFerreteria` int(11) NOT NULL,
   `estanteporpasillo_idestantePorpasillo` int(11) NOT NULL,
   PRIMARY KEY (`idinventarioPorFerreteria`),
@@ -254,7 +254,7 @@ CREATE TABLE `inventarioporferreteria` (
   CONSTRAINT `fk_inventarioPorFerreteria_ferreteria1` FOREIGN KEY (`ferreteria_idFerreteria`) REFERENCES `ferreteria` (`idFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_inventarioPorFerreteria_producto1` FOREIGN KEY (`producto_idProducto`) REFERENCES `producto` (`idProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_inventarioporferreteria_estanteporpasillo1` FOREIGN KEY (`estanteporpasillo_idestantePorpasillo`) REFERENCES `estanteporpasillo` (`idestantePorpasillo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -263,7 +263,7 @@ CREATE TABLE `inventarioporferreteria` (
 
 LOCK TABLES `inventarioporferreteria` WRITE;
 /*!40000 ALTER TABLE `inventarioporferreteria` DISABLE KEYS */;
-INSERT INTO `inventarioporferreteria` VALUES (2,17,'1',2,2),(4,20,'2',1,4),(5,21,'2',2,5),(6,20,'2',3,6),(7,7,'3',1,7),(8,8,'3',2,8),(9,6,'3',3,9),(10,9,'4',1,1),(11,8,'4',2,2),(12,7,'4',3,3),(13,4,'5',1,4),(14,5,'5',2,5),(15,6,'5',3,6),(16,9,'6',1,7),(17,8,'6',2,8),(18,7,'6',3,9),(19,4,'7',1,1),(20,5,'7',2,2),(22,9,'8',1,4),(23,8,'8',2,5),(24,5,'8',3,6),(25,4,'9',1,7),(26,7,'9',2,8),(27,8,'9',3,9),(28,5,'10',1,1),(29,4,'10',2,2),(30,5,'10',3,3),(31,8,'11',1,4),(32,7,'11',2,5),(33,4,'11',3,6);
+INSERT INTO `inventarioporferreteria` VALUES (2,17,1,2,2),(4,20,2,1,4),(5,21,2,2,5),(6,20,2,3,6),(7,7,3,1,7),(8,8,3,2,8),(9,6,3,3,9),(10,9,4,1,1),(11,8,4,2,2),(12,7,4,3,3),(13,4,5,1,4),(14,5,5,2,5),(15,6,5,3,6),(16,9,6,1,7),(17,8,6,2,8),(18,7,6,3,9),(19,4,7,1,1),(20,5,7,2,2),(22,9,8,1,4),(23,8,8,2,5),(24,5,8,3,6),(25,4,9,1,7),(26,7,9,2,8),(27,8,9,3,9),(28,5,10,1,1),(29,4,10,2,2),(30,5,10,3,3),(31,8,11,1,4),(32,7,11,2,5),(33,4,11,3,6),(34,27,1,1,5);
 /*!40000 ALTER TABLE `inventarioporferreteria` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -439,7 +439,7 @@ DROP TABLE IF EXISTS `producto`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `producto` (
-  `idProducto` varchar(20) NOT NULL,
+  `idProducto` int(11) NOT NULL,
   `nombreProducto` varchar(40) DEFAULT NULL,
   `precioProducto` float DEFAULT NULL,
   `descripcionProducto` varchar(100) DEFAULT NULL,
@@ -462,7 +462,7 @@ CREATE TABLE `producto` (
 
 LOCK TABLES `producto` WRITE;
 /*!40000 ALTER TABLE `producto` DISABLE KEYS */;
-INSERT INTO `producto` VALUES ('1','calentador magnifico',75000,'calienta agua diay nada mas','no hace nada mas que calentar agua a 5000 grados centigrados en 5 seg','calienta agua',31,'3',0),('10','madera ceramica',17000,'piso ceramico con color de madera','de montado facil y sin pegamento','ser piso',31,'2',0),('11','madera ceramica rustica',17000,'piso ceramico colo madera simple','facil de montar y de apariencia simple','ser piso',31,'2',0),('12','microondas',35000,'microondas con temporizador de ruedita','varias potencias y de 110v','calienta rapidamente',62,'3',0),('13','adorno planta simple',20000,'adorno de decoracion con castillo adentro de platas','adorna ','adorna',31,'5',0),('14','adorno planta diminuto',7500,'adorno diminuto de plantas multicolor','adorna cocinas','adorna',31,'5',0),('2','ceramica tipo piedra',10000,'cuadro de ceramica con apariencia a piedra','util para pisos y paredes','embellece la casa',31,'2',0),('3','ceramica simple',8500,'cuadro de ceramica de colores gris y dorado','especial para cocinas y entradas de la casa','emebellece',31,'5',0),('4','grifo minimalista',45000,'grifo con apariencia minimalista de una sola entrada','muy bonito','tira agua y se ve lindo',180,'5',0),('5','grifo doble',23000,'con de dos canales en un tubo','sencillo y bello','bota agua muy sofisticadamente',180,'3',0),('6','grifo cobre ',41000,'grifo para banno especialmente disennado para verse bieny funcionar facilmente','bello y junta dos tubos en uno','agua ',365,'3',0),('7','horno con discos',26000,'hornito con dos disco encima para una cocina pequenna y completa','tosta y cocina','cocica muy chivamente',180,'1',0),('8','lavado simple metal',30000,'lavado sencillo de un hueco','superficie deslizante','lavar los platos',365,'1',0),('9','lavado amplio plastico',35000,'lavado con area para poner los trstes','facil de lavar','lavar platos',365,'1',0);
+INSERT INTO `producto` VALUES (1,'calentador magnifico',75000,'calienta agua diay nada mas','no hace nada mas que calentar agua a 5000 grados centigrados en 5 seg','calienta agua',31,'3',0),(2,'ceramica tipo piedra',10000,'cuadro de ceramica con apariencia a piedra','util para pisos y paredes','embellece la casa',31,'2',0),(3,'ceramica simple',8500,'cuadro de ceramica de colores gris y dorado','especial para cocinas y entradas de la casa','emebellece',31,'5',0),(4,'grifo minimalista',45000,'grifo con apariencia minimalista de una sola entrada','muy bonito','tira agua y se ve lindo',180,'5',0),(5,'grifo doble',23000,'con de dos canales en un tubo','sencillo y bello','bota agua muy sofisticadamente',180,'3',0),(6,'grifo cobre ',41000,'grifo para banno especialmente disennado para verse bieny funcionar facilmente','bello y junta dos tubos en uno','agua ',365,'3',0),(7,'horno con discos',26000,'hornito con dos disco encima para una cocina pequenna y completa','tosta y cocina','cocica muy chivamente',180,'1',0),(8,'lavado simple metal',30000,'lavado sencillo de un hueco','superficie deslizante','lavar los platos',365,'1',0),(9,'lavado amplio plastico',35000,'lavado con area para poner los trstes','facil de lavar','lavar platos',365,'1',0),(10,'madera ceramica',17000,'piso ceramico con color de madera','de montado facil y sin pegamento','ser piso',31,'2',0),(11,'madera ceramica rustica',17000,'piso ceramico colo madera simple','facil de montar y de apariencia simple','ser piso',31,'2',0),(12,'microondas',35000,'microondas con temporizador de ruedita','varias potencias y de 110v','calienta rapidamente',62,'3',0),(13,'adorno planta simple',20000,'adorno de decoracion con castillo adentro de platas','adorna ','adorna',31,'5',0),(14,'adorno planta diminuto',7500,'adorno diminuto de plantas multicolor','adorna cocinas','adorna',31,'5',0);
 /*!40000 ALTER TABLE `producto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -476,7 +476,7 @@ DROP TABLE IF EXISTS `productoporbackorder`;
 CREATE TABLE `productoporbackorder` (
   `idProductoPorBackOrder` int(11) NOT NULL AUTO_INCREMENT,
   `ferreteria_idFerreteria` int(11) NOT NULL,
-  `producto_idProducto` varchar(20) NOT NULL,
+  `producto_idProducto` int(11) NOT NULL,
   `cliente_idCliente` varchar(25) NOT NULL,
   PRIMARY KEY (`idProductoPorBackOrder`),
   KEY `fk_productoporbackorder_ferreteria1_idx` (`ferreteria_idFerreteria`),
@@ -494,7 +494,7 @@ CREATE TABLE `productoporbackorder` (
 
 LOCK TABLES `productoporbackorder` WRITE;
 /*!40000 ALTER TABLE `productoporbackorder` DISABLE KEYS */;
-INSERT INTO `productoporbackorder` VALUES (1,2,'8','1'),(2,3,'9','1');
+INSERT INTO `productoporbackorder` VALUES (1,2,8,'1'),(2,3,9,'1');
 /*!40000 ALTER TABLE `productoporbackorder` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -507,17 +507,14 @@ DROP TABLE IF EXISTS `productoporcarrito`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `productoporcarrito` (
   `idProductoPorCarrito` int(11) NOT NULL AUTO_INCREMENT,
-  `Producto_idProducto` varchar(20) NOT NULL,
-  `ferreteria_idFerreteria` int(11) NOT NULL,
   `cliente_idCliente` varchar(25) NOT NULL,
+  `inventarioporferreteria_idinventarioPorFerreteria` int(11) NOT NULL,
   PRIMARY KEY (`idProductoPorCarrito`),
-  KEY `fk_ProductoPorCarrito_Producto1_idx` (`Producto_idProducto`),
-  KEY `fk_productoporcarrito_ferreteria1_idx` (`ferreteria_idFerreteria`),
   KEY `fk_productoporcarrito_cliente1_idx` (`cliente_idCliente`),
-  CONSTRAINT `fk_ProductoPorCarrito_Producto1` FOREIGN KEY (`Producto_idProducto`) REFERENCES `producto` (`idProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `fk_productoporcarrito_inventarioporferreteria1_idx` (`inventarioporferreteria_idinventarioPorFerreteria`),
   CONSTRAINT `fk_productoporcarrito_cliente1` FOREIGN KEY (`cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_productoporcarrito_ferreteria1` FOREIGN KEY (`ferreteria_idFerreteria`) REFERENCES `ferreteria` (`idFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+  CONSTRAINT `fk_productoporcarrito_inventarioporferreteria1` FOREIGN KEY (`inventarioporferreteria_idinventarioPorFerreteria`) REFERENCES `inventarioporferreteria` (`idinventarioPorFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -526,7 +523,7 @@ CREATE TABLE `productoporcarrito` (
 
 LOCK TABLES `productoporcarrito` WRITE;
 /*!40000 ALTER TABLE `productoporcarrito` DISABLE KEYS */;
-INSERT INTO `productoporcarrito` VALUES (1,'2',1,'1'),(2,'5',1,'1'),(3,'8',1,'1'),(4,'12',1,'2'),(5,'4',1,'2'),(7,'1',1,'1'),(8,'3',2,'1'),(9,'2',3,'1'),(10,'4',2,'1'),(11,'1',1,'1'),(12,'1',1,'1'),(13,'9',3,'1');
+INSERT INTO `productoporcarrito` VALUES (1,'1',7),(2,'1',13),(3,'1',22),(5,'2',10),(7,'1',34),(8,'1',8),(9,'1',6),(10,'1',11),(13,'1',27),(14,'2',27),(15,'1',12);
 /*!40000 ALTER TABLE `productoporcarrito` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -539,7 +536,7 @@ DROP TABLE IF EXISTS `productoporpedido`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `productoporpedido` (
   `idProductoPorPedido` int(11) NOT NULL AUTO_INCREMENT,
-  `Producto_idProducto` varchar(20) NOT NULL,
+  `Producto_idProducto` int(11) NOT NULL,
   `Pedido_idPedido` int(11) NOT NULL,
   `vistoBueno` tinyint(1) DEFAULT NULL,
   `ferreteria_idFerreteria` int(11) NOT NULL,
@@ -559,7 +556,7 @@ CREATE TABLE `productoporpedido` (
 
 LOCK TABLES `productoporpedido` WRITE;
 /*!40000 ALTER TABLE `productoporpedido` DISABLE KEYS */;
-INSERT INTO `productoporpedido` VALUES (18,'1',5,0,1),(19,'2',5,0,1),(20,'3',5,0,1);
+INSERT INTO `productoporpedido` VALUES (18,1,5,0,1),(19,2,5,0,1),(20,3,5,0,1);
 /*!40000 ALTER TABLE `productoporpedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -771,7 +768,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarABackOrder`(IN pId varchar(20), IN fId INT, IN cId VARCHAR(25))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarABackOrder`(IN pId INT, IN fId INT, IN cId VARCHAR(25))
 BEGIN
 	INSERT INTO `ferreterias`.`productoporbackorder`
 		(`Producto_idProducto`,
@@ -797,16 +794,15 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarACarrito`(IN pId varchar(20), IN fId INT, IN cId VARCHAR(25))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarACarrito`(IN pId INT, IN fId INT, IN cId VARCHAR(25))
 BEGIN
 	INSERT INTO `ferreterias`.`productoporcarrito`
-		(`Producto_idProducto`,
-		`ferreteria_idFerreteria`,
+		(`inventarioporferreteria_idinventarioPorFerreteria`,
 		`cliente_idCliente`)
-		VALUES
-		(pId,
-		fId,
-		cId);
+		SELECT idInventarioPorFerreteria, cId FROM InventarioPorFerreteria
+			WHERE Producto_idProducto = pId
+            AND Ferreteria_idFerreteria = fId 
+           	LIMIT 1;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -863,7 +859,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarLineaInventario`(in pidProducto varchar(20), IN pidFerreteria INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarLineaInventario`(in pidProducto INT, IN pidFerreteria INT)
 BEGIN
 	DELETE FROM `ferreterias`.`inventarioporferreteria`
 	WHERE Producto_idProducto = pidProducto
@@ -884,7 +880,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `estaEnBackOrder`(IN pId varchar(20), IN fId INT, IN cId VARCHAR(25))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `estaEnBackOrder`(IN pId INT, IN fId INT, IN cId VARCHAR(25))
 BEGIN
 	select COUNT(Producto_idProducto) as cantidad
 	from ProductoPorBackOrder
@@ -907,12 +903,13 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `estaEnCarrito`(IN pId varchar(20), IN fId INT, IN cId VARCHAR(25))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `estaEnCarrito`(IN pId INT, IN fId INT, IN cId VARCHAR(25))
 BEGIN
 	select COUNT(Producto_idProducto) as cantidad
-	from ProductoPorCarrito
-    where Producto_idProducto = pId
-    AND ferreteria_idFerreteria = fId
+	from ProductoPorCarrito, InventarioPorFerreteria
+    where idInventarioPorFerreteria = inventarioporferreteria_idinventarioPorFerreteria
+    AND InventarioPorFerreteria.ferreteria_idFerreteria = fId
+    AND InventarioPorFerreteria.Producto_idProducto = pId
     AND cliente_idCliente = cId;
 END ;;
 DELIMITER ;
@@ -957,13 +954,11 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCantidadCarrito`(in userid INT)
 BEGIN
-select  count(p.Producto_idProducto) as cantidad
-from cliente c 
-join usuariocliente u
-on u.cliente_idCliente = c.idCliente
-join productoporcarrito p
-on p.Cliente_idCliente = c.idCliente
-where u.idusuarioCliente = userid;
+SELECT COUNT(idProductoPorCarrito) AS cantidad
+FROM ProductoPorCarrito, cliente, usuariocliente
+WHERE UsuarioCliente.cliente_idCliente = userid
+AND UsuarioCliente.cliente_idCliente = idCliente
+AND ProductoPorCarrito.Cliente_idCliente = idCliente;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1043,7 +1038,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductoEnFerreteria`(IN pId varchar(20), IN fId INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductoEnFerreteria`(IN pId INT, IN fId INT)
 BEGIN
 	select idProducto, nombreProducto, precioProducto, imagenProducto AS fotoProducto,
 		descripcionProducto, nombreMarca AS marcaProducto, aspectosTecnicosProducto,
@@ -1272,7 +1267,7 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `seleccionarProducto`(
-IN pId varchar(20),
+IN pId INT,
 IN pFerreteria VARCHAR(45)
 )
 BEGIN
@@ -1342,4 +1337,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-25 17:41:37
+-- Dump completed on 2016-11-26  6:51:15
