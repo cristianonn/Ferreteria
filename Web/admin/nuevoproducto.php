@@ -1,17 +1,26 @@
 <?php
     /* Ferreteria - Bases de Datos II
+     * nuevoproducto.php - Agregar un nuevo producto
+     * Creado: 26/11/16 Gabriela Garro
      */
     include("session.php");
-    $arrayTiposEmpleado = getTiposEmpleado();
+    $arrayDepartamentos = getDepartamentos();
+    $arrayMarcas = getMarcas();
     //Chequear si se envió el form
     if (isset($_POST['submit'])) {
         unset($_POST['submit']);
-        $identificacion = $_POST['identificacion'];
         $nombre = $_POST['nombre'];
-        $apellidos = $_POST['apellidos'];
-        $telefono = $_POST['telefono'];
-        $idTipoEmpleado = $_POST['idTipoEmpleado'];
-        agregarEmpleado($identificacion, $nombre, $apellidos, $telefono, $idTipoEmpleado);
+        $precio = $_POST['precio'];
+        $descripcion = $_POST['descripcion'];
+        $aspectostecnicos =$_POST['aspectostecnicos'];
+        $utilidad = $_POST['utilidad'];
+        $garantia = $_POST['garantia'];
+        $idDepartamento = $_POST['idDepartamento'];
+        $idMarca = $_POST['idMarca'];
+        $carpeta = "../../BD/Images/";
+        $arrayImagen = $_FILES['imagen'];
+        agregarProducto($nombre, $precio, $descripcion, $aspectostecnicos, $utilidad,
+            $garantia, $idDepartamento, $idMarca, $carpeta, $arrayImagen);
     }
 ?>
 
@@ -26,7 +35,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Agregar nuevo empleado</title>
+    <title>Agregar nuevo producto</title>
 
     <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
@@ -51,7 +60,8 @@
     <![endif]-->
 
     <script>
-        arrayTiposEmpleado = <?php echo json_encode($arrayTiposEmpleado); ?>;
+        arrayDepartamentos = <?php echo json_encode($arrayDepartamentos); ?>;
+        arrayMarcas = <?php echo json_encode($arrayMarcas); ?>;
         function popular(selectId, array, pvalue, ptext) {
             var select = document.getElementById(selectId);
             for (var i = 0; i < array.length; i++) {
@@ -76,54 +86,80 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Agregar nuevo empleado</h1>
+                    <h1 class="page-header">Agregar nuevo producto</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
             <div class="row">
-                <form role="form" action="nuevoempleado.php" method="POST" class="registration-form">
+                <form role="form" action="nuevoproducto.php" method="POST" class="registration-form" enctype="multipart/form-data">
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls">
-                            <label>Identificación (cédula)</label>
-                            <input type="number" class="form-control" placeholder="Identificación" name="identificacion" id="identificacion" step="1" min="100000000" max="900000000">
+                            <label>Nombre de producto</label>
+                            <input type="text" class="form-control" placeholder="Nombre de producto..." name="nombre" id="nombre" maxlength="100">
                             <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls">
-                            <label>Nombre</label>
-                            <input type="text" class="form-control" placeholder="Nombre" name="nombre" id="nombre" maxlength="100" required data-validation-required-message="Por favor ingrese el nombre">
-                            <p class="help-block text-danger"></p>
+                            <label>Imagen</label>
+                            <input type="file" name="imagen" id="imagen" accept="image/*" class="form-control"/>
                         </div>
                     </div>
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls">
-                            <label>Apellidos</label>
-                            <input type="text" class="form-control" placeholder="Apellidos" name="apellidos" id="apellidos" maxlength="100" required data-validation-required-message="Por favor ingrese los apellidos">
-                            <p class="help-block text-danger"></p>
+                            <label>Precio</label>
+                            <input type="number" class="form-control" placeholder="Precio..." name="precio" id="precio" step="0.01">
                         </div>
                     </div>
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls">
-                            <label>Número de teléfono</label>
-                            <input type="number" class="form-control" placeholder="Número de teléfono" name="telefono" id="telefono" step="1" min="20000000" max="89999999">
-                            <p class="help-block text-danger"></p>
+                            <label>Descripción</label>
+                            <textarea class="form-control" placeholder="Descripción..." name="descripcion" id="descripcion" maxlength="200" rows="4"></textarea>
                         </div>
                     </div>
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls">
-                            <label>Tipo de empleado</label>
-                            <select name="idTipoEmpleado" id="idTipoEmpleado" class="form-control">
-                                <option>Seleccione un tipo...</option>
+                            <label>Aspectos técnicos</label>
+                            <textarea class="form-control" placeholder="Aspectos técnicos..." name="aspectostecnicos" id="aspectostecnicos" maxlength="100" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group controls">
+                            <label>Utilidad</label>
+                            <textarea class="form-control" placeholder="Utilidad..." name="utilidad" id="utilidad" maxlength="100" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group controls">
+                            <label>Garantía (días)</label>
+                            <input type="number" class="form-control" placeholder="Garantía..." name="garantia" id="garantia" step="1" min="0">
+                        </div>
+                    </div>
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group controls">
+                            <label>Departamento</label>
+                            <select name="idDepartamento" id="idDepartamento" class="form-control">
+                                <option>Seleccione un departamento...</option>
                             </select>
                             <script>
-                                popular("idTipoEmpleado", arrayTiposEmpleado, 0, 1);
+                                popular("idDepartamento", arrayDepartamentos, 0, 1);
+                            </script>
+                        </div>
+                    </div>
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group controls">
+                            <label>Marca</label>
+                            <select name="idMarca" id="idMarca" class="form-control">
+                                <option>Seleccione una marca...</option>
+                            </select>
+                            <script>
+                                popular("idMarca", arrayMarcas, 0, 1);
                             </script>
                         </div>
                     </div>
                     <hr>
-                    <input name="submit" type="submit" class="btn btn-primary" value = "Agregar empleado">
+                    <input name="submit" type="submit" class="btn btn-primary" value = "Agregar producto">
                 </form>
             </div>
             <!-- /.row -->
