@@ -20,7 +20,7 @@
         $utilidadProducto = "";
         $garantia = "";
         $nombreDepartamento = "";
-        $cantidad = "";
+        $cantidad = 0;
         $nombreFerreteria = "";
         $cantidadCarrito = -1;
         $cantidadBackOrder = -1;
@@ -168,17 +168,17 @@
                 <input type="hidden" name="idf" value=<?php echo "\"" . $_GET['idf'] . "\""; ?>>
                 <input type="hidden" name="idp" value=<?php echo "\"" . $_GET['idp'] . "\""; ?>>
                 <?php 
-                    if ($cantidadCarrito != 0) {
-                        echo "<button type=\"button\" class=\"btn btn-danger\" disabled=\"disabled\">Añadir a carrito</button>";
+                    if ($cantidadCarrito != 0 || $cantidad == 0) {
+                        echo "<button type=\"button\" class=\"btn btn-danger\" disabled=\"disabled\">Añadir a carrito</button>    ";
                     }
                     else {
-                        echo "<input name=\"carrito\" type=\"submit\" class=\"btn btn-danger\" value = \"Añadir a carrito\">";
+                        echo "<input name=\"carrito\" type=\"submit\" class=\"btn btn-danger\" value = \"Añadir a carrito\">    ";
                     }
                     if ($cantidadBackOrder != 0) {
-                        echo "<button type=\"button\" class=\"btn btn-danger\" disabled=\"disabled\">Añadir a Back order</button>";
+                        echo "<button type=\"button\" class=\"btn btn-danger\" disabled=\"disabled\">Añadir a Backorder</button>";
                     }
                     else {
-                        echo "<input name=\"backorder\" type=\"submit\" class=\"btn btn-danger\" value = \"Añadir a Back order\">";
+                        echo "<input name=\"backorder\" type=\"submit\" class=\"btn btn-danger\" value = \"Añadir a Backorder\">";
                     }
                     
                 ?>

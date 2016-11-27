@@ -193,6 +193,7 @@ CREATE TABLE `ferreteria` (
   `telefonoFerreteria` varchar(45) DEFAULT NULL,
   `latitud` float DEFAULT NULL,
   `longitud` float DEFAULT NULL,
+  `direccion` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`idFerreteria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -203,7 +204,7 @@ CREATE TABLE `ferreteria` (
 
 LOCK TABLES `ferreteria` WRITE;
 /*!40000 ALTER TABLE `ferreteria` DISABLE KEYS */;
-INSERT INTO `ferreteria` VALUES (1,'Hermanos clavo','22225236',NULL,NULL),(2,'Tornillos mil','22229658',NULL,NULL),(3,'Constru bien','22221536',NULL,NULL),(4,'Cementico','22220125',NULL,NULL);
+INSERT INTO `ferreteria` VALUES (1,'Hermanos clavo','22225236',9.86629,-83.9223,'Cartago'),(2,'Tornillos mil','22229658',10.0163,-84.2138,'Alajuela'),(3,'Constru bien','22221536',9.93224,-84.0806,'San José'),(4,'Cementico','22220125',10.0008,-84.1176,'Heredia');
 /*!40000 ALTER TABLE `ferreteria` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -328,12 +329,9 @@ CREATE TABLE `pedidoonline` (
   `precioPedido` float DEFAULT NULL,
   `estadoPedido` varchar(15) DEFAULT NULL,
   `Cliente_idCliente` varchar(25) NOT NULL,
-  `ferreteria_idFerreteria` int(11) NOT NULL,
   PRIMARY KEY (`idPedido`),
   KEY `fk_Pedido_Cliente1_idx` (`Cliente_idCliente`),
-  KEY `fk_pedidoonline_ferreteria1_idx` (`ferreteria_idFerreteria`),
-  CONSTRAINT `fk_Pedido_Cliente1` FOREIGN KEY (`Cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pedidoonline_ferreteria1` FOREIGN KEY (`ferreteria_idFerreteria`) REFERENCES `ferreteria` (`idFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_Pedido_Cliente1` FOREIGN KEY (`Cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -343,7 +341,6 @@ CREATE TABLE `pedidoonline` (
 
 LOCK TABLES `pedidoonline` WRITE;
 /*!40000 ALTER TABLE `pedidoonline` DISABLE KEYS */;
-INSERT INTO `pedidoonline` VALUES (5,'2016-11-19',5000,'entregado','1',1),(6,'2016-11-19',3600,'pendiente','2',1);
 /*!40000 ALTER TABLE `pedidoonline` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -538,15 +535,12 @@ CREATE TABLE `productoporpedido` (
   `idProductoPorPedido` int(11) NOT NULL AUTO_INCREMENT,
   `Pedido_idPedido` int(11) NOT NULL,
   `vistoBueno` tinyint(1) DEFAULT NULL,
-  `ferreteria_idFerreteria` int(11) NOT NULL,
-  `producto_idProducto` int(11) NOT NULL,
+  `inventarioporferreteria_idinventarioPorFerreteria` int(11) NOT NULL,
   PRIMARY KEY (`idProductoPorPedido`),
   KEY `fk_ProductoPorPedido_Pedido1_idx` (`Pedido_idPedido`),
-  KEY `fk_productoporpedido_ferreteria1_idx` (`ferreteria_idFerreteria`),
-  KEY `fk_productoporpedido_producto1_idx` (`producto_idProducto`),
+  KEY `fk_productoporpedido_inventarioporferreteria1_idx` (`inventarioporferreteria_idinventarioPorFerreteria`),
   CONSTRAINT `fk_ProductoPorPedido_Pedido1` FOREIGN KEY (`Pedido_idPedido`) REFERENCES `pedidoonline` (`idPedido`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_productoporpedido_ferreteria1` FOREIGN KEY (`ferreteria_idFerreteria`) REFERENCES `ferreteria` (`idFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_productoporpedido_producto1` FOREIGN KEY (`producto_idProducto`) REFERENCES `producto` (`idProducto`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_productoporpedido_inventarioporferreteria1` FOREIGN KEY (`inventarioporferreteria_idinventarioPorFerreteria`) REFERENCES `inventarioporferreteria` (`idinventarioPorFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -556,7 +550,6 @@ CREATE TABLE `productoporpedido` (
 
 LOCK TABLES `productoporpedido` WRITE;
 /*!40000 ALTER TABLE `productoporpedido` DISABLE KEYS */;
-INSERT INTO `productoporpedido` VALUES (18,5,0,1,1),(19,5,0,1,2),(20,5,0,1,3);
 /*!40000 ALTER TABLE `productoporpedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -809,6 +802,43 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `agregarCliente` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarCliente`(
+IN pId VARCHAR(25),
+IN pNombre VARCHAR(25),
+IN pApellidos VARCHAR(45),
+IN pTel VARCHAR(15),
+IN pCorreo VARCHAR(45)
+)
+BEGIN
+SELECT * FROM ferreterias.usuarioempleado;INSERT INTO `ferreterias`.`cliente`
+(`idCliente`,
+`nombreCliente`,
+`apellidosCliente`,
+`telCliente`,
+`correoCliente`)
+VALUES
+(pId,
+pNombre,
+pApellidos,
+pTel,
+pCorreo);
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `agregarEmpleado` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -932,6 +962,28 @@ INSERT INTO `ferreterias`.`inventarioporferreteria`
 	SELECT 0 AS cantidad, idFerreteria, 1 AS estanteporpasillo_idestantePorpasillo, 
     pId AS producto_idProducto
 		FROM Ferreteria;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `eliminarCliente` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarCliente`(IN pId INT)
+BEGIN
+	DELETE FROM `ferreterias`.`cliente`
+	WHERE idCliente = pId;
+    DELETE FROM `ferreterias`.`usuariocliente`
+	WHERE cliente_idCliente = pId;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1108,6 +1160,44 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `getClientes` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getClientes`()
+BEGIN
+	SELECT * from cliente;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `getDepartamento` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getDepartamento`()
+BEGIN
+	SELECT * from departamentos;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `getDepartamentos` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1147,6 +1237,25 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `getEstantes` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getEstantes`()
+BEGIN
+	Select * from estante;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `getFerreterias` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1180,6 +1289,25 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getMarcas`()
 BEGIN
  select idMarca, nombreMarca
  FROM Marca;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `getPasillos` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPasillos`()
+BEGIN
+	SELECT * FROM pasillo;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1485,6 +1613,32 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `verMejorFerreteria` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `verMejorFerreteria`()
+BEGIN
+	select ferreteria_idFerreteria,sum(precioPedido) 
+	from (
+	select ferreteria_idFerreteria, precioPedido
+	from pedidoonline) 
+    as precio
+    GROUP BY ferreteria_idferreteria
+    ORDER BY precioPedido DESC
+    LIMIT 1;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -1495,4 +1649,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-26  9:30:30
+-- Dump completed on 2016-11-27 17:46:38
