@@ -82,6 +82,26 @@
     }
 
 
+    function getTodasFerreterias() {
+        $conn = $_SESSION['conn'];
+        $arrayFerreterias = [];
+        $query = mysqli_query($conn, "CALL getFerreterias();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows!=0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayFerreterias[] = [$row['idFerreteria'], $row['nombreFerreteria'], 
+                    $row['telefonoFerreteria'],$row['latitud'],$row['longitud'],
+                    "<a class=\"btn btn-default\" href=\"ferreterias.php?editar=" . $row['idFerreteria'] . "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></a>",
+                    "<a class=\"btn btn-default\" href=\"ferreterias.php?eliminar=" . $row['idFerreteria'] . "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></a>"];
+            }
+        }
+        mysqli_next_result($conn); //TIENE que ir o hay error
+        return $arrayFerreterias;
+    }
+
     /*----------------------Empleados-----------------------*/
     function getEmpleados() {
         $conn = $_SESSION['conn'];
@@ -162,7 +182,9 @@
         $numrows = mysqli_num_rows($query);
         if ($numrows != 0) {
             while($row = mysqli_fetch_assoc($query)) {
-                $arrayDepartamentos[] = [$row['idDepartamento'], $row['nombreDepartamento']];
+                $arrayDepartamentos[] = [$row['idDepartamento'], $row['nombreDepartamento'],
+                "<a class=\"btn btn-default\" href=\"empleados.php?editar=" . $row['idDepartamento'] . "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></a>",
+                "<a class=\"btn btn-default\" href=\"empleados.php?eliminar=" . $row['idDepartamento'] . "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></a>"];
             }
         }
         mysqli_next_result($conn);
@@ -179,11 +201,32 @@
         $numrows = mysqli_num_rows($query);
         if ($numrows != 0) {
             while($row = mysqli_fetch_assoc($query)) {
-                $arrayDepartamentos[] = [$row['idPasillo'], $row['numeroPasillo']];
+                $arrayPasillos[] = [$row['idPasillo'], $row['numeroPasillo'],
+                "<a class=\"btn btn-default\" href=\"pasillos.php?editar=" . $row['idPasillo'] . "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></a>",
+                "<a class=\"btn btn-default\" href=\"pasillos.php?eliminar=" . $row['idPasillo'] . "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></a>"];
             }
         }
         mysqli_next_result($conn);
-        return $arrayDepartamentos;
+        return $arrayPasillos;
+    }
+
+    function getEstantes() {
+        $conn = $_SESSION['conn'];
+        $arrayEstantes = [];
+        $query = mysqli_query($conn, "CALL getEstantes();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayEstantes[] = [$row['idEstante'], $row['numeroEstante'],
+                "<a class=\"btn btn-default\" href=\"empleados.php?editar=" . $row['idEstante'] . "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></a>",
+                "<a class=\"btn btn-default\" href=\"empleados.php?eliminar=" . $row['idEstante'] . "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></a>"];
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayEstantes;
     }
 
     function getMarcas() {
@@ -301,4 +344,22 @@
         }
     }
 
+
+
+    function getMejorFerreteria() {
+        $conn = $_SESSION['conn'];
+        $arrayFerreteria = [];
+        $query = mysqli_query($conn, "CALL verMejorFerreteria();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayFerreteria = $row;
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayFerreteria;
+    }
 ?>

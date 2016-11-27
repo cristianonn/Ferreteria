@@ -50,7 +50,18 @@
                     <a href="index.php"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
                 <li>
-                    <a href="tables.html"><i class="fa fa-building" aria-hidden="true"></i></i> Ferreterías</a>
+                    <a href="tables.html"><i class="fa fa-building" aria-hidden="true"></i></i> Ferreterías<span class="fa arrow"></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="#">Nueva Ferreteria</a>
+                        </li>
+                        <li>
+                            <a href="ferreterias.php">Ver ferreterias</a>
+                        </li>
+                        <li>
+                            <a href="mejorferreteria.php">Ver mejor ferreteria</a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-users" aria-hidden="true"></i></i> Empleado<span class="fa arrow"></span></a>
@@ -91,7 +102,7 @@
                             <a href="pasillos.php">Pasillos</a>
                         </li>
                         <li>
-                            <a href="#">Estantes</a>
+                            <a href="estantes.php">Estantes</a>
                         </li>
                     </ul>
                 </li>

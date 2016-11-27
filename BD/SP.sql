@@ -661,4 +661,15 @@ END$$
 
 DELIMITER ;
 
+-- -----------------------------------------------------
+-- procedure getEstantes
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE PROCEDURE `getEstantes` ()
+BEGIN
+	Select * from estante;
+END$$
+
+DELIMITER ;
 

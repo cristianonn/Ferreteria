@@ -10,8 +10,15 @@
         eliminarLineaInventario($idProducto, $idFerreteria);
         echo "Producto " . $idProducto . " eliminado.";
     }*/
-    $arrayDepartamentos = getDepartamentos();
     
+    $idFerreteria = '';
+    $ventas = '';
+    $arrayFerreteria = getMejorFerreteria();
+    if ($arrayFerreteria != null) 
+    {
+        $idFerreteria = $arrayFerreteria['ferreteria_idFerreteria'];
+        $ventas = $arrayFerreteria['ventas'];
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +30,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Departamentos</title>
+    <title>Mejor ferreteria</title>
 
     <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
@@ -57,20 +64,9 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
  	<![endif]-->
  	<script>
-        arrayDepartamentos = <?php echo json_encode($arrayDepartamentos); ?>;
-        $(document).ready(function() {
-            $('#departamentos').DataTable( {
-                data: arrayDepartamentos,
-                columns: [
-                    {title: "Id."},
-                    {title: "Nombre"},
-                    {title: "Editar"},
-                    {title: "Eliminar"}
-                ]
-            } );
-        } );
-
-
+        arrayPasillos
+        idFerreteria = <?php echo json_encode($arrayPasillos[0]); ?>;
+        ventasFerreteria  = <?php echo json_encode($arrayPasillos[1]); ?>;
 
     </script>
 </head>
@@ -85,7 +81,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Departamentos</h1>
+                    <h1 class="page-header">Mejor ferreteria</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -93,9 +89,17 @@
             <div class="row">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <table id="departamentos" 
-                        class="table table-striped table-bordered table-hover" 
-                        width="100%"></table>
+                        <table class="table" >
+                            <tbody>
+                                <tr>
+                                    <th><b>Ferreteria</b></th>
+                                    <td><?php echo $idFerreteria; ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Total de ganancias</th>
+                                    <td>₡ <?php echo $ventas; ?></td>
+                                </tr>
+                        </table>
                     </div>
                 </div>
             </div>

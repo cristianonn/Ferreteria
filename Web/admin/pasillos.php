@@ -64,6 +64,8 @@
                 columns: [
                     {title: "Id."},
                     {title: "Numero"},
+                    {title: "Editar"},
+                    {title: "Eliminar"}
                 ]
             } );
         } );

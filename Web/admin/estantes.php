@@ -10,7 +10,7 @@
         eliminarLineaInventario($idProducto, $idFerreteria);
         echo "Producto " . $idProducto . " eliminado.";
     }*/
-    $arrayDepartamentos = getDepartamentos();
+    $arrayEstantes = getEstantes();
     
 ?>
 <!DOCTYPE html>
@@ -23,7 +23,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Departamentos</title>
+    <title>Estantes</title>
 
     <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
@@ -57,13 +57,13 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
  	<![endif]-->
  	<script>
-        arrayDepartamentos = <?php echo json_encode($arrayDepartamentos); ?>;
+        arrayEstantes = <?php echo json_encode($arrayEstantes); ?>;
         $(document).ready(function() {
-            $('#departamentos').DataTable( {
-                data: arrayDepartamentos,
+            $('#Estantes').DataTable( {
+                data: arrayEstantes,
                 columns: [
                     {title: "Id."},
-                    {title: "Nombre"},
+                    {title: "Numero"},
                     {title: "Editar"},
                     {title: "Eliminar"}
                 ]
@@ -85,7 +85,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Departamentos</h1>
+                    <h1 class="page-header">Estantes</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -93,7 +93,7 @@
             <div class="row">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <table id="departamentos" 
+                        <table id="Estantes" 
                         class="table table-striped table-bordered table-hover" 
                         width="100%"></table>
                     </div>
