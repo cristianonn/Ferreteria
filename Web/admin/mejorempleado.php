@@ -99,7 +99,7 @@
                                 </tr>
                                 <tr>
                                     <th>Nombre</th>
-                                    <td>₡ <?php echo $nombre; ?></td>
+                                    <td><?php echo $nombre; ?></td>
                                 </tr>
                                 <tr>
                                     <th><b>Apellidos</b></th>
