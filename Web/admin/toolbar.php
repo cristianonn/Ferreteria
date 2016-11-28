@@ -76,6 +76,9 @@
                             <a href="tipoEmpleados.php">Tipos de empleado</a>
                         </li>
                         <li>
+                            <a href="mejorempleado.php">Empleado del mes</a>
+                        </li>
+                        <li>
                             <a href="#">Vacaciones</a>
                         </li>
                     </ul>
@@ -102,7 +105,7 @@
                             <a href="pasillos.php">Pasillos</a>
                         </li>
                         <li>
-                            <a href="estantes.php">Estantes</a>
+                            <a href="estantes.php1">Estantes</a>
                         </li>
                     </ul>
                 </li>

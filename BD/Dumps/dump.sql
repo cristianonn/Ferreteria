@@ -1625,7 +1625,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `verMejorEmpleado`()
 BEGIN
-select venta.empleado_idEmpleado, venta.ventas, a.idAmonestacion
+select venta.empleado_idEmpleado as  id, e.nombreEmpleado, e.apellidosEmpleado ,venta.ventas
 FROM
 	(select empleado_idEmpleado,sum(precioPedido) as ventas
 	from (
@@ -1637,6 +1637,8 @@ FROM
     ORDER BY ventas DESC) venta
     LEFT JOIN amonestacion a
     ON a.Empleado_idEmpleadoAmonestacion = venta.empleado_idEmpleado and a.fecha BETWEEN (CURRENT_DATE() - INTERVAL 6 MONTH) AND CURRENT_DATE()
+    JOIN empleado e
+    ON e.idEmpleado = venta.empleado_idEmpleado
     WHERE a.idAmonestacion IS NULL
     limit 1;
 END ;;
@@ -1688,4 +1690,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-27 23:20:57
+-- Dump completed on 2016-11-28  0:53:14

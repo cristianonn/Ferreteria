@@ -362,4 +362,21 @@
         mysqli_next_result($conn);
         return $arrayFerreteria;
     }
+
+    function getMejorEmpleado() {
+        $conn = $_SESSION['conn'];
+        $arrayEmpleado = [];
+        $query = mysqli_query($conn, "CALL verMejorEmpleado();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayEmpleado = $row;
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayEmpleado;
+    }
 ?>

@@ -685,10 +685,10 @@ DELIMITER;
 	-- -----------------------------------------------------
 	DELIMITER $$
 	USE `ferreterias`$$
-	CREATE DEFINER=`root`@`localhost` PROCEDURE `verMejorEmpleado`()
-	BEGIN
-	select venta.empleado_idEmpleado, venta.ventas, a.idAmonestacion
-	FROM
+CREATE DEFINER=`root`@`localhost` PROCEDURE `verMejorEmpleado`()
+BEGIN
+select venta.empleado_idEmpleado as  id, e.nombreEmpleado, e.apellidosEmpleado ,venta.ventas
+FROM
 	(select empleado_idEmpleado,sum(precioPedido) as ventas
 	from (
 	select empleado_idEmpleado, precioPedido
@@ -699,8 +699,10 @@ DELIMITER;
     ORDER BY ventas DESC) venta
     LEFT JOIN amonestacion a
     ON a.Empleado_idEmpleadoAmonestacion = venta.empleado_idEmpleado and a.fecha BETWEEN (CURRENT_DATE() - INTERVAL 6 MONTH) AND CURRENT_DATE()
+    JOIN empleado e
+    ON e.idEmpleado = venta.empleado_idEmpleado
     WHERE a.idAmonestacion IS NULL
-    ;
-	END$$
+    limit 1;
+END$$
 
 	DELIMITER ;
