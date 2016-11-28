@@ -4,7 +4,7 @@ USE `ferreterias`;
 --
 -- Host: localhost    Database: ferreterias
 -- ------------------------------------------------------
--- Server version	5.7.16-log
+-- Server version	5.7.15-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -28,10 +28,10 @@ CREATE TABLE `amonestacion` (
   `idAmonestacion` int(11) NOT NULL AUTO_INCREMENT,
   `motivoAmonestacion` varchar(45) DEFAULT NULL,
   `fecha` date DEFAULT NULL,
-  `Empleado_idEmpleado` varchar(15) NOT NULL,
+  `Empleado_idEmpleadoAmonestacion` varchar(15) NOT NULL,
   PRIMARY KEY (`idAmonestacion`),
-  KEY `fk_Amonestacion_Empleado1_idx` (`Empleado_idEmpleado`),
-  CONSTRAINT `fk_Amonestacion_Empleado1` FOREIGN KEY (`Empleado_idEmpleado`) REFERENCES `empleado` (`idEmpleado`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_Amonestacion_Empleado1_idx` (`Empleado_idEmpleadoAmonestacion`),
+  CONSTRAINT `fk_Amonestacion_Empleado1` FOREIGN KEY (`Empleado_idEmpleadoAmonestacion`) REFERENCES `empleado` (`idEmpleado`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -41,7 +41,7 @@ CREATE TABLE `amonestacion` (
 
 LOCK TABLES `amonestacion` WRITE;
 /*!40000 ALTER TABLE `amonestacion` DISABLE KEYS */;
-INSERT INTO `amonestacion` VALUES (4,'llegadas tardias','2015-05-02','15'),(5,'ofenza a un cliente','2016-02-06','16');
+INSERT INTO `amonestacion` VALUES (4,'llegadas tardias','2015-05-02','15'),(5,'ofenza a un cliente','2016-10-06','17');
 /*!40000 ALTER TABLE `amonestacion` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -193,7 +193,6 @@ CREATE TABLE `ferreteria` (
   `telefonoFerreteria` varchar(45) DEFAULT NULL,
   `latitud` float DEFAULT NULL,
   `longitud` float DEFAULT NULL,
-  `direccion` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`idFerreteria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -204,7 +203,7 @@ CREATE TABLE `ferreteria` (
 
 LOCK TABLES `ferreteria` WRITE;
 /*!40000 ALTER TABLE `ferreteria` DISABLE KEYS */;
-INSERT INTO `ferreteria` VALUES (1,'Hermanos clavo','22225236',9.86629,-83.9223,'Cartago'),(2,'Tornillos mil','22229658',10.0163,-84.2138,'Alajuela'),(3,'Constru bien','22221536',9.93224,-84.0806,'San José'),(4,'Cementico','22220125',10.0008,-84.1176,'Heredia');
+INSERT INTO `ferreteria` VALUES (1,'Hermanos clavo','22225236',NULL,NULL),(2,'Tornillos mil','22229658',NULL,NULL),(3,'Constru bien','22221536',NULL,NULL),(4,'Cementico','22220125',NULL,NULL);
 /*!40000 ALTER TABLE `ferreteria` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -329,9 +328,12 @@ CREATE TABLE `pedidoonline` (
   `precioPedido` float DEFAULT NULL,
   `estadoPedido` varchar(15) DEFAULT NULL,
   `Cliente_idCliente` varchar(25) NOT NULL,
+  `empleado_idEmpleado` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`idPedido`),
   KEY `fk_Pedido_Cliente1_idx` (`Cliente_idCliente`),
-  CONSTRAINT `fk_Pedido_Cliente1` FOREIGN KEY (`Cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_empelado_idEmpleado_idx` (`empleado_idEmpleado`),
+  CONSTRAINT `fk_Pedido_Cliente1` FOREIGN KEY (`Cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_empelado_idEmpleado` FOREIGN KEY (`empleado_idEmpleado`) REFERENCES `empleado` (`idEmpleado`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -341,6 +343,7 @@ CREATE TABLE `pedidoonline` (
 
 LOCK TABLES `pedidoonline` WRITE;
 /*!40000 ALTER TABLE `pedidoonline` DISABLE KEYS */;
+INSERT INTO `pedidoonline` VALUES (1,'2016-11-10',1500,'entregado','1','17'),(2,'2016-11-11',1000,'entregado','2','16'),(3,'2016-11-12',3000,'entregado','3','17');
 /*!40000 ALTER TABLE `pedidoonline` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -550,6 +553,7 @@ CREATE TABLE `productoporpedido` (
 
 LOCK TABLES `productoporpedido` WRITE;
 /*!40000 ALTER TABLE `productoporpedido` DISABLE KEYS */;
+INSERT INTO `productoporpedido` VALUES (1,1,0,2),(2,1,0,4),(3,2,0,5),(4,3,0,5);
 /*!40000 ALTER TABLE `productoporpedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -743,10 +747,6 @@ LOCK TABLES `vehiculoporempleado` WRITE;
 INSERT INTO `vehiculoporempleado` VALUES (1,'20','2325'),(2,'23','5498'),(3,'24','6548');
 /*!40000 ALTER TABLE `vehiculoporempleado` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'ferreterias'
---
 
 --
 -- Dumping routines for database 'ferreterias'
@@ -1613,6 +1613,38 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `verMejorEmpleado` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `verMejorEmpleado`()
+BEGIN
+select venta.empleado_idEmpleado, venta.ventas, a.idAmonestacion
+FROM
+	(select empleado_idEmpleado,sum(precioPedido) as ventas
+	from (
+	select empleado_idEmpleado, precioPedido
+	from pedidoonline
+	WHERE fechaPedido BETWEEN (CURRENT_DATE() - INTERVAL 1 MONTH) AND CURRENT_DATE())
+    as precio
+    GROUP BY empleado_idEmpleado
+    ORDER BY ventas DESC) venta
+    LEFT JOIN amonestacion a
+    ON a.Empleado_idEmpleadoAmonestacion = venta.empleado_idEmpleado and a.fecha BETWEEN (CURRENT_DATE() - INTERVAL 6 MONTH) AND CURRENT_DATE()
+    WHERE a.idAmonestacion IS NULL
+    limit 1;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `verMejorFerreteria` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1625,14 +1657,21 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `verMejorFerreteria`()
 BEGIN
-	select ferreteria_idFerreteria,sum(precioPedido) 
+	select ferreteria_idFerreteria,sum(precioProducto) as ventas
 	from (
-	select ferreteria_idFerreteria, precioPedido
-	from pedidoonline) 
+	select i.ferreteria_idFerreteria, p.precioProducto
+	from productoporpedido q
+    JOIN inventarioporferreteria i
+    ON q.inventarioporferreteria_idinventarioPorFerreteria = i.idinventarioPorFerreteria
+    JOIN producto p
+    ON i.producto_idProducto = p.idProducto
+    JOIN pedidoonline r 
+    ON q.Pedido_idPedido = r.idPedido
+    WHERE r.fechaPedido BETWEEN (CURRENT_DATE() - INTERVAL 1 MONTH) AND CURRENT_DATE()) 
     as precio
     GROUP BY ferreteria_idferreteria
-    ORDER BY precioPedido DESC
-    LIMIT 1;
+    ORDER BY precioProducto DESC
+    limit 1;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1649,4 +1688,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-27 17:46:38
+-- Dump completed on 2016-11-27 23:20:57

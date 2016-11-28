@@ -556,120 +556,151 @@ END$$
 DELIMITER ;
 
 
--- -----------------------------------------------------
--- procedure agregarCliente
--- -----------------------------------------------------
-DELIMITER $$
-USE `ferreterias`$$
-CREATE PROCEDURE `agregarCliente` (
-IN pId VARCHAR(25),
-IN pNombre VARCHAR(25),
-IN pApellidos VARCHAR(45),
-IN pTel VARCHAR(15),
-IN pCorreo VARCHAR(45)
-)
-BEGIN
-SELECT * FROM ferreterias.usuarioempleado;INSERT INTO `ferreterias`.`cliente`
-(`idCliente`,
-`nombreCliente`,
-`apellidosCliente`,
-`telCliente`,
-`correoCliente`)
-VALUES
-(pId,
-pNombre,
-pApellidos,
-pTel,
-pCorreo);
+	-- -----------------------------------------------------
+	-- procedure agregarCliente
+	-- -----------------------------------------------------
+	DELIMITER $$
+	USE `ferreterias`$$
+	CREATE PROCEDURE `agregarCliente` (
+	IN pId VARCHAR(25),
+	IN pNombre VARCHAR(25),
+	IN pApellidos VARCHAR(45),
+	IN pTel VARCHAR(15),
+	IN pCorreo VARCHAR(45)
+	)
+	BEGIN
+	SELECT * FROM ferreterias.usuarioempleado;INSERT INTO `ferreterias`.`cliente`
+	(`idCliente`,
+	`nombreCliente`,
+	`apellidosCliente`,
+	`telCliente`,
+	`correoCliente`)
+	VALUES
+	(pId,
+	pNombre,
+	pApellidos,
+	pTel,
+	pCorreo);
 
-END$$
+	END$$
 
-DELIMITER ;
+	DELIMITER ;
 
--- -----------------------------------------------------
--- procedure getClientes
--- -----------------------------------------------------
-DELIMITER $$
-USE `ferreterias`$$
-CREATE PROCEDURE `getClientes` ()
-BEGIN
-	SELECT * from cliente;
-END$$
+	-- -----------------------------------------------------
+	-- procedure getClientes
+	-- -----------------------------------------------------
+	DELIMITER $$
+	USE `ferreterias`$$
+	CREATE PROCEDURE `getClientes` ()
+	BEGIN
+		SELECT * from cliente;
+	END$$
 
-DELIMITER ;
-
-
-
--- -----------------------------------------------------
--- procedure eliminarCliente
--- -----------------------------------------------------
-DELIMITER $$
-USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarCliente`(IN pId INT)
-BEGIN
-	DELETE FROM `ferreterias`.`cliente`
-	WHERE idCliente = pId;
-    DELETE FROM `ferreterias`.`usuariocliente`
-	WHERE cliente_idCliente = pId;
-END$$
-
-DELIMITER ;
+	DELIMITER ;
 
 
 
--- -----------------------------------------------------
--- procedure getDepartamentos
--- -----------------------------------------------------
-DELIMITER $$
-USE `ferreterias`$$
-CREATE PROCEDURE `getDepartamento` ()
-BEGIN
-	SELECT * from departamentos;
-END$$
+	-- -----------------------------------------------------
+	-- procedure eliminarCliente
+	-- -----------------------------------------------------
+	DELIMITER $$
+	USE `ferreterias`$$
+	CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarCliente`(IN pId INT)
+	BEGIN
+		DELETE FROM `ferreterias`.`cliente`
+		WHERE idCliente = pId;
+	    DELETE FROM `ferreterias`.`usuariocliente`
+		WHERE cliente_idCliente = pId;
+	END$$
 
-DELIMITER ;
+	DELIMITER ;
 
 
--- -----------------------------------------------------
--- procedure getPasillos
--- -----------------------------------------------------
-DELIMITER $$
-USE `ferreterias`$$
-CREATE PROCEDURE `getPasillos` ()
-BEGIN
-	SELECT * FROM pasillo;
-END$$
 
-DELIMITER ;
+	-- -----------------------------------------------------
+	-- procedure getDepartamentos
+	-- -----------------------------------------------------
+	DELIMITER $$
+	USE `ferreterias`$$
+	CREATE PROCEDURE `getDepartamento` ()
+	BEGIN
+		SELECT * from departamentos;
+	END$$
 
--- -----------------------------------------------------
--- procedure verMejorFerreteria
--- -----------------------------------------------------
-DELIMITER $$
-USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `verMejorFerreteria`()
-BEGIN
-	select ferreteria_idFerreteria,sum(precioPedido) 
+	DELIMITER ;
+
+
+	-- -----------------------------------------------------
+	-- procedure getPasillos
+	-- -----------------------------------------------------
+	DELIMITER $$
+	USE `ferreterias`$$
+	CREATE PROCEDURE `getPasillos` ()
+	BEGIN
+		SELECT * FROM pasillo;
+	END$$
+
+	DELIMITER ;
+
+	-- -----------------------------------------------------
+	-- procedure verMejorFerreteria
+	-- -----------------------------------------------------
+	DELIMITER $$
+	USE `ferreterias`$$
+	CREATE DEFINER=`root`@`localhost` PROCEDURE `verMejorFerreteria`()
+	BEGIN
+	select ferreteria_idFerreteria,sum(precioProducto) as ventas
 	from (
-	select ferreteria_idFerreteria, precioPedido
-	from pedidoonline) 
+	select i.ferreteria_idFerreteria, p.precioProducto
+	from productoporpedido q
+    JOIN inventarioporferreteria i
+    ON q.inventarioporferreteria_idinventarioPorFerreteria = i.idinventarioPorFerreteria
+    JOIN producto p
+    ON i.producto_idProducto = p.idProducto
+    JOIN pedidoonline r 
+    ON q.Pedido_idPedido = r.idPedido
+    WHERE r.fechaPedido BETWEEN (CURRENT_DATE() - INTERVAL 1 MONTH) AND CURRENT_DATE()) 
     as precio
     GROUP BY ferreteria_idferreteria
-    ORDER BY precioPedido DESC
+    ORDER BY precioProducto DESC
     LIMIT 1;
-END$$
+	END$$
+DELIMITER;
 
-DELIMITER ;
+	-- -----------------------------------------------------
+	-- procedure getEstantes
+	-- -----------------------------------------------------
+	DELIMITER $$
+	USE `ferreterias`$$
+	CREATE PROCEDURE `getEstantes` ()
+	BEGIN
+		Select * from estante;
+	END$$
 
--- -----------------------------------------------------
--- procedure getEstantes
--- -----------------------------------------------------
-DELIMITER $$
-USE `ferreterias`$$
-CREATE PROCEDURE `getEstantes` ()
-BEGIN
-	Select * from estante;
-END$$
+	DELIMITER ;
 
-DELIMITER ;
 
+		-- -----------------------------------------------------
+	-- procedure getMejoreEmpleado
+	-- -----------------------------------------------------
+	DELIMITER $$
+	USE `ferreterias`$$
+	CREATE DEFINER=`root`@`localhost` PROCEDURE `verMejorEmpleado`()
+	BEGIN
+	select venta.empleado_idEmpleado, venta.ventas, a.idAmonestacion
+	FROM
+	(select empleado_idEmpleado,sum(precioPedido) as ventas
+	from (
+	select empleado_idEmpleado, precioPedido
+	from pedidoonline
+	WHERE fechaPedido BETWEEN (CURRENT_DATE() - INTERVAL 1 MONTH) AND CURRENT_DATE())
+    as precio
+    GROUP BY empleado_idEmpleado
+    ORDER BY ventas DESC) venta
+    LEFT JOIN amonestacion a
+    ON a.Empleado_idEmpleadoAmonestacion = venta.empleado_idEmpleado and a.fecha BETWEEN (CURRENT_DATE() - INTERVAL 6 MONTH) AND CURRENT_DATE()
+    WHERE a.idAmonestacion IS NULL
+    ;
+	END$$
+
+	DELIMITER ;
