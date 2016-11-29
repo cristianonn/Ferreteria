@@ -94,6 +94,9 @@ h6 {
 .thumbnail img {
     width: 100%;
 }
+.thumbnail200>img {
+    max-width: 200px;
+}
 
 .ratings {
     padding-right: 10px;

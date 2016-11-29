@@ -308,19 +308,21 @@ DELIMITER ;
 
 DELIMITER $$
 USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `productosCarrito`(in username varchar(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `productosCarrito`
+(in idUsuario INT)
 BEGIN
-select s.nombreProducto, s.precioProducto, s.descripcionProducto, s.idProducto, s.fotoProducto
-from cliente c 
-join usuariocliente u
-on u.cliente_idCliente = c.idCliente
-join carrito K
-on k.Cliente_idCliente = c.idCliente
-join productoporcarrito p 
-on p.carrito_idcarrito = k.idCarrito
-join producto s 
-on s.idProducto = p.producto_idproducto 
-where u.usuarioCliente = username;
+	SELECT imagenProducto, nombreProducto, nombreMarca, precioProducto, 
+		ixf.idInventarioPorFerreteria AS idInventario, ixf.cantidad AS disponible
+	FROM UsuarioCliente uc, Cliente c, ProductoPorCarrito pxc,
+		InventarioPorFerreteria ixf, Producto p, ImagenesProducto ip,
+		Marca m
+	WHERE idUsuario = uc.idUsuarioCliente 
+	AND uc.cliente_idCliente = c.idCliente
+	AND c.idCliente = pxc.Cliente_idCliente
+	AND pxc.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
+	AND ixf.Producto_idProducto = p.idProducto
+	AND p.idProducto = ip.Producto_idProducto
+	AND p.Marca_idMarca = m.idMarca;
 END$$
 
 DELIMITER ;

@@ -156,4 +156,22 @@
         //mysqli_next_result($conn);
     }
 
+    function getProductosCarrito() {
+        $conn = $_SESSION['conn'];
+        $idCliente = $_SESSION['userID'];
+        $arrayCarrito = [];
+        $query = mysqli_query($conn, "CALL productosCarrito('$idCliente');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayCarrito[] = $row;
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayCarrito;
+    }
+
 ?>

@@ -1489,19 +1489,20 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `productosCarrito`(in username varchar(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `productosCarrito`(in idUsuario INT)
 BEGIN
-select s.nombreProducto, s.precioProducto, s.descripcionProducto, s.idProducto, s.fotoProducto
-from cliente c 
-join usuariocliente u
-on u.cliente_idCliente = c.idCliente
-join carrito K
-on k.Cliente_idCliente = c.idCliente
-join productoporcarrito p 
-on p.carrito_idcarrito = k.idCarrito
-join producto s 
-on s.idProducto = p.producto_idproducto 
-where u.usuarioCliente = username;
+	SELECT imagenProducto, nombreProducto, nombreMarca, precioProducto, 
+		ixf.idInventarioPorFerreteria AS idInventario, ixf.cantidad AS disponible
+	FROM UsuarioCliente uc, Cliente c, ProductoPorCarrito pxc,
+		InventarioPorFerreteria ixf, Producto p, ImagenesProducto ip,
+		Marca m
+	WHERE idUsuario = uc.idUsuarioCliente 
+	AND uc.cliente_idCliente = c.idCliente
+	AND c.idCliente = pxc.Cliente_idCliente
+	AND pxc.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
+	AND ixf.Producto_idProducto = p.idProducto
+	AND p.idProducto = ip.Producto_idProducto
+	AND p.Marca_idMarca = m.idMarca;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1722,4 +1723,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-29  0:06:52
+-- Dump completed on 2016-11-29  3:04:01
