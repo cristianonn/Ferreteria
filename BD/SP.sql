@@ -312,17 +312,19 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `productosCarrito`
 (in idUsuario INT)
 BEGIN
 	SELECT imagenProducto, nombreProducto, nombreMarca, precioProducto, 
-		ixf.idInventarioPorFerreteria AS idInventario, ixf.cantidad AS disponible
+		ixf.idInventarioPorFerreteria AS idInventario, ixf.cantidad AS disponible,
+		nombreFerreteria
 	FROM UsuarioCliente uc, Cliente c, ProductoPorCarrito pxc,
 		InventarioPorFerreteria ixf, Producto p, ImagenesProducto ip,
-		Marca m
+		Marca m, Ferreteria f
 	WHERE idUsuario = uc.idUsuarioCliente 
 	AND uc.cliente_idCliente = c.idCliente
 	AND c.idCliente = pxc.Cliente_idCliente
 	AND pxc.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
 	AND ixf.Producto_idProducto = p.idProducto
 	AND p.idProducto = ip.Producto_idProducto
-	AND p.Marca_idMarca = m.idMarca;
+	AND p.Marca_idMarca = m.idMarca
+	AND ixf.ferreteria_idFerreteria = f.idFerreteria;
 END$$
 
 DELIMITER ;
@@ -728,3 +730,113 @@ DELIMITER ;
 	END$$
 
 	DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure eliminarDeCarrito
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarDeCarrito`
+(IN pidInventario INT, IN pidCliente VARCHAR(45))
+BEGIN
+	DELETE FROM `ferreterias`.`productoporcarrito`
+		WHERE cliente_idCliente = (SELECT idCliente 
+			FROM Cliente c, UsuarioCliente uc
+			WHERE pidCliente = uc.idUsuarioCliente
+			AND uc.Cliente_idCliente = c.idCliente)
+		AND inventarioporferreteria_idinventarioPorFerreteria = pidInventario;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure hacerPedido
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `hacerPedido`
+(IN pidCliente VARCHAR(25), IN pIdEmpleado VARCHAR(25))
+BEGIN
+	INSERT INTO `ferreterias`.`PedidoOnline`
+		(`fechaPedido`,
+		`precioPedido`,
+		`estadoPedido`,
+		`Cliente_idCliente`,
+		`empleado_idempleado`)
+	SELECT UTC_DATE(), 
+		0,
+		"No despachado",
+		idCliente,
+		pIdEmpleado
+	FROM Cliente c, UsuarioCliente uc
+	WHERE pidCliente = uc.idUsuarioCliente
+	AND uc.Cliente_idCliente = c.idCliente;
+	SELECT LAST_INSERT_ID() AS idPedido;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure agregarAPedido
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarAPedido`
+(IN pidInventario INT, IN pidPedido INT, IN pCantidad INT)
+BEGIN
+	UPDATE `ferreterias`.`inventarioporferreteria`
+	SET
+	`cantidad` = `cantidad` - pCantidad
+	WHERE `idinventarioPorFerreteria` = pidInventario;
+	INSERT INTO `ferreterias`.`ProductoPorPedido`
+		(`Pedido_idPedido`,
+		`vistoBueno`,
+		`inventarioporferreteria_idinventarioPorFerreteria`,
+		`cantidad`)
+	VALUES
+		(pidPedido,
+		0,
+		pidInventario,
+		pCantidad);
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getProductosDePedido
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductosDePedido`
+(IN pidPedido INT)
+BEGIN
+	SELECT nombreProducto, nombreFerreteria, pxp.cantidad AS cantidad, 
+		SUM(pxp.cantidad * precioProducto) AS precio
+	FROM ProductoPorPedido pxp, InventarioPorFerreteria ixf, Ferreteria f,
+		Producto p
+	WHERE pidPedido = pxp.Pedido_idPedido
+	AND pxp.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
+	AND ixf.ferreteria_idFerreteria = f.idFerreteria
+	AND ixf.Producto_idProducto = p.idProducto
+	GROUP BY p.idProducto;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getTotalPedido
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalPedido`
+(IN pidPedido INT)
+BEGIN
+	SELECT SUM(pxp.cantidad * precioProducto) AS precio
+	FROM ProductoPorPedido pxp, InventarioPorFerreteria ixf, 
+		Producto p
+	WHERE pidPedido = pxp.Pedido_idPedido
+	AND pxp.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
+	AND ixf.Producto_idProducto = p.idProducto;
+END$$
+
+DELIMITER ;

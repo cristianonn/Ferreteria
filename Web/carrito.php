@@ -11,6 +11,7 @@
     else {
         echo "No se encuentra registrado.";
     }
+    $arrayEmpleados = getEmpleados();
     $carpetaImagenes = "../BD/Images/";
 ?>
 <!DOCTYPE html>
@@ -52,8 +53,8 @@
         arrayCarrito = <?php echo json_encode($arrayCarrito); ?>;
         var carpetaImagenes = "../BD/Images/";
         function popularTabla() {
+            var table = document.getElementById("tablaProductos").getElementsByTagName('tbody')[0];
             for (var i = 0; i < arrayCarrito.length; i++) {
-                var table = document.getElementById("tablaProductos").getElementsByTagName('tbody')[0];
                 var row = table.insertRow(i);
                 var foto = row.insertCell(0);
                 foto.innerHTML = "<div class=\"thumbnail thumbnail200\"><img src=\"" + carpetaImagenes + arrayCarrito[i]["imagenProducto"] + "\" class=\"thumbnail100\"></div>";
@@ -63,12 +64,26 @@
                 marca.innerHTML = arrayCarrito[i]["nombreMarca"];
                 var precio = row.insertCell(3);
                 precio.innerHTML = arrayCarrito[i]["precioProducto"];
-                var cantidad = row.insertCell(4);
+                var ferreteria = row.insertCell(4);
+                ferreteria.innerHTML = arrayCarrito[i]["nombreFerreteria"];
+                var cantidad = row.insertCell(5);
                 cantidad.innerHTML = "<input type=\"hidden\" name=\"producto" + i + "\" value=\"" +
                     arrayCarrito[i]["idInventario"] + "\">" +
                     "<input type=\"number\" class=\"form-control\" step=\"1\" max=\"" +
                     arrayCarrito[i]["disponible"] + "\" placeholder=\"Disponible = " +
                     arrayCarrito[i]["disponible"] + "\" name=\"cantidad" + i + "\">" ;
+            }
+        }
+        arrayEmpleados = <?php echo json_encode($arrayEmpleados); ?>;
+        function popular(selectId, array, pvalue, ptext) {
+            var select = document.getElementById(selectId);
+            for (var i = 0; i < array.length; i++) {
+                var value = array[i][pvalue];
+                var text = array[i][ptext];
+                var option = document.createElement("option");
+                option.textContent = text;
+                option.value = value;
+                select.appendChild(option);
             }
         }
     </script>
@@ -104,28 +119,31 @@
                     <table class="table table-hover table-striped" id="tablaProductos">
                         <thead>
                             <tr >
-                                <th>
-                                    Fotografía
-                                </th>
-                                <th>
-                                    Nombre
-                                </th>
-                                <th>
-                                    Marca
-                                </th>
-                                <th>
-                                    Precio
-                                </th>
-                                <th>
-                                    Cantidad
-                                </th>
+                                <th>Fotografía</th>
+                                <th>Nombre</th>
+                                <th>Marca</th>
+                                <th>Precio</th>
+                                <th>Ferretería</th>
+                                <th>Cantidad</th>
                             </tr>
                         </thead>
                         <tbody>
                             
                         </tbody>
                     </table>
-                    <div class="pull-right">
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group controls">
+                            <hr>
+                            <p>¿Recibió ayuda de algún empleado?</p>
+                            <select name="idEmpleado" id="idEmpleado" class="form-control">
+                                <option value="0">Seleccione un empleado...</option>
+                            </select><br>
+                            <script>
+                                popular("idEmpleado", arrayEmpleados, "idEmpleado", "nombreEmpleado");
+                            </script>
+                        </div>
+                    </div>
+                    <div class="pull-right"><br>
                         <input name="submit" type="submit" class=
                         <?php
                             if (isset($_SESSION['userID'])) {

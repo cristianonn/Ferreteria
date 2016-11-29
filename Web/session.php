@@ -174,4 +174,96 @@
         return $arrayCarrito;
     }
 
+    function eliminarDeCarrito($idInventario) {
+        $conn = $_SESSION['conn'];
+        $idCliente = $_SESSION['userID'];
+        $query = mysqli_query($conn, "CALL eliminarDeCarrito('$idInventario', '$idCliente');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+    }
+
+    function hacerPedido($idEmpleado) {
+        $conn = $_SESSION['conn'];
+        $idCliente = $_SESSION['userID'];
+        $idPedido = 0;
+        if ($idEmpleado == 0) {
+            $query = mysqli_query($conn, "CALL hacerPedido('$idCliente', NULL);");
+        }
+        else {
+            $query = mysqli_query($conn, "CALL hacerPedido('$idCliente', '$idEmpleado');");
+        }
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $idPedido = $row['idPedido'];
+            }
+        }
+        mysqli_next_result($conn);
+        return $idPedido;
+    }
+
+    function getEmpleados() {
+        $conn = $_SESSION['conn'];
+        $arrayEmpleados = [];
+        $query = mysqli_query($conn, "CALL getEmpleados();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayEmpleados[] = ["idEmpleado" => $row['idEmpleado'],
+                    "nombreEmpleado" => $row['nombreEmpleado'] . " " . $row['apellidosEmpleado']];
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayEmpleados;
+    }
+
+    function agregarAPedido($idInventario, $idPedido, $cantidad) {
+        $conn = $_SESSION['conn'];
+        $idCliente = $_SESSION['userID'];
+        $query = mysqli_query($conn, "CALL agregarAPedido('$idInventario', '$idPedido', '$cantidad');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+    }
+    function getProductosDePedido($idPedido) {
+        $conn = $_SESSION['conn'];
+        $arrayProductos = [];
+        $query = mysqli_query($conn, "CALL getProductosDePedido('$idPedido');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayProductos[] = $row;
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayProductos;
+    }
+
+    function getTotalPedido($idPedido) {
+        $conn = $_SESSION['conn'];
+        $total = 0;
+        $query = mysqli_query($conn, "CALL getTotalPedido('$idPedido');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $total = $row['precio'];
+            }
+        }
+        mysqli_next_result($conn);
+        return $total;
+    }
+
 ?>

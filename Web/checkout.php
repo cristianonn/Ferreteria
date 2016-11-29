@@ -4,7 +4,40 @@
      * Creado: 29/11/16 Gabriela Garro
      */
     include("session.php");
-    
+    $arrayProductos = [];
+    $total = 0;
+    //Si recibió la info de facturación
+    if (isset($_POST["submit"])) {
+        $idPedido = 0;
+        //Iterar por los POST
+        for ($i = 0; isset($_POST["producto" . $i]); $i++) {
+            $idProducto = $_POST["producto" . $i];
+            $cantidad = $_POST["cantidad" . $i];
+            if ($cantidad == 0 && $cantidad != "") {
+                eliminarDeCarrito($idProducto);
+            }
+            elseif ($cantidad > 0) {
+                eliminarDeCarrito($idProducto);
+                if ($idPedido == 0) { // El pedido no ha sido hecho
+                    $idEmpleado = $_POST['idEmpleado'];
+                    $idPedido = hacerPedido($idEmpleado);
+                }
+                agregarAPedido($idProducto, $idPedido, $cantidad);
+            }
+        }
+        //Hacer la facturación
+        $arrayProductos = getProductosDePedido($idPedido);
+        $total = getTotalPedido($idPedido);
+    }
+    //Truco para ver otras facturas
+    elseif (isset($_GET['idPedido'])) {
+        $idPedido = $_GET['idPedido'];
+        $arrayProductos = getProductosDePedido($idPedido);
+        $total = getTotalPedido($idPedido);
+    }
+    else {
+        echo "No hay información de compra.";
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,7 +75,21 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script>
-        
+        arrayProductos = <?php echo json_encode($arrayProductos); ?>;
+        function popularTabla() {
+            var table = document.getElementById("tablaProductos").getElementsByTagName('tbody')[0];
+            for (var i = 0; i < arrayProductos.length; i++) {
+                var row = table.insertRow(i);
+                var nombre = row.insertCell(0);
+                nombre.innerHTML = arrayProductos[i]["nombreProducto"];
+                var ferreteria = row.insertCell(1);
+                ferreteria.innerHTML = arrayProductos[i]["nombreFerreteria"];
+                var cantidad = row.insertCell(2);
+                cantidad.innerHTML = arrayProductos[i]["cantidad"];
+                var precio = row.insertCell(3);
+                precio.innerHTML = arrayProductos[i]["precio"];
+            }
+        }
     </script>
 
 </head>
@@ -72,7 +119,27 @@
 
                 <div class="row">
                 <h2>Facturación</h1><br>
-                
+                <div class="col-lg-12">
+                    <table class="table" class="table table-hover table-striped" id="tablaProductos">
+                        <thead>
+                            <tr >
+                                <th>Producto</th>
+                                <th>Ferretería</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                    <script>
+                        popularTabla();
+                    </script>
+                    <div class="pull-right">
+                        <h3>Total: ₡<?php echo $total;?></h3>
+                    </div>
+                </div>
                 </div>
             </div>
             <div class="col-md-1"></div>
