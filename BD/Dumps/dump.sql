@@ -58,6 +58,8 @@ CREATE TABLE `cliente` (
   `apellidosCliente` varchar(45) DEFAULT NULL,
   `telCliente` varchar(15) DEFAULT NULL,
   `correoCliente` varchar(45) DEFAULT NULL,
+  `latitud` float DEFAULT NULL,
+  `longitud` float DEFAULT NULL,
   PRIMARY KEY (`idCliente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -68,7 +70,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES ('1','Louis','CK','88888888','lck@gmail.com'),('2','Carlos','VH','89652145','CVH@gmail.com'),('3','bo burnham','BU','88695425','BBU@hotmail.com'),('4','Andres','LL','88663321','ALL@gmail.com');
+INSERT INTO `cliente` VALUES ('1','Louis','CK','88888888','lck@gmail.com',9.87494,-83.9132),('2','Carlos','VH','89652145','CVH@gmail.com',9.84822,-83.9435),('3','bo burnham','BU','88695425','BBU@hotmail.com',9.90858,-83.9755),('4','Andres','LL','88663321','ALL@gmail.com',9.92688,-84.0418);
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1865,4 +1867,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-29  5:23:43
+-- Dump completed on 2016-11-29  5:51:44

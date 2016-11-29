@@ -50,21 +50,43 @@
                     <a href="index.php"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
                 <li>
-                    <a href="tables.html"><i class="fa fa-building" aria-hidden="true"></i></i> Ferreterías<span class="fa arrow"></a>
+                    <a href="#"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Pedidos<span class="fa arrow"></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="#">Nueva Ferreteria</a>
+                            <a href="#">Despachar pedido</a>
                         </li>
                         <li>
-                            <a href="ferreterias.php">Ver ferreterias</a>
-                        </li>
-                        <li>
-                            <a href="mejorferreteria.php">Ver mejor ferreteria</a>
+                            <a href="#">Ver pedidos</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-users" aria-hidden="true"></i></i> Empleado<span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-truck" aria-hidden="true"></i> Rutas<span class="fa arrow"></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="#">Nueva ruta</a>
+                        </li>
+                        <li>
+                            <a href="#">Ver rutas</a>
+                        </li>
+                        <li>
+                            <a href="#">Ganancias por ruta</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-building" aria-hidden="true"></i> Ferreterías<span class="fa arrow"></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="ferreterias.php">Ver ferreterías</a>
+                        </li>
+                        <li>
+                            <a href="mejorferreteria.php">Ganancias por ferretería</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-users" aria-hidden="true"></i> Empleados<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
                             <a href="nuevoempleado.php">Nuevo empleado</a>
@@ -76,7 +98,7 @@
                             <a href="tipoEmpleados.php">Tipos de empleado</a>
                         </li>
                         <li>
-                            <a href="mejorempleado.php">Ventas de empleados</a>
+                            <a href="mejorempleado.php">Ganancias por empleado </a>
                         </li>
                         <li>
                             <a href="#">Vacaciones</a>
@@ -84,7 +106,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-archive" aria-hidden="true"></i></i> Producto<span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-archive" aria-hidden="true"></i> Productos<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
                             <a href="nuevoproducto.php">Nuevo producto</a>
@@ -110,7 +132,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-users" aria-hidden="true"></i></i> Cliente<span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-users" aria-hidden="true"></i> Clientes<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
                             <a href="nuevocliente.php">Nuevo cliente</a>
