@@ -4,6 +4,7 @@
      * Creado: 25/11/16 Gabriela Garro
      */
     include("session.php");
+    $arrayRutas = getRutas();
 
     //Chequear si se envió el form
     if (isset($_POST['submit'])) {
@@ -13,7 +14,9 @@
         $apellidos = $_POST['apellidos'];
         $telefono = $_POST['telefono'];
         $correo = $_POST['correo'];
+        $idRuta = $_POST['idRuta'];
         agregarCliente($identificacion, $nombre, $apellidos, $telefono, $correo);
+        agregarClienteARuta($idRuta, $identificacion);
     }
 ?>
 
@@ -51,6 +54,20 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script>
+        arrayRutas = <?php echo json_encode($arrayRutas); ?>;
+        function popular(selectId, array, pvalue, ptext) {
+            var select = document.getElementById(selectId);
+            for (var i = 0; i < array.length; i++) {
+                var value = array[i][pvalue];
+                var text = array[i][ptext];
+                var option = document.createElement("option");
+                option.textContent = text;
+                option.value = value;
+                select.appendChild(option);
+            }
+        }
+    </script>
 
 
 </head>
@@ -104,6 +121,17 @@
                             <label>Correo electrónico</label>
                             <input type="text" class="form-control" placeholder="Correo" name="correo" id="correo" maxlength="100" required data-validation-required-message="Por favor ingrese el correo">
                             <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group controls">
+                            <label>Ruta</label>
+                            <select name="idRuta" id="idRuta" class="form-control">
+                                <option>Seleccione una ruta...</option>
+                            </select>
+                            <script>
+                                popular("idRuta", arrayRutas, "idRuta", "zona");
+                            </script>
                         </div>
                     </div>
                     <hr>

@@ -60,6 +60,7 @@ CREATE TABLE `cliente` (
   `correoCliente` varchar(45) DEFAULT NULL,
   `latitud` float DEFAULT NULL,
   `longitud` float DEFAULT NULL,
+  `direccion` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`idCliente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -70,7 +71,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES ('1','Louis','CK','88888888','lck@gmail.com',9.87494,-83.9132),('2','Carlos','VH','89652145','CVH@gmail.com',9.84822,-83.9435),('3','bo burnham','BU','88695425','BBU@hotmail.com',9.90858,-83.9755),('4','Andres','LL','88663321','ALL@gmail.com',9.92688,-84.0418);
+INSERT INTO `cliente` VALUES ('1','Louis','CK','88888888','lck@gmail.com',9.87494,-83.9132,'Cartago'),('2','Carlos','VH','89652145','CVH@gmail.com',9.84822,-83.9435,'Cartago'),('3','bo burnham','BU','88695425','BBU@hotmail.com',9.90858,-83.9755,'Tres Ríos'),('4','Andres','LL','88663321','ALL@gmail.com',9.92688,-84.0418,'Curridabat'),('601890628','Wendy','Sulca','84551211','wsulca@gmail.com',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -573,10 +574,11 @@ CREATE TABLE `ruta` (
   `estadoRuta` varchar(20) DEFAULT NULL,
   `fechaRuta` date DEFAULT NULL,
   `Empleado_idEmpleado` varchar(15) NOT NULL,
+  `zona` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`idRuta`),
   KEY `fk_Ruta_Empleado1_idx` (`Empleado_idEmpleado`),
   CONSTRAINT `fk_Ruta_Empleado1` FOREIGN KEY (`Empleado_idEmpleado`) REFERENCES `empleado` (`idEmpleado`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -585,7 +587,7 @@ CREATE TABLE `ruta` (
 
 LOCK TABLES `ruta` WRITE;
 /*!40000 ALTER TABLE `ruta` DISABLE KEYS */;
-INSERT INTO `ruta` VALUES (1,'en espera','2016-11-20','23'),(2,'en espera','2016-11-25','24');
+INSERT INTO `ruta` VALUES (1,'en espera','2016-11-20','23','Cartago centro'),(4,'En espera','2016-11-29','20','San José Este');
 /*!40000 ALTER TABLE `ruta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -605,7 +607,7 @@ CREATE TABLE `rutaporcliente` (
   KEY `fk_rutaporCliente_cliente1_idx` (`cliente_idCliente`),
   CONSTRAINT `fk_RutaPorPedido_Ruta1` FOREIGN KEY (`Ruta_idRuta`) REFERENCES `ruta` (`idRuta`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_rutaporCliente_cliente1` FOREIGN KEY (`cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -614,7 +616,7 @@ CREATE TABLE `rutaporcliente` (
 
 LOCK TABLES `rutaporcliente` WRITE;
 /*!40000 ALTER TABLE `rutaporcliente` DISABLE KEYS */;
-INSERT INTO `rutaporcliente` VALUES (1,1,'1'),(2,1,'2'),(3,1,'3');
+INSERT INTO `rutaporcliente` VALUES (1,1,'1'),(2,1,'2'),(4,4,'4'),(5,4,'3'),(9,4,'601890628');
 /*!40000 ALTER TABLE `rutaporcliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -853,26 +855,49 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarCliente`(
-IN pId VARCHAR(25),
-IN pNombre VARCHAR(25),
-IN pApellidos VARCHAR(45),
-IN pTel VARCHAR(15),
-IN pCorreo VARCHAR(45)
-)
+	IN pId VARCHAR(25),
+	IN pNombre VARCHAR(25),
+	IN pApellidos VARCHAR(45),
+	IN pTel VARCHAR(15),
+	IN pCorreo VARCHAR(45)
+	)
 BEGIN
-SELECT * FROM ferreterias.usuarioempleado;INSERT INTO `ferreterias`.`cliente`
-(`idCliente`,
-`nombreCliente`,
-`apellidosCliente`,
-`telCliente`,
-`correoCliente`)
-VALUES
-(pId,
-pNombre,
-pApellidos,
-pTel,
-pCorreo);
+	INSERT INTO `ferreterias`.`cliente`
+	(`idCliente`,
+	`nombreCliente`,
+	`apellidosCliente`,
+	`telCliente`,
+	`correoCliente`)
+	VALUES
+	(pId,
+	pNombre,
+	pApellidos,
+	pTel,
+	pCorreo);
 
+	END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `agregarClienteARuta` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarClienteARuta`(IN pidRuta INT, IN pidCliente VARCHAR(25))
+BEGIN
+	INSERT INTO `ferreterias`.`RutaPorCliente`
+		(`Ruta_idRuta`,
+		`cliente_idCliente`)
+	VALUES
+		(pidRuta, pidCliente);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1002,6 +1027,35 @@ INSERT INTO `ferreterias`.`inventarioporferreteria`
 	SELECT 0 AS cantidad, idFerreteria, 1 AS estanteporpasillo_idestantePorpasillo, 
     pId AS producto_idProducto
 		FROM Ferreteria;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `crearRuta` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `crearRuta`(IN pzona VARCHAR(100), IN pIdEmpleado VARCHAR(15))
+BEGIN
+	INSERT INTO `ferreterias`.`Ruta`
+		(`estadoRuta`,
+		`fechaRuta`,
+		`Empleado_idEmpleado`,
+		`zona`)
+	VALUES
+		("En espera",
+		UTC_DATE(),
+		pIdEmpleado,
+		pzona);
+	SELECT LAST_INSERT_ID() AS idRuta;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1224,6 +1278,28 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `getChoferes` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getChoferes`()
+BEGIN
+	Select idEmpleado, nombreEmpleado, apellidosEmpleado
+	FROM empleado, tipoempleado
+	WHERE TipoEmpleado_idTipoEmpleado = idTipoEmpleado
+	AND idTipoEmpleado = 5;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `getClientes` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1237,6 +1313,28 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getClientes`()
 BEGIN
 	SELECT * from cliente;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `getClientesSinRuta` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getClientesSinRuta`()
+BEGIN
+	SELECT idCliente, nombreCliente, apellidosCliente, direccion
+	FROM Cliente c
+	WHERE c.idCliente NOT IN (SELECT Cliente_idCliente
+		FROM RutaPorCliente rxc);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1460,6 +1558,26 @@ BEGIN
 	AND ixf.ferreteria_idFerreteria = f.idFerreteria
 	AND ixf.Producto_idProducto = p.idProducto
 	GROUP BY p.idProducto;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `getRutas` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRutas`()
+BEGIN
+	SELECT idRuta, zona
+	FROM Ruta;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1867,4 +1985,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-29  5:51:44
+-- Dump completed on 2016-11-29 16:24:57

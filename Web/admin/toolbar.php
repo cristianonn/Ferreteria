@@ -64,7 +64,7 @@
                     <a href="#"><i class="fa fa-truck" aria-hidden="true"></i> Rutas<span class="fa arrow"></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="#">Nueva ruta</a>
+                            <a href="nuevaruta.php">Nueva ruta</a>
                         </li>
                         <li>
                             <a href="#">Ver rutas</a>

@@ -193,6 +193,22 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
+-- procedure getChoferes
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getChoferes`()
+BEGIN
+	Select idEmpleado, nombreEmpleado, apellidosEmpleado
+	FROM empleado, tipoempleado
+	WHERE TipoEmpleado_idTipoEmpleado = idTipoEmpleado
+	AND idTipoEmpleado = 5;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
 -- procedure getFerreterias
 -- -----------------------------------------------------
 
@@ -576,7 +592,7 @@ DELIMITER ;
 	IN pCorreo VARCHAR(45)
 	)
 	BEGIN
-	SELECT * FROM ferreterias.usuarioempleado;INSERT INTO `ferreterias`.`cliente`
+	INSERT INTO `ferreterias`.`cliente`
 	(`idCliente`,
 	`nombreCliente`,
 	`apellidosCliente`,
@@ -590,8 +606,6 @@ DELIMITER ;
 	pCorreo);
 
 	END$$
-
-	DELIMITER ;
 
 	-- -----------------------------------------------------
 	-- procedure getClientes
@@ -837,6 +851,74 @@ BEGIN
 	WHERE pidPedido = pxp.Pedido_idPedido
 	AND pxp.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
 	AND ixf.Producto_idProducto = p.idProducto;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getClientesSinRuta
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getClientesSinRuta`()
+BEGIN
+	SELECT idCliente, nombreCliente, apellidosCliente, direccion
+	FROM Cliente c
+	WHERE c.idCliente NOT IN (SELECT Cliente_idCliente
+		FROM RutaPorCliente rxc);
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure crearRuta
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `crearRuta`
+(IN pzona VARCHAR(100), IN pIdEmpleado VARCHAR(15))
+BEGIN
+	INSERT INTO `ferreterias`.`Ruta`
+		(`estadoRuta`,
+		`fechaRuta`,
+		`Empleado_idEmpleado`,
+		`zona`)
+	VALUES
+		("En espera",
+		UTC_DATE(),
+		pIdEmpleado,
+		pzona);
+	SELECT LAST_INSERT_ID() AS idRuta;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure agregarClienteARuta
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `agregarClienteARuta`
+(IN pidRuta INT, IN pidCliente VARCHAR(25))
+BEGIN
+	INSERT INTO `ferreterias`.`RutaPorCliente`
+		(`Ruta_idRuta`,
+		`cliente_idCliente`)
+	VALUES
+		(pidRuta, pidCliente);
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getRutas
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRutas`()
+BEGIN
+	SELECT idRuta, zona
+	FROM Ruta;
 END$$
 
 DELIMITER ;

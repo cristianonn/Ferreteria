@@ -120,7 +120,7 @@
                     "<a class=\"btn btn-default\" href=\"empleados.php?eliminar=" . $row['idEmpleado'] . "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></a>"];
             }
         }
-        mysqli_next_result($conn); //TIENE que ir o hay error
+        mysqli_next_result($conn); 
         return $arrayEmpleados;
     }
 
@@ -303,12 +303,13 @@
 /*------------- CLiente ----------*/
     function agregarCliente($pId,$pNombre,$pApe,$pTel,$pCorreo) {
         $conn = $_SESSION['conn'];
+        $idCliente = 0;
         $query = mysqli_query($conn, "CALL agregarCliente('$pId', '$pNombre','$pApe','$pTel','$pCorreo');");
         if (!$query) {
             die ("Error: " . mysqli_error($conn));
         }
         else {
-            echo "Cliente " . $pId . " agregado.";
+            echo "Cliente " . $pId . " agregado. ";
         }
     }
 
@@ -397,4 +398,88 @@
         mysqli_next_result($conn);
         return $arrayEmpleado;
     }
+
+    function getChoferes() {
+        $conn = $_SESSION['conn'];
+        $arrayEmpleado = [];
+        $query = mysqli_query($conn, "CALL getChoferes();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayEmpleado[] = [$row['idEmpleado'], $row['nombreEmpleado'] . " " . $row['apellidosEmpleado']];
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayEmpleado;
+    }
+
+    function getClientesSinRuta() {
+        $conn = $_SESSION['conn'];
+        $arrayClientes = [];
+        $query = mysqli_query($conn, "CALL getClientesSinRuta();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayClientes[] = ["idCliente" => $row['idCliente'], 
+                    "nombre" => $row['nombreCliente'] . " " . $row['apellidosCliente'],
+                    "direccion" => $row['direccion']];
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayClientes;
+    }
+
+    function crearRuta($zona, $idChofer) {
+        $conn = $_SESSION['conn'];
+        $idRuta = 0;
+        $query = mysqli_query($conn, "CALL crearRuta('$zona', '$idChofer');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $idRuta = $row['idRuta'];
+            }
+        }
+        mysqli_next_result($conn);
+        echo "Ruta " . $idRuta . " creada. ";
+        return $idRuta;
+    }
+
+    function agregarClienteARuta($idRuta, $idCliente) {
+        $conn = $_SESSION['conn'];
+        $query = mysqli_query($conn, "CALL agregarClienteARuta('$idRuta', '$idCliente');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        else {
+            echo "Cliente" . $idCliente . " agregado a ruta " . $idRuta;
+        }
+    }
+
+    function getRutas() {
+        $conn = $_SESSION['conn'];
+        $arrayRutas = [];
+        $query = mysqli_query($conn, "CALL getRutas();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayRutas[] = ["idRuta" => $row['idRuta'],
+                    "zona" => $row['zona']];
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayRutas;
+    }
+
 ?>
