@@ -1,7 +1,7 @@
 <?php
     /* Ferreteria - Bases de Datos II
-     * productos.php - Ver catálogo de productos
-     * Creado: 25/11/16 Gabriela Garro
+     * mejorferreteria.php - Ver mejores ferreterías
+     * Creado: 28/11/16 Gabriela Garro
      */
     include("session.php");
     //Datos por defecto
@@ -17,7 +17,6 @@
     //Convertir a formato de base de datos
     $fecha1db = date("Y-m-d", strtotime($fecha1));
     $fecha2db = date("Y-m-d", strtotime($fecha2));
-    //echo $fecha1db;
     $arrayFerreterias = getMejoresFerreterias((string) $fecha1db, (string) $fecha2db);
 ?>
 <!DOCTYPE html>

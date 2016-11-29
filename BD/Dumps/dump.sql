@@ -1236,7 +1236,10 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getEmpleados`()
 BEGIN
-	Select * FROM empleado;
+	Select idEmpleado, nombreEmpleado, apellidosEmpleado,
+		telEmpleado, fechaEntrada,vacacionesEmpleado, tipo
+	FROM empleado, tipoempleado
+	WHERE TipoEmpleado_idTipoEmpleado = idTipoEmpleado;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1656,25 +1659,21 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `verMejorEmpleado`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `verMejorEmpleado`(IN fecha1 DATE, IN fecha2 DATE)
 BEGIN
-select venta.empleado_idEmpleado as  id, e.nombreEmpleado, e.apellidosEmpleado ,venta.ventas
-FROM
-	(select empleado_idEmpleado,sum(precioPedido) as ventas
-	from (
-	select empleado_idEmpleado, precioPedido
-	from pedidoonline
-	WHERE fechaPedido BETWEEN (CURRENT_DATE() - INTERVAL 1 MONTH) AND CURRENT_DATE())
-    as precio
-    GROUP BY empleado_idEmpleado
-    ORDER BY ventas DESC) venta
-    LEFT JOIN amonestacion a
-    ON a.Empleado_idEmpleadoAmonestacion = venta.empleado_idEmpleado and a.fecha BETWEEN (CURRENT_DATE() - INTERVAL 6 MONTH) AND CURRENT_DATE()
-    JOIN empleado e
-    ON e.idEmpleado = venta.empleado_idEmpleado
-    WHERE a.idAmonestacion IS NULL
-    limit 1;
-END ;;
+	SELECT idEmpleado, nombreEmpleado, apellidosEmpleado, 
+		SUM(pxp.cantidad * p.precioProducto) AS ventas
+	FROM Empleado e, PedidoOnline po, ProductoPorPedido pxp,
+		InventarioPorFerreteria ixf, Producto p, Amonestacion a
+	WHERE e.idEmpleado = po.empleado_idempleado
+	AND po.fechaPedido BETWEEN (fecha1) AND (fecha2)
+	AND po.idPedido = pxp.Pedido_idPedido
+	AND pxp.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
+	AND ixf.Producto_idProducto = p.idProducto
+	AND idEmpleado NOT IN (SELECT Empleado_idEmpleadoAmonestacion FROM Amonestacion)
+	GROUP BY idEmpleado
+    ORDER BY ventas DESC;
+	END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1723,4 +1722,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-28 23:36:00
+-- Dump completed on 2016-11-29  0:06:52

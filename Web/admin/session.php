@@ -115,7 +115,7 @@
             while($row = mysqli_fetch_assoc($query)) {
                 $arrayEmpleados[] = [$row['idEmpleado'], $row['nombreEmpleado'], 
                     $row['apellidosEmpleado'], $row['telEmpleado'], $row['fechaEntrada'],
-                    $row['vacacionesEmpleado'], $row['TipoEmpleado_idTipoEmpleado'],
+                    $row['vacacionesEmpleado'], $row['tipo'],
                     "<a class=\"btn btn-default\" href=\"empleados.php?editar=" . $row['idEmpleado'] . "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></a>",
                     "<a class=\"btn btn-default\" href=\"empleados.php?eliminar=" . $row['idEmpleado'] . "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></a>"];
             }
@@ -380,17 +380,18 @@
         return $arrayFerreteria;
     }
 
-    function getMejorEmpleado() {
+    function getMejorEmpleado($fecha1, $fecha2) {
         $conn = $_SESSION['conn'];
         $arrayEmpleado = [];
-        $query = mysqli_query($conn, "CALL verMejorEmpleado();");
+        $query = mysqli_query($conn, "CALL verMejorEmpleado('$fecha1', '$fecha2');");
         if (!$query) {
             die ("Error: " . mysqli_error($conn));
         }
         $numrows = mysqli_num_rows($query);
         if ($numrows != 0) {
             while($row = mysqli_fetch_assoc($query)) {
-                $arrayEmpleado = $row;
+                $arrayEmpleado[] = [$row['idEmpleado'], $row['nombreEmpleado'],
+                    $row['apellidosEmpleado'], $row['ventas']];
             }
         }
         mysqli_next_result($conn);
