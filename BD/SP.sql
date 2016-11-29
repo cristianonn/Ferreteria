@@ -665,7 +665,27 @@ DELIMITER ;
     ORDER BY precioProducto DESC
     LIMIT 1;
 	END$$
-DELIMITER;
+	DELIMITER ;
+
+	-- -----------------------------------------------------
+	-- procedure ventasFerreterias
+	-- -----------------------------------------------------
+	DELIMITER $$
+	USE `ferreterias`$$
+	CREATE DEFINER=`root`@`localhost` PROCEDURE `ventasFerreterias`
+	(IN fecha1 DATE, IN fecha2 DATE)
+	BEGIN
+		SELECT idFerreteria, nombreFerreteria, SUM(pxp.cantidad * p.precioProducto) AS ventas
+		FROM Ferreteria f, ProductoPorPedido pxp, InventarioPorFerreteria ixf, Producto p, PedidoOnline po
+		WHERE f.idFerreteria = ixf.Ferreteria_idFerreteria
+		AND ixf.idInventarioPorFerreteria = pxp.inventarioporferreteria_idinventarioPorFerreteria
+        AND pxp.Pedido_idPedido = po.idPedido
+		AND ixf.Producto_idProducto = p.idProducto
+		AND po.fechaPedido BETWEEN (fecha1) AND (fecha2)
+        GROUP BY idferreteria
+        ORDER BY ventas DESC;
+	END$$
+	DELIMITER ;
 
 	-- -----------------------------------------------------
 	-- procedure getEstantes
@@ -681,28 +701,28 @@ DELIMITER;
 
 
 		-- -----------------------------------------------------
-	-- procedure getMejoreEmpleado
+	-- procedure getMejorEmpleado
 	-- -----------------------------------------------------
 	DELIMITER $$
 	USE `ferreterias`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `verMejorEmpleado`()
-BEGIN
-select venta.empleado_idEmpleado as  id, e.nombreEmpleado, e.apellidosEmpleado ,venta.ventas
-FROM
-	(select empleado_idEmpleado,sum(precioPedido) as ventas
-	from (
-	select empleado_idEmpleado, precioPedido
-	from pedidoonline
-	WHERE fechaPedido BETWEEN (CURRENT_DATE() - INTERVAL 1 MONTH) AND CURRENT_DATE())
-    as precio
-    GROUP BY empleado_idEmpleado
-    ORDER BY ventas DESC) venta
-    LEFT JOIN amonestacion a
-    ON a.Empleado_idEmpleadoAmonestacion = venta.empleado_idEmpleado and a.fecha BETWEEN (CURRENT_DATE() - INTERVAL 6 MONTH) AND CURRENT_DATE()
-    JOIN empleado e
-    ON e.idEmpleado = venta.empleado_idEmpleado
-    WHERE a.idAmonestacion IS NULL
-    limit 1;
-END$$
+	CREATE DEFINER=`root`@`localhost` PROCEDURE `verMejorEmpleado`()
+	BEGIN
+	select venta.empleado_idEmpleado as  id, e.nombreEmpleado, e.apellidosEmpleado ,venta.ventas
+	FROM
+		(select empleado_idEmpleado,sum(precioPedido) as ventas
+		from (
+		select empleado_idEmpleado, precioPedido
+		from pedidoonline
+		WHERE fechaPedido BETWEEN (CURRENT_DATE() - INTERVAL 1 MONTH) AND CURRENT_DATE())
+	    as precio
+	    GROUP BY empleado_idEmpleado
+	    ORDER BY ventas DESC) venta
+	    LEFT JOIN amonestacion a
+	    ON a.Empleado_idEmpleadoAmonestacion = venta.empleado_idEmpleado and a.fecha BETWEEN (CURRENT_DATE() - INTERVAL 6 MONTH) AND CURRENT_DATE()
+	    JOIN empleado e
+	    ON e.idEmpleado = venta.empleado_idEmpleado
+	    WHERE a.idAmonestacion IS NULL
+	    limit 1;
+	END$$
 
 	DELIMITER ;

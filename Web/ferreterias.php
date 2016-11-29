@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Nuestra ferreterías</title>
+    <title>Nuestras ferreterías</title>
 
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="img/favicon.ico" type="image/x-icon">
@@ -85,7 +85,7 @@
                     longitudUsuario = position.coords.longitude;
                     //Poner una ventanita marcando la ubicación del usuario
                     ubicacionInfoWindow.setPosition(pos);
-                    ubicacionInfoWindow.setContent('Su ubicación.');
+                    ubicacionInfoWindow.setContent('Su ubicación');
                     map.setCenter(pos);
                     var infowindow = new google.maps.InfoWindow();
                     var marker;
@@ -191,7 +191,7 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; Ferretería Online 2014</p>
+                    <p>Copyright &copy; Ferretería Online 2016</p>
                 </div>
             </div>
         </footer>

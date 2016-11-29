@@ -4,21 +4,21 @@
      * Creado: 25/11/16 Gabriela Garro
      */
     include("session.php");
-    /*if (isset($_GET['eliminar']) || isset($_GET['idf'])) {
-        $idProducto = $_GET['eliminar'];
-        $idFerreteria = $_GET['idf'];
-        eliminarLineaInventario($idProducto, $idFerreteria);
-        echo "Producto " . $idProducto . " eliminado.";
-    }*/
-    
-    $idFerreteria = '';
-    $ventas = '';
-    $arrayFerreteria = getMejorFerreteria();
-    if ($arrayFerreteria != null) 
-    {
-        $idFerreteria = $arrayFerreteria['ferreteria_idFerreteria'];
-        $ventas = $arrayFerreteria['ventas'];
+    //Datos por defecto
+    if (!isset($_GET['fecha1'])) {
+        $_GET['fecha1'] = "2016-01-01";
     }
+    if (!isset($_GET['fecha2'])) {
+        $_GET['fecha2'] = date("Y-m-d");
+    }
+    //Recuperar datos del form
+    $fecha1 = $_GET['fecha1'];
+    $fecha2 = $_GET['fecha2'];
+    //Convertir a formato de base de datos
+    $fecha1db = date("Y-m-d", strtotime($fecha1));
+    $fecha2db = date("Y-m-d", strtotime($fecha2));
+    //echo $fecha1db;
+    $arrayFerreterias = getMejoresFerreterias((string) $fecha1db, (string) $fecha2db);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,9 +64,18 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
  	<![endif]-->
  	<script>
-        arrayPasillos
-        idFerreteria = <?php echo json_encode($arrayPasillos[0]); ?>;
-        ventasFerreteria  = <?php echo json_encode($arrayPasillos[1]); ?>;
+        arrayFerreterias = <?php echo json_encode($arrayFerreterias); ?>;
+        $(document).ready(function() {
+            $('#Ferreterias').DataTable( {
+                data: arrayFerreterias,
+                columns: [
+                    {title: "Id."},
+                    {title: "Nombre"},
+                    {title: "Ventas"}
+                ],
+                "order": [[ 2, "desc" ]]
+            } );
+        } );
 
     </script>
 </head>
@@ -87,19 +96,30 @@
             </div>
             <!-- /.row -->
             <div class="row">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <table class="table" >
-                            <tbody>
-                                <tr>
-                                    <th><b>Ferreteria</b></th>
-                                    <td><?php echo $idFerreteria; ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Total de ganancias</th>
-                                    <td>₡ <?php echo $ventas; ?></td>
-                                </tr>
-                        </table>
+                <form role="form" action="mejorferreteria.php" method="GET" class="registration-form">
+                    <div class="form-group col-md-5 floating-label-form-group controls">
+                        <label>Fecha de inicio</label>
+                        <input type="date" name="fecha1" id="fecha1" class="form-control" value=<?php echo "\"" . $fecha1 . "\"";?>>
+                    </div>
+                    <div class="form-group col-md-5 floating-label-form-group controls">
+                        <label>Fecha final</label>
+                        <input type="date" name="fecha2" id="fecha2" class="form-control" value=<?php echo "\"" . $fecha2 . "\"";?>>
+                    </div>
+                    <div class="form-group col-md-2 floating-label-form-group controls">
+                        <br>
+                        <input type="submit" class="btn btn-primary" value = "Cambiar fechas">
+                    </div>
+                </form>
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <table id="Ferreterias" 
+                            class="table table-striped table-bordered table-hover" 
+                            width="100%"></table>
+                        </div>
                     </div>
                 </div>
             </div>

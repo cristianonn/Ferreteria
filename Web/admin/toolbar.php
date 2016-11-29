@@ -76,7 +76,7 @@
                             <a href="tipoEmpleados.php">Tipos de empleado</a>
                         </li>
                         <li>
-                            <a href="mejorempleado.php">Empleado del mes</a>
+                            <a href="mejorempleado.php">Ventas de empleados</a>
                         </li>
                         <li>
                             <a href="#">Vacaciones</a>

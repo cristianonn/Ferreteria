@@ -4,7 +4,7 @@ USE `ferreterias`;
 --
 -- Host: localhost    Database: ferreterias
 -- ------------------------------------------------------
--- Server version	5.7.15-log
+-- Server version	5.7.16-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -193,6 +193,7 @@ CREATE TABLE `ferreteria` (
   `telefonoFerreteria` varchar(45) DEFAULT NULL,
   `latitud` float DEFAULT NULL,
   `longitud` float DEFAULT NULL,
+  `direccion` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`idFerreteria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -203,7 +204,7 @@ CREATE TABLE `ferreteria` (
 
 LOCK TABLES `ferreteria` WRITE;
 /*!40000 ALTER TABLE `ferreteria` DISABLE KEYS */;
-INSERT INTO `ferreteria` VALUES (1,'Hermanos clavo','22225236',NULL,NULL),(2,'Tornillos mil','22229658',NULL,NULL),(3,'Constru bien','22221536',NULL,NULL),(4,'Cementico','22220125',NULL,NULL);
+INSERT INTO `ferreteria` VALUES (1,'Hermanos clavo','22225236',9.86629,-83.9223,'Cartago'),(2,'Tornillos mil','22229658',10.0163,-84.2138,'Alajuela'),(3,'Constru bien','22221536',9.93224,-84.08,'San José'),(4,'Cementico','22220125',10.0008,-84.1176,'Heredia');
 /*!40000 ALTER TABLE `ferreteria` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -514,7 +515,7 @@ CREATE TABLE `productoporcarrito` (
   KEY `fk_productoporcarrito_inventarioporferreteria1_idx` (`inventarioporferreteria_idinventarioPorFerreteria`),
   CONSTRAINT `fk_productoporcarrito_cliente1` FOREIGN KEY (`cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_productoporcarrito_inventarioporferreteria1` FOREIGN KEY (`inventarioporferreteria_idinventarioPorFerreteria`) REFERENCES `inventarioporferreteria` (`idinventarioPorFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -523,7 +524,7 @@ CREATE TABLE `productoporcarrito` (
 
 LOCK TABLES `productoporcarrito` WRITE;
 /*!40000 ALTER TABLE `productoporcarrito` DISABLE KEYS */;
-INSERT INTO `productoporcarrito` VALUES (1,'1',7),(2,'1',13),(3,'1',22),(5,'2',10),(7,'1',34),(8,'1',8),(9,'1',6),(10,'1',11),(13,'1',27),(14,'2',27),(15,'1',12);
+INSERT INTO `productoporcarrito` VALUES (1,'1',7),(2,'1',13),(3,'1',22),(5,'2',10),(7,'1',34),(8,'1',8),(9,'1',6),(10,'1',11),(13,'1',27),(14,'2',27),(15,'1',12),(16,'1',20);
 /*!40000 ALTER TABLE `productoporcarrito` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -539,6 +540,7 @@ CREATE TABLE `productoporpedido` (
   `Pedido_idPedido` int(11) NOT NULL,
   `vistoBueno` tinyint(1) DEFAULT NULL,
   `inventarioporferreteria_idinventarioPorFerreteria` int(11) NOT NULL,
+  `cantidad` int(11) DEFAULT '1',
   PRIMARY KEY (`idProductoPorPedido`),
   KEY `fk_ProductoPorPedido_Pedido1_idx` (`Pedido_idPedido`),
   KEY `fk_productoporpedido_inventarioporferreteria1_idx` (`inventarioporferreteria_idinventarioPorFerreteria`),
@@ -553,7 +555,7 @@ CREATE TABLE `productoporpedido` (
 
 LOCK TABLES `productoporpedido` WRITE;
 /*!40000 ALTER TABLE `productoporpedido` DISABLE KEYS */;
-INSERT INTO `productoporpedido` VALUES (1,1,0,2),(2,1,0,4),(3,2,0,5),(4,3,0,5);
+INSERT INTO `productoporpedido` VALUES (1,1,0,2,2),(2,1,0,4,1),(3,2,0,5,3),(4,3,0,5,1),(5,2,0,9,1);
 /*!40000 ALTER TABLE `productoporpedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -747,6 +749,10 @@ LOCK TABLES `vehiculoporempleado` WRITE;
 INSERT INTO `vehiculoporempleado` VALUES (1,'20','2325'),(2,'23','5498'),(3,'24','6548');
 /*!40000 ALTER TABLE `vehiculoporempleado` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'ferreterias'
+--
 
 --
 -- Dumping routines for database 'ferreterias'
@@ -1613,6 +1619,33 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `ventasFerreterias` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ventasFerreterias`(IN fecha1 DATE, IN fecha2 DATE)
+BEGIN
+		SELECT idFerreteria, nombreFerreteria, SUM(pxp.cantidad * p.precioProducto) AS ventas
+		FROM Ferreteria f, ProductoPorPedido pxp, InventarioPorFerreteria ixf, Producto p, PedidoOnline po
+		WHERE f.idFerreteria = ixf.Ferreteria_idFerreteria
+		AND ixf.idInventarioPorFerreteria = pxp.inventarioporferreteria_idinventarioPorFerreteria
+        AND pxp.Pedido_idPedido = po.idPedido
+		AND ixf.Producto_idProducto = p.idProducto
+		AND po.fechaPedido BETWEEN (fecha1) AND (fecha2)
+        GROUP BY idferreteria
+        ORDER BY ventas DESC;
+	END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `verMejorEmpleado` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1673,8 +1706,8 @@ BEGIN
     as precio
     GROUP BY ferreteria_idferreteria
     ORDER BY precioProducto DESC
-    limit 1;
-END ;;
+    LIMIT 1;
+	END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1690,4 +1723,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-28  0:53:14
+-- Dump completed on 2016-11-28 23:36:00

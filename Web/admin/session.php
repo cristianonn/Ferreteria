@@ -93,7 +93,7 @@
         if ($numrows!=0) {
             while($row = mysqli_fetch_assoc($query)) {
                 $arrayFerreterias[] = [$row['idFerreteria'], $row['nombreFerreteria'], 
-                    $row['telefonoFerreteria'],$row['latitud'],$row['longitud'],
+                    $row['telefonoFerreteria'],$row['latitud'], $row['longitud'], $row['direccion'],
                     "<a class=\"btn btn-default\" href=\"ferreterias.php?editar=" . $row['idFerreteria'] . "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></a>",
                     "<a class=\"btn btn-default\" href=\"ferreterias.php?eliminar=" . $row['idFerreteria'] . "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></a>"];
             }
@@ -357,6 +357,23 @@
         if ($numrows != 0) {
             while($row = mysqli_fetch_assoc($query)) {
                 $arrayFerreteria = $row;
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayFerreteria;
+    }
+
+    function getMejoresFerreterias($fecha1, $fecha2) {
+        $conn = $_SESSION['conn'];
+        $arrayFerreteria = [];
+        $query = mysqli_query($conn, "CALL ventasFerreterias('$fecha1', '$fecha2');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayFerreteria[] = [$row['idFerreteria'], $row['nombreFerreteria'], $row['ventas']];
             }
         }
         mysqli_next_result($conn);

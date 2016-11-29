@@ -67,14 +67,12 @@
                     {title: "Telefono"},
                     {title: "Latitud"},
                     {title: "Longitud"},
+                    {title: "Dirección"},
                     {title: "Editar"},
                     {title: "Eliminar"}
                 ]
             } );
         } );
-
-
-
     </script>
 </head>
 
