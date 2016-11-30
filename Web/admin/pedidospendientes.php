@@ -162,25 +162,31 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Pedidos pendientes</h1>
-                    <div id="map" class="map-page"></div>
-                    <br>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
             <div class="row">
-                <select name="idRuta" id="idRuta" class="form-control" onchange="rutaOnChange();">
-                    <option>Seleccione una ruta...</option>
-                </select>
-                <script>
-                    popular("idRuta", arrayRutas, "idRuta", "zona");
-                </script>
-                <br/>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <table id="pedidos" 
-                        class="table table-striped table-bordered table-hover" 
-                        width="100%"></table>
+                <div class="col-lg-12">
+                    <select name="idRuta" id="idRuta" class="form-control" onchange="rutaOnChange();">
+                        <option>Seleccione una ruta...</option>
+                    </select>
+                    <script>
+                        popular("idRuta", arrayRutas, "idRuta", "zona");
+                    </script>
+                    <br/>
+                </div>
+                <div class="col-lg-12">
+                    <div id="map" class="map-page"></div>
+                    <br>
+                </div>
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <table id="pedidos" 
+                            class="table table-striped table-bordered table-hover" 
+                            width="100%"></table>
+                        </div>
                     </div>
                 </div>
             </div>

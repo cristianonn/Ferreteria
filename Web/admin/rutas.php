@@ -188,7 +188,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Mapa</h1>
+                    <h2>Mapa</h2>
                     <input type="hidden" name="idRuta" id="idRuta" value="">
                     <div id="map" class="map-page"></div>
                     <br>
@@ -197,11 +197,14 @@
             </div>
             <!-- /.row -->
             <div class="row">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <table id="clientes" 
-                        class="table table-striped table-bordered table-hover"
-                        width="100%"></table>
+                <div class="col-lg-12">
+                    <h3>Clientes</h3>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <table id="clientes" 
+                            class="table table-striped table-bordered table-hover"
+                            width="100%"></table>
+                        </div>
                     </div>
                 </div>
             </div>

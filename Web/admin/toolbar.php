@@ -64,7 +64,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-truck" aria-hidden="true"></i> Rutas<span class="fa arrow"></a>
+                    <a href="#"><i class="fa fa-map-o" aria-hidden="true"></i> Rutas<span class="fa arrow"></a>
                     <ul class="nav nav-second-level">
                         <li>
                             <a href="nuevaruta.php">Nueva ruta</a>
@@ -104,7 +104,7 @@
                             <a href="mejorempleado.php">Ganancias por empleado </a>
                         </li>
                         <li>
-                            <a href="#">Vacaciones</a>
+                            <a href="#">Reportar amonestación</a>
                         </li>
                     </ul>
                 </li>
@@ -124,7 +124,7 @@
                             <a href="mejoresventas.php">Ventas de productos</a>
                         </li>
                         <li>
-                            <a href="#">Marcas de productos</a>
+                            <a href="marcas.php">Marcas de productos</a>
                         </li>
                         <li>
                             <a href="departamentos.php">Departamentos</a>
@@ -145,6 +145,20 @@
                         </li>
                         <li>
                             <a href="clientes.php">Ver clientes</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-truck" aria-hidden="true"></i> Flotilla<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="#">Vehículos</a>
+                        </li>
+                        <li>
+                            <a href="#">Modelos</a>
+                        </li>
+                        <li>
+                            <a href="#">Reportar kilómetros</a>
                         </li>
                     </ul>
                 </li>

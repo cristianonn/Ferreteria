@@ -664,4 +664,23 @@
         }
         return $arrayPedidos;
     }
+
+    function getTablaMarcas() {
+        $conn = $_SESSION['conn'];
+        $arrayProductos = [];
+        $query = mysqli_query($conn, "CALL getMarcas();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows!=0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayProductos[] = [$row['idMarca'], $row['nombreMarca'],
+                    "<a class=\"btn btn-default\" href=\"marcas.php?editar=" . $row['idMarca'] . "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></a>",
+                    "<a class=\"btn btn-default\" href=\"marcas.php?eliminar=" . $row['idMarca'] . "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></a>"];
+            }
+        }
+        mysqli_next_result($conn); //TIENE que ir o hay error
+        return $arrayProductos;
+    }
 ?>
