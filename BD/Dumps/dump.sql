@@ -26,13 +26,13 @@ DROP TABLE IF EXISTS `amonestacion`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `amonestacion` (
   `idAmonestacion` int(11) NOT NULL AUTO_INCREMENT,
-  `motivoAmonestacion` varchar(45) DEFAULT NULL,
+  `motivoAmonestacion` varchar(200) DEFAULT NULL,
   `fecha` date DEFAULT NULL,
   `Empleado_idEmpleadoAmonestacion` varchar(15) NOT NULL,
   PRIMARY KEY (`idAmonestacion`),
   KEY `fk_Amonestacion_Empleado1_idx` (`Empleado_idEmpleadoAmonestacion`),
   CONSTRAINT `fk_Amonestacion_Empleado1` FOREIGN KEY (`Empleado_idEmpleadoAmonestacion`) REFERENCES `empleado` (`idEmpleado`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `amonestacion` (
 
 LOCK TABLES `amonestacion` WRITE;
 /*!40000 ALTER TABLE `amonestacion` DISABLE KEYS */;
-INSERT INTO `amonestacion` VALUES (4,'llegadas tardias','2015-05-02','15'),(5,'ofenza a un cliente','2016-10-06','17');
+INSERT INTO `amonestacion` VALUES (4,'llegadas tardias','2015-05-02','15'),(5,'ofenza a un cliente','2016-10-06','17'),(6,'3 ausencias injustificadas','2016-11-30','19');
 /*!40000 ALTER TABLE `amonestacion` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -267,7 +267,7 @@ CREATE TABLE `inventarioporferreteria` (
 
 LOCK TABLES `inventarioporferreteria` WRITE;
 /*!40000 ALTER TABLE `inventarioporferreteria` DISABLE KEYS */;
-INSERT INTO `inventarioporferreteria` VALUES (2,12,2,2,1),(4,20,1,4,2),(5,21,2,5,2),(6,20,3,6,2),(7,7,1,7,3),(8,8,2,8,3),(9,3,3,9,3),(10,9,1,1,4),(11,8,2,2,4),(12,7,3,3,4),(13,4,1,4,5),(14,5,2,5,5),(15,6,3,6,5),(16,9,1,7,6),(17,8,2,8,6),(18,6,3,9,6),(19,4,1,1,7),(20,2,2,2,7),(22,9,1,4,8),(23,8,2,5,8),(24,5,3,6,8),(25,4,1,7,9),(26,7,2,8,9),(27,8,3,9,9),(28,5,1,1,10),(29,4,2,2,10),(30,5,3,3,10),(31,8,1,4,11),(32,7,2,5,11),(33,4,3,6,11),(34,27,1,5,1),(35,0,1,1,15),(36,0,2,1,15),(37,0,3,1,15),(38,0,4,1,15),(42,0,1,1,16),(43,0,2,1,16),(44,0,3,1,16),(45,0,4,1,16),(49,0,1,1,17),(50,0,2,1,17),(51,0,3,1,17),(52,0,4,1,17),(56,0,1,1,18),(57,0,2,1,18),(58,0,3,1,18),(59,0,4,1,18),(63,0,1,1,19),(64,0,2,1,19),(65,0,3,1,19),(66,0,4,1,19);
+INSERT INTO `inventarioporferreteria` VALUES (2,12,2,2,1),(4,20,1,4,2),(5,21,2,5,2),(6,20,3,6,2),(7,5,1,7,3),(8,8,2,8,3),(9,3,3,9,3),(10,9,1,1,4),(11,8,2,2,4),(12,7,3,3,4),(13,3,1,4,5),(14,5,2,5,5),(15,6,3,6,5),(16,8,1,7,6),(17,8,2,8,6),(18,6,3,9,6),(19,4,1,1,7),(20,2,2,2,7),(22,9,1,4,8),(23,8,2,5,8),(24,5,3,6,8),(25,4,1,7,9),(26,7,2,8,9),(27,8,3,9,9),(28,5,1,1,10),(29,4,2,2,10),(30,5,3,3,10),(31,8,1,4,11),(32,7,2,5,11),(33,4,3,6,11),(34,27,1,5,1),(35,0,1,1,15),(36,0,2,1,15),(37,0,3,1,15),(38,0,4,1,15),(42,0,1,1,16),(43,0,2,1,16),(44,0,3,1,16),(45,0,4,1,16),(49,0,1,1,17),(50,0,2,1,17),(51,0,3,1,17),(52,0,4,1,17),(56,0,1,1,18),(57,0,2,1,18),(58,0,3,1,18),(59,0,4,1,18),(63,0,1,1,19),(64,0,2,1,19),(65,0,3,1,19),(66,0,4,1,19);
 /*!40000 ALTER TABLE `inventarioporferreteria` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -338,7 +338,7 @@ CREATE TABLE `pedidoonline` (
   KEY `fk_empelado_idEmpleado_idx` (`empleado_idEmpleado`),
   CONSTRAINT `fk_Pedido_Cliente1` FOREIGN KEY (`Cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_empelado_idEmpleado` FOREIGN KEY (`empleado_idEmpleado`) REFERENCES `empleado` (`idEmpleado`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -347,7 +347,7 @@ CREATE TABLE `pedidoonline` (
 
 LOCK TABLES `pedidoonline` WRITE;
 /*!40000 ALTER TABLE `pedidoonline` DISABLE KEYS */;
-INSERT INTO `pedidoonline` VALUES (1,'2016-11-10',1500,'Entregado','1','17'),(2,'2016-11-11',1000,'Entregado','2','16'),(3,'2016-11-12',3000,'Entregado','3','17'),(7,'2016-11-29',0,'Entregando','1','15'),(8,'2016-11-29',0,'No despachado','1','24'),(9,'2016-11-29',0,'No despachado','1','22');
+INSERT INTO `pedidoonline` VALUES (1,'2016-11-10',1500,'Entregado','1','17'),(2,'2016-11-11',1000,'Entregado','2','16'),(3,'2016-11-12',3000,'Entregado','3','17'),(7,'2016-11-29',0,'Entregando','1','15'),(8,'2016-11-29',0,'Entregando','1','24'),(9,'2016-11-29',0,'No despachado','1','22'),(10,'2016-11-30',0,'Entregando','3','702470727');
 /*!40000 ALTER TABLE `pedidoonline` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -518,7 +518,7 @@ CREATE TABLE `productoporcarrito` (
   KEY `fk_productoporcarrito_inventarioporferreteria1_idx` (`inventarioporferreteria_idinventarioPorFerreteria`),
   CONSTRAINT `fk_productoporcarrito_cliente1` FOREIGN KEY (`cliente_idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_productoporcarrito_inventarioporferreteria1` FOREIGN KEY (`inventarioporferreteria_idinventarioPorFerreteria`) REFERENCES `inventarioporferreteria` (`idinventarioPorFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -549,7 +549,7 @@ CREATE TABLE `productoporpedido` (
   KEY `fk_productoporpedido_inventarioporferreteria1_idx` (`inventarioporferreteria_idinventarioPorFerreteria`),
   CONSTRAINT `fk_ProductoPorPedido_Pedido1` FOREIGN KEY (`Pedido_idPedido`) REFERENCES `pedidoonline` (`idPedido`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_productoporpedido_inventarioporferreteria1` FOREIGN KEY (`inventarioporferreteria_idinventarioPorFerreteria`) REFERENCES `inventarioporferreteria` (`idinventarioPorFerreteria`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -558,7 +558,7 @@ CREATE TABLE `productoporpedido` (
 
 LOCK TABLES `productoporpedido` WRITE;
 /*!40000 ALTER TABLE `productoporpedido` DISABLE KEYS */;
-INSERT INTO `productoporpedido` VALUES (1,1,0,2,2),(2,1,0,4,1),(3,2,0,5,3),(4,3,0,5,1),(5,2,0,9,1),(21,7,0,2,5),(22,8,0,18,1),(23,9,0,20,3),(24,9,0,9,3);
+INSERT INTO `productoporpedido` VALUES (1,1,0,2,2),(2,1,0,4,1),(3,2,0,5,3),(4,3,0,5,1),(5,2,0,9,1),(21,7,0,2,5),(22,8,0,18,1),(23,9,0,20,3),(24,9,0,9,3),(25,10,0,7,2),(26,10,0,16,1),(27,10,0,13,1);
 /*!40000 ALTER TABLE `productoporpedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1942,6 +1942,33 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `reportarAmonestacion` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `reportarAmonestacion`(IN pMotivo VARCHAR(200), IN pIdEmpleado VARCHAR(15))
+BEGIN
+	INSERT INTO `ferreterias`.`amonestacion`
+		(`motivoAmonestacion`,
+		`fecha`,
+		`Empleado_idEmpleadoAmonestacion`)
+	VALUES
+		(pMotivo,
+		UTC_DATE(),
+		pIdEmpleado);
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `seleccionar6Random` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -2135,7 +2162,9 @@ BEGIN
 	AND po.idPedido = pxp.Pedido_idPedido
 	AND pxp.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
 	AND ixf.Producto_idProducto = p.idProducto
-	AND idEmpleado NOT IN (SELECT Empleado_idEmpleadoAmonestacion FROM Amonestacion)
+	AND idEmpleado NOT IN (SELECT Empleado_idEmpleadoAmonestacion 
+		FROM Amonestacion
+		WHERE fecha > (NOW() - INTERVAL 6 MONTH))
 	GROUP BY idEmpleado
     ORDER BY ventas DESC;
 	END ;;
@@ -2187,4 +2216,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-30  4:51:12
+-- Dump completed on 2016-11-30  6:11:04

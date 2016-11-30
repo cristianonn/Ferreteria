@@ -738,7 +738,9 @@ DELIMITER ;
 	AND po.idPedido = pxp.Pedido_idPedido
 	AND pxp.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
 	AND ixf.Producto_idProducto = p.idProducto
-	AND idEmpleado NOT IN (SELECT Empleado_idEmpleadoAmonestacion FROM Amonestacion)
+	AND idEmpleado NOT IN (SELECT Empleado_idEmpleadoAmonestacion 
+		FROM Amonestacion
+		WHERE fecha > (NOW() - INTERVAL 6 MONTH))
 	GROUP BY idEmpleado
     ORDER BY ventas DESC;
 	END$$
@@ -1075,5 +1077,25 @@ BEGIN
 	AND pxp.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
 	AND ixf.Producto_idProducto = p.idProducto
 	GROUP BY idPedido;
+END$$
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure reportarAmonestacion
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `reportarAmonestacion`
+(IN pMotivo VARCHAR(200), IN pIdEmpleado VARCHAR(15))
+BEGIN
+	INSERT INTO `ferreterias`.`amonestacion`
+		(`motivoAmonestacion`,
+		`fecha`,
+		`Empleado_idEmpleadoAmonestacion`)
+	VALUES
+		(pMotivo,
+		UTC_DATE(),
+		pIdEmpleado);
+
 END$$
 DELIMITER ;

@@ -104,7 +104,7 @@
                             <a href="mejorempleado.php">Ganancias por empleado </a>
                         </li>
                         <li>
-                            <a href="#">Reportar amonestación</a>
+                            <a href="amonestacion.php">Reportar amonestación</a>
                         </li>
                     </ul>
                 </li>

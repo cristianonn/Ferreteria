@@ -124,6 +124,24 @@
         return $arrayEmpleados;
     }
 
+    function getListaEmpleados() {
+        $conn = $_SESSION['conn'];
+        $arrayEmpleados = [];
+        $query = mysqli_query($conn, "CALL getEmpleados();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows!=0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayEmpleados[] = ["idEmpleado" => $row['idEmpleado'], 
+                "nombre" => $row['nombreEmpleado'] . " " . $row['apellidosEmpleado']];
+            }
+        }
+        mysqli_next_result($conn); 
+        return $arrayEmpleados;
+    }
+
 
     function getTipoEmpleadosEditar() {
         $conn = $_SESSION['conn'];
@@ -682,5 +700,16 @@
         }
         mysqli_next_result($conn); //TIENE que ir o hay error
         return $arrayProductos;
+    }
+
+    function reportarAmonestacion($motivo, $idEmpleado) {
+        $conn = $_SESSION['conn'];
+        $query = mysqli_query($conn, "CALL reportarAmonestacion('$motivo', '$idEmpleado');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        else {
+            echo "Amonestacion reportada para empleado " . $idEmpleado . ". ";
+        }
     }
 ?>
