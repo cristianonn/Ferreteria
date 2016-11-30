@@ -530,4 +530,27 @@
         return $arrayRutasClientes;
     }
 
+
+    function getVentasPorFerreteria() {
+        $conn = $_SESSION['conn'];
+        $arrayFerreterias = getFerreterias();
+        $arrayProductos = [];
+        for ($i = 0; $i < sizeof($arrayFerreterias); $i++) {
+            $idFerreteria = $arrayFerreterias[$i]["idFerreteria"];
+            $query = mysqli_query($conn, "CALL organizarPasillos('$idFerreteria')");
+            if (!$query) {
+                die ("Error: " . mysqli_error($conn));
+            }
+            $numrows = mysqli_num_rows($query);
+            if ($numrows != 0) {
+                while($row = mysqli_fetch_assoc($query)) {
+                    $arrayProductos[$idFerreteria][] = [$row['idProducto'], $row['nombreProducto'], 
+                        $row['idPasillo'], $row['idEstante'], $row['cantidad'],
+                        "<a class=\"btn btn-default\" href=\"mejoresventas.php?editar=" . $row['idProducto'] . "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></a>"];
+                }
+            }
+            mysqli_next_result($conn);
+        }
+        return $arrayProductos;
+    }
 ?>

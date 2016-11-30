@@ -118,6 +118,9 @@
                             <a href="inventario.php">Inventario</a>
                         </li>
                         <li>
+                            <a href="mejoresventas.php">Ventas de productos</a>
+                        </li>
+                        <li>
                             <a href="#">Marcas de productos</a>
                         </li>
                         <li>

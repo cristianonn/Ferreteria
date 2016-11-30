@@ -939,3 +939,30 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+
+
+-- -----------------------------------------------------
+-- procedure organizarPasillos
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `organizarPasillos`(IN pIdFerreteria int(11))
+BEGIN
+	Select  q.idProducto, q.nombreProducto, p.idPasillo, f.idEstante, sum(r.cantidad) as cantidad
+    FROM inventarioporferreteria i
+    LEFT JOIN estanteporpasillo e
+    ON i.estanteporpasillo_idestantePorpasillo = e.idestantePorpasillo
+    INNER JOIN estante f
+    ON e.estante_idEstante = f.idEstante
+    INNER JOIN pasillo p
+    ON p.idPasillo = e.pasillo_idPasillo
+    INNER JOIN producto q
+    ON q.idProducto = i.producto_idProducto
+	LEFT JOIN productoporpedido r
+    ON r.inventarioporferreteria_idinventarioPorFerreteria = i.idinventarioPorFerreteria
+    WHERE i.ferreteria_idFerreteria = pIdFerreteria
+    GROUP BY q.idProducto
+    Order BY sum(r.cantidad) DESC, p.idPasillo;
+END$$
+DELIMITER ;
