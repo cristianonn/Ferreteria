@@ -482,4 +482,52 @@
         return $arrayRutas;
     }
 
+    function getTablaRutas() {
+        $conn = $_SESSION['conn'];
+        $arrayRutas = [];
+        $query = mysqli_query($conn, "CALL getRutas();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayRutas[] = [$row['idRuta'], $row['zona'],
+                    "<a href=\"#\" data-toggle=\"modal\" data-target=\"#ruta\" id=\"mapa\"
+                        onclick=\"cambiarRuta(" . $row['idRuta'] . ")\">
+                    <i class=\"fa fa-share\" aria-hidden=\"true\"></i> Ver</a>"];
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayRutas;
+    }
+
+    function getRutasClientes() {
+        $conn = $_SESSION['conn'];
+        $arrayRutas = getRutas();
+        $arrayRutasClientes = [];
+        for ($i = 0; $i < sizeof($arrayRutas); $i++) {
+            $idRuta = $arrayRutas[$i]["idRuta"];
+            $zona = $arrayRutas[$i]["zona"];
+            //$arrayRutasClientes[$idRuta]["zona"] = $zona;
+            $clientes = [];
+            $query = mysqli_query($conn, "CALL getClientesPorRuta('$idRuta');");
+            if (!$query) {
+                die ("Error: " . mysqli_error($conn));
+            }
+            $numrows = mysqli_num_rows($query);
+            if ($numrows != 0) {
+                while($row = mysqli_fetch_assoc($query)) {
+                    $clientes[] = [$row['idCliente'],
+                        $row['nombreCliente'] . " " . $row['apellidosCliente'],
+                        $row['latitud'],
+                        $row['longitud']];                
+                }
+                $arrayRutasClientes[$idRuta] = $clientes;
+            }
+            mysqli_next_result($conn);
+        }
+        return $arrayRutasClientes;
+    }
+
 ?>

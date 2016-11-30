@@ -922,3 +922,20 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getClientesPorRuta
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getClientesPorRuta`
+(IN pIdRuta INT)
+BEGIN
+	SELECT idCliente, nombreCliente, apellidosCliente, latitud, longitud
+	FROM Cliente c, RutaPorCliente rxc, Ruta r
+	WHERE pIdRuta = r.idRuta
+	AND r.idRuta = rxc.Ruta_idRuta
+	AND rxc.Cliente_idCliente = c.idCliente;
+END$$
+
+DELIMITER ;

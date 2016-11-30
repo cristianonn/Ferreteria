@@ -432,3 +432,12 @@ table.dataTable thead .sorting:after {
     border-left-width: 0;
   }
 }
+.modal-body {
+  max-width: 800px;
+}
+.modal-body .map {
+  height: 300px;
+  width: 100%;
+  max-width: 550px;
+}
+

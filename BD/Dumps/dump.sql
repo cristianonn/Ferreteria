@@ -71,7 +71,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES ('1','Louis','CK','88888888','lck@gmail.com',9.87494,-83.9132,'Cartago'),('2','Carlos','VH','89652145','CVH@gmail.com',9.84822,-83.9435,'Cartago'),('3','bo burnham','BU','88695425','BBU@hotmail.com',9.90858,-83.9755,'Tres Ríos'),('4','Andres','LL','88663321','ALL@gmail.com',9.92688,-84.0418,'Curridabat'),('601890628','Wendy','Sulca','84551211','wsulca@gmail.com',NULL,NULL,NULL);
+INSERT INTO `cliente` VALUES ('1','Louis','CK','88888888','lck@gmail.com',9.87494,-83.9132,'Cartago'),('2','Carlos','VH','89652145','CVH@gmail.com',9.84822,-83.9435,'Cartago'),('3','bo burnham','BU','88695425','BBU@hotmail.com',9.90858,-83.9755,'Tres Ríos'),('4','Andres','LL','88663321','ALL@gmail.com',9.92688,-84.0418,'Curridabat'),('601890628','Wendy','Sulca','84551211','wsulca@gmail.com',9.93278,-84.0292,'Curridabat');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1319,6 +1319,29 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `getClientesPorRuta` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getClientesPorRuta`(IN pIdRuta INT)
+BEGIN
+	SELECT idCliente, nombreCliente, apellidosCliente, latitud, longitud
+	FROM Cliente c, RutaPorCliente rxc, Ruta r
+	WHERE pIdRuta = r.idRuta
+	AND r.idRuta = rxc.Ruta_idRuta
+	AND rxc.Cliente_idCliente = c.idCliente;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `getClientesSinRuta` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1985,4 +2008,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-29 16:24:57
+-- Dump completed on 2016-11-29 21:22:35
