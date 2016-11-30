@@ -267,7 +267,7 @@ CREATE TABLE `inventarioporferreteria` (
 
 LOCK TABLES `inventarioporferreteria` WRITE;
 /*!40000 ALTER TABLE `inventarioporferreteria` DISABLE KEYS */;
-INSERT INTO `inventarioporferreteria` VALUES (2,12,2,2,1),(4,20,1,4,2),(5,21,2,5,2),(6,20,3,6,2),(7,5,1,7,3),(8,8,2,8,3),(9,3,3,9,3),(10,9,1,1,4),(11,8,2,2,4),(12,7,3,3,4),(13,3,1,4,5),(14,5,2,5,5),(15,6,3,6,5),(16,8,1,7,6),(17,8,2,8,6),(18,6,3,9,6),(19,4,1,1,7),(20,2,2,2,7),(22,9,1,4,8),(23,8,2,5,8),(24,5,3,6,8),(25,4,1,7,9),(26,7,2,8,9),(27,8,3,9,9),(28,5,1,1,10),(29,4,2,2,10),(30,5,3,3,10),(31,8,1,4,11),(32,7,2,5,11),(33,4,3,6,11),(34,27,1,5,1),(35,0,1,1,15),(36,0,2,1,15),(37,0,3,1,15),(38,0,4,1,15),(42,0,1,1,16),(43,0,2,1,16),(44,0,3,1,16),(45,0,4,1,16),(49,0,1,1,17),(50,0,2,1,17),(51,0,3,1,17),(52,0,4,1,17),(56,0,1,1,18),(57,0,2,1,18),(58,0,3,1,18),(59,0,4,1,18),(63,0,1,1,19),(64,0,2,1,19),(65,0,3,1,19),(66,0,4,1,19);
+INSERT INTO `inventarioporferreteria` VALUES (2,52,2,2,1),(4,20,1,4,2),(5,21,2,5,2),(6,20,3,6,2),(7,51,1,7,3),(8,84,2,8,3),(9,35,3,9,3),(10,19,1,1,4),(11,18,2,2,4),(12,17,3,3,4),(13,32,1,4,5),(14,54,2,5,5),(15,60,3,6,5),(16,38,1,7,6),(17,28,2,8,6),(18,69,3,9,6),(19,54,1,1,7),(20,21,2,2,7),(22,22,1,4,8),(23,24,2,5,8),(24,57,3,6,8),(25,42,1,7,9),(26,71,2,8,9),(27,89,3,9,9),(28,75,1,1,10),(29,41,2,2,10),(30,23,3,3,10),(31,55,1,4,11),(32,95,2,5,11),(33,24,3,6,11),(34,21,1,5,1),(35,21,1,1,15),(36,54,2,1,15),(37,50,3,1,15),(38,50,4,1,15),(42,50,1,1,16),(43,50,2,1,16),(44,50,3,1,16),(45,50,4,1,16),(49,50,1,1,17),(50,50,2,1,17),(51,50,3,1,17),(52,50,4,1,17),(56,50,1,1,18),(57,50,2,1,18),(58,50,3,1,18),(59,50,4,1,18),(63,50,1,1,19),(64,50,2,1,19),(65,50,3,1,19),(66,50,4,1,19);
 /*!40000 ALTER TABLE `inventarioporferreteria` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -291,8 +291,59 @@ CREATE TABLE `marca` (
 
 LOCK TABLES `marca` WRITE;
 /*!40000 ALTER TABLE `marca` DISABLE KEYS */;
-INSERT INTO `marca` VALUES (0,'mamco'),(2,'sony'),(3,'senaza'),(4,'pinta'),(5,'pana'),(6,'pani');
+INSERT INTO `marca` VALUES (0,'ACE'),(2,'American'),(3,'Faberware'),(4,'Samsung'),(5,'Black & Decker'),(6,'DeWalt');
 /*!40000 ALTER TABLE `marca` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `marcavehiculo`
+--
+
+DROP TABLE IF EXISTS `marcavehiculo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `marcavehiculo` (
+  `idMarcaVehiculo` int(11) NOT NULL AUTO_INCREMENT,
+  `nombreMarcaVehiculo` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idMarcaVehiculo`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `marcavehiculo`
+--
+
+LOCK TABLES `marcavehiculo` WRITE;
+/*!40000 ALTER TABLE `marcavehiculo` DISABLE KEYS */;
+INSERT INTO `marcavehiculo` VALUES (1,'Mack'),(2,'Scania'),(3,'Frightliner');
+/*!40000 ALTER TABLE `marcavehiculo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `modelovehiculo`
+--
+
+DROP TABLE IF EXISTS `modelovehiculo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `modelovehiculo` (
+  `idModeloVehiculo` int(11) NOT NULL AUTO_INCREMENT,
+  `nombreModeloVehiculo` varchar(45) DEFAULT NULL,
+  `MarcaVehiculo_idMarcaVehiculo` int(11) NOT NULL,
+  PRIMARY KEY (`idModeloVehiculo`),
+  KEY `fk_ModeloVehiculo_MarcaVehiculo1_idx` (`MarcaVehiculo_idMarcaVehiculo`),
+  CONSTRAINT `fk_ModeloVehiculo_MarcaVehiculo1` FOREIGN KEY (`MarcaVehiculo_idMarcaVehiculo`) REFERENCES `marcavehiculo` (`idMarcaVehiculo`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `modelovehiculo`
+--
+
+LOCK TABLES `modelovehiculo` WRITE;
+/*!40000 ALTER TABLE `modelovehiculo` DISABLE KEYS */;
+INSERT INTO `modelovehiculo` VALUES (1,'Titan',1),(2,'P Series',2),(3,'Cascadia',3);
+/*!40000 ALTER TABLE `modelovehiculo` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -578,7 +629,7 @@ CREATE TABLE `ruta` (
   PRIMARY KEY (`idRuta`),
   KEY `fk_Ruta_Empleado1_idx` (`Empleado_idEmpleado`),
   CONSTRAINT `fk_Ruta_Empleado1` FOREIGN KEY (`Empleado_idEmpleado`) REFERENCES `empleado` (`idEmpleado`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -709,9 +760,13 @@ DROP TABLE IF EXISTS `vehiculo`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vehiculo` (
   `placaVehiculo` varchar(10) NOT NULL,
-  `modeloVehiculo` varchar(25) DEFAULT NULL,
   `annoVehiculo` int(11) DEFAULT NULL,
-  PRIMARY KEY (`placaVehiculo`)
+  `ModeloVehiculo_idModeloVehiculo` int(11) NOT NULL,
+  `gasolina` float DEFAULT NULL,
+  `kilometros` float DEFAULT NULL,
+  PRIMARY KEY (`placaVehiculo`),
+  KEY `fk_vehiculo_ModeloVehiculo1_idx` (`ModeloVehiculo_idModeloVehiculo`),
+  CONSTRAINT `fk_vehiculo_ModeloVehiculo1` FOREIGN KEY (`ModeloVehiculo_idModeloVehiculo`) REFERENCES `modelovehiculo` (`idModeloVehiculo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -721,7 +776,7 @@ CREATE TABLE `vehiculo` (
 
 LOCK TABLES `vehiculo` WRITE;
 /*!40000 ALTER TABLE `vehiculo` DISABLE KEYS */;
-INSERT INTO `vehiculo` VALUES ('2325','nisan',2011),('5498','suzuki',2017),('6548','mazda ',2015),('8765','toyota',2014),('98465','mitsubishi',2010);
+INSERT INTO `vehiculo` VALUES ('2325',2011,1,0.5,2),('5498',2017,2,2,5),('6548',2015,3,3,5),('8765',2014,1,0,0),('98465',2010,2,0.5,3);
 /*!40000 ALTER TABLE `vehiculo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1505,6 +1560,47 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `getMarcasVehiculos` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMarcasVehiculos`()
+BEGIN
+	SELECT idMarcaVehiculo, nombreMarcaVehiculo
+	FROM MarcaVehiculo;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `getModelosVehiculos` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getModelosVehiculos`()
+BEGIN
+	SELECT idModeloVehiculo, nombreModeloVehiculo, nombreMarcaVehiculo
+	FROM ModeloVehiculo, MarcaVehiculo
+	WHERE MarcaVehiculo_idMarcaVehiculo = idMarcaVehiculo;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `getPasillos` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1815,6 +1911,35 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `getVehiculos` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getVehiculos`()
+BEGIN
+	SELECT placaVehiculo, nombreModeloVehiculo, nombreMarcaVehiculo,
+		annoVehiculo, nombreEmpleado, apellidosEmpleado, gasolina, kilometros
+	FROM Vehiculo v
+    INNER JOIN ModeloVehiculo modelo
+	ON v.ModeloVehiculo_idModeloVehiculo = modelo.idModeloVehiculo
+    INNER JOIN MarcaVehiculo marca
+	ON modelo.MarcaVehiculo_idMarcaVehiculo = marca.idMarcaVehiculo
+    LEFT JOIN VehiculoPorEmpleado vxe
+	ON v.placaVehiculo = vxe.Vehiculo_placaVehiculo
+    LEFT JOIN Empleado e
+	ON vxe.Empleado_idEmpleado = e.idEmpleado;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `hacerPedido` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1962,6 +2087,30 @@ BEGIN
 		(pMotivo,
 		UTC_DATE(),
 		pIdEmpleado);
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `reportarGastosVehiculo` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `reportarGastosVehiculo`(IN pPlaca VARCHAR(10), IN pKilometros FLOAT, IN pGasolina FLOAT)
+BEGIN
+	UPDATE `ferreterias`.`vehiculo`
+	SET
+		`gasolina` = gasolina + pGasolina,
+		`kilometros` = kilometros + pKilometros
+	WHERE `placaVehiculo` = pPlaca;
 
 END ;;
 DELIMITER ;
@@ -2216,4 +2365,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-30  6:11:04
+-- Dump completed on 2016-11-30 11:08:20

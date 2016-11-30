@@ -1099,3 +1099,66 @@ BEGIN
 
 END$$
 DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getMarcasVehiculos
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMarcasVehiculos`()
+BEGIN
+	SELECT idMarcaVehiculo, nombreMarcaVehiculo
+	FROM MarcaVehiculo;
+END$$
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getModelosVehiculos
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getModelosVehiculos`()
+BEGIN
+	SELECT idModeloVehiculo, nombreModeloVehiculo, nombreMarcaVehiculo
+	FROM ModeloVehiculo, MarcaVehiculo
+	WHERE MarcaVehiculo_idMarcaVehiculo = idMarcaVehiculo;
+END$$
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getVehiculos
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getVehiculos`()
+BEGIN
+	SELECT placaVehiculo, nombreModeloVehiculo, nombreMarcaVehiculo,
+		annoVehiculo, nombreEmpleado, apellidosEmpleado
+	FROM Vehiculo v
+    INNER JOIN ModeloVehiculo modelo
+	ON v.ModeloVehiculo_idModeloVehiculo = modelo.idModeloVehiculo
+    INNER JOIN MarcaVehiculo marca
+	ON modelo.MarcaVehiculo_idMarcaVehiculo = marca.idMarcaVehiculo
+    LEFT JOIN VehiculoPorEmpleado vxe
+	ON v.placaVehiculo = vxe.Vehiculo_placaVehiculo
+    LEFT JOIN Empleado e
+	ON vxe.Empleado_idEmpleado = e.idEmpleado;
+END$$
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure reportarGastosVehiculo
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `reportarGastosVehiculo`
+(IN pPlaca VARCHAR(10), IN pKilometros FLOAT, IN pGasolina FLOAT)
+BEGIN
+	UPDATE `ferreterias`.`vehiculo`
+	SET
+		`gasolina` = gasolina + pGasolina,
+		`kilometros` = kilometros + pKilometros
+	WHERE `placaVehiculo` = pPlaca;
+
+END$$
+DELIMITER ;

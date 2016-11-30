@@ -152,13 +152,16 @@
                     <a href="#"><i class="fa fa-truck" aria-hidden="true"></i> Flotilla<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="#">Vehículos</a>
+                            <a href="vehiculos.php">Vehículos</a>
                         </li>
                         <li>
-                            <a href="#">Modelos</a>
+                            <a href="modelosvehiculos.php">Modelos</a>
                         </li>
                         <li>
-                            <a href="#">Reportar kilómetros</a>
+                            <a href="marcasvehiculos.php">Marcas</a>
+                        </li>
+                        <li>
+                            <a href="reportarvehiculo.php">Reportar kilómetros</a>
                         </li>
                     </ul>
                 </li>

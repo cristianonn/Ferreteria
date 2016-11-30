@@ -712,4 +712,97 @@
             echo "Amonestacion reportada para empleado " . $idEmpleado . ". ";
         }
     }
+
+    function getMarcasVehiculos() {
+        $conn = $_SESSION['conn'];
+        $arrayProductos = [];
+        $query = mysqli_query($conn, "CALL getMarcasVehiculos();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows!=0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayProductos[] = [$row['idMarcaVehiculo'], $row['nombreMarcaVehiculo'],
+                    "<a class=\"btn btn-default\" href=\"marcasvehiculos.php?editar=" . $row['idMarcaVehiculo'] . "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></a>",
+                    "<a class=\"btn btn-default\" href=\"marcasvehiculos.php?eliminar=" . $row['idMarcaVehiculo'] . "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></a>"];
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayProductos;
+    }
+
+    function getModelosVehiculos() {
+        $conn = $_SESSION['conn'];
+        $arrayProductos = [];
+        $query = mysqli_query($conn, "CALL getModelosVehiculos();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows!=0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayProductos[] = [$row['idModeloVehiculo'], $row['nombreModeloVehiculo'],
+                    $row['nombreMarcaVehiculo'],
+                    "<a class=\"btn btn-default\" href=\"modelosvehiculos.php?editar=" . $row['idModeloVehiculo'] . "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></a>",
+                    "<a class=\"btn btn-default\" href=\"modelosvehiculos.php?eliminar=" . $row['idModeloVehiculo'] . "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></a>"];
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayProductos;
+    }
+
+    function getVehiculos() {
+        $conn = $_SESSION['conn'];
+        $arrayProductos = [];
+        $query = mysqli_query($conn, "CALL getVehiculos();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows!=0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayProductos[] = [$row['placaVehiculo'], 
+                    $row['nombreModeloVehiculo'],
+                    $row['nombreMarcaVehiculo'],
+                    $row['annoVehiculo'],
+                    $row['nombreEmpleado'] . " " . $row['apellidosEmpleado'],
+                    $row['kilometros'], $row['gasolina'],
+                    "<a class=\"btn btn-default\" href=\"vehiculos.php?editar=" . $row['placaVehiculo'] . "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></a>",
+                    "<a class=\"btn btn-default\" href=\"vehiculos.php?eliminar=" . $row['placaVehiculo'] . "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></a>"];
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayProductos;
+    }
+
+    function getListaVehiculos() {
+        $conn = $_SESSION['conn'];
+        $arrayProductos = [];
+        $query = mysqli_query($conn, "CALL getVehiculos();");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows!=0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayProductos[] = [$row['placaVehiculo'], 
+                    $row['placaVehiculo'] . " - " . $row['nombreMarcaVehiculo'] . " " .
+                        $row['nombreModeloVehiculo'] . " (" . $row['annoVehiculo'] . ")"];
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayProductos;
+    }
+
+    function reportarGastosVehiculo($placa, $kilometros, $gasolina) {
+        $conn = $_SESSION['conn'];
+        $query = mysqli_query($conn, "CALL reportarGastosVehiculo('$placa', '$kilometros', '$gasolina');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        else {
+            echo "Gastos reportados para vehículo " . $placa . ". ";
+        }
+    }
 ?>
