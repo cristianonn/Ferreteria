@@ -966,3 +966,27 @@ BEGIN
     Order BY sum(r.cantidad) DESC, p.idPasillo;
 END$$
 DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure ventasRutas
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ventasRutas`
+(IN fecha1 DATE, IN fecha2 DATE)
+BEGIN
+	SELECT idRuta, zona, SUM(idPedido) as pedidos,
+		SUM(pxp.cantidad * p.precioProducto) AS ventas
+	FROM Ruta r, RutaPorCliente rxc, Cliente c, PedidoOnline po,
+		ProductoPorPedido pxp, Producto p, inventarioPorFerreteria ixf
+	WHERE r.idRuta = rxc.Ruta_idRuta
+	AND rxc.Cliente_idCliente = c.idCliente
+	AND po.Cliente_idCliente = c.idCliente
+	AND po.idPedido = pxp.Pedido_idPedido
+	AND pxp.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
+	AND ixf.Producto_idProducto = p.idProducto
+	AND po.fechaPedido BETWEEN (fecha1) AND (fecha2)
+    GROUP BY idRuta
+    ORDER BY ventas DESC;
+END$$
+DELIMITER ;

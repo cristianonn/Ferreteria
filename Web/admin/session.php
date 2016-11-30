@@ -553,4 +553,22 @@
         }
         return $arrayProductos;
     }
+
+    function getMejoresRutas($fecha1, $fecha2) {
+        $conn = $_SESSION['conn'];
+        $arrayRutas = [];
+        $query = mysqli_query($conn, "CALL ventasRutas('$fecha1', '$fecha2');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        $numrows = mysqli_num_rows($query);
+        if ($numrows != 0) {
+            while($row = mysqli_fetch_assoc($query)) {
+                $arrayRutas[] = [$row['idRuta'], $row['zona'], 
+                    $row['articulos'], $row['ventas']];
+            }
+        }
+        mysqli_next_result($conn);
+        return $arrayRutas;
+    }
 ?>

@@ -70,7 +70,7 @@
                             <a href="rutas.php">Ver rutas</a>
                         </li>
                         <li>
-                            <a href="#">Ganancias por ruta</a>
+                            <a href="mejorruta.php">Ganancias por ruta</a>
                         </li>
                     </ul>
                 </li>
