@@ -1,12 +1,11 @@
 <?php
     /* Ferreteria - Bases de Datos II
-     * rutas.php - Ver rutas
-     * Creado: 29/11/16 Gabriela Garro
+     * pedidospendientes.php - Ver la ruta para entregar los pedidos pendientes
+     * Creado: 30/11/16 Gabriela Garro
      */
-    include("session.php");
-    $arrayRutas = getTablaRutas();
-    $arrayRutasClientes = getRutasClientes();
-    
+    include("session.php");  
+    $arrayRutas = getRutas();
+    $arrayPedidos = getPedidosPorRutaPendientes();
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +19,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Rutas</title>
+    <title>Ruta de pedidos pendientes</title>
 
     <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
@@ -43,10 +42,6 @@
     <!-- Font Awesome -->
     <script src="https://use.fontawesome.com/554db7ace5.js"></script>
 
-    <!-- Datatables JS -->
-    <script src="https://code.jquery.com/jquery-1.12.3.js"></script>
-    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -55,17 +50,45 @@
     <![endif]-->
     <script>
         arrayRutas = <?php echo json_encode($arrayRutas); ?>;
-        arrayRutasClientes = <?php echo json_encode($arrayRutasClientes); ?>;
-        $(document).ready(function() {
-            $('#rutas').DataTable( {
-                data: arrayRutas,
-                columns: [
-                    {title: "Id."},
-                    {title: "Zona de la ruta"},
-                    {title: "Mapa"}
-                ]
-            } );
-        } );
+        arrayPedidos = <?php echo json_encode($arrayPedidos); ?>;
+        function popular(selectId, array, pvalue, ptext) {
+            var select = document.getElementById(selectId);
+            for (var i = 0; i < array.length; i++) {
+                var value = array[i][pvalue];
+                var text = array[i][ptext];
+                var option = document.createElement("option");
+                option.textContent = text;
+                option.value = value;
+                select.appendChild(option);
+            }
+        }
+
+        function rutaOnChange() {
+            idRuta = document.getElementById("idRuta").value;
+            arrayPedidosXRuta = arrayPedidos[idRuta];
+            if (typeof tabla === 'undefined') {
+                tabla = $('#pedidos').DataTable( {
+                    data: arrayPedidosXRuta,
+                    columns: [
+                        {title: "Id."},
+                        {title: "Nombre de Cliente"},
+                        {title: "Latitud"},
+                        {title: "Longitud"},
+                        {title: "Estado"},
+                        {title: "Fecha"},
+                        {title: "Total (₡)"}
+                    ]
+                } );
+            }
+            else { 
+                idRuta = document.getElementById("idRuta").value;
+                arrayPedidosXRuta = arrayPedidos[idRuta];
+                tabla.clear().draw();
+                if (arrayPedidosXRuta.length != 0) {
+                    tabla.rows.add(arrayPedidosXRuta).draw();
+                }
+            }
+        }
 
         function initMap() {
             var directionsService = new google.maps.DirectionsService;
@@ -75,12 +98,11 @@
                 center: {lat: 9.856351, lng: -83.9130812},
                 zoom: 12
             });
-
             var ubicacionInfoWindow = new google.maps.InfoWindow({map: map});
 
             directionsDisplay.setMap(map);
 
-            document.getElementById('aRuta').addEventListener('click', function() {
+            document.getElementById('idRuta').addEventListener('click', function() {
                 calculateAndDisplayRoute(directionsService, directionsDisplay);
                 });
 
@@ -100,64 +122,31 @@
         }
 
         function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-            //Paradas
             var waypts = [];
             var idRuta = document.getElementById('idRuta').value;
-            console.log(idRuta);
-            var arrayClientes = arrayRutasClientes[idRuta];
-            for (var i = 0; i < arrayClientes.length; i++) {
+            arrayPedidosXRuta = arrayPedidos[idRuta];
+            for (var i = 0; i < arrayPedidosXRuta.length; i++) {
                 waypts.push({
-                    location: { lat: parseFloat(arrayClientes[i][2]),
-                                lng: parseFloat(arrayClientes[i][3]) },
+                    location: {lat: parseFloat(arrayPedidosXRuta[i][2]),
+                        lng: parseFloat(arrayPedidosXRuta[i][3])},
                     stopover: true
                 });
             }
-            console.log(waypts);
 
             directionsService.route({
                 origin: { lat: 9.86629, lng: -83.9223},
-                destination: { lat: 9.86629, lng: -83.922},
+                destination: { lat: 9.86629, lng: -83.9223},
                 waypoints: waypts,
                 optimizeWaypoints: true,
                 travelMode: google.maps.TravelMode.DRIVING
-            }, function(response, status) {
+                }, function(response, status) {
                 if (status === google.maps.DirectionsStatus.OK) {
-                  directionsDisplay.setDirections(response);
-                  var route = response.routes[0];
+                    directionsDisplay.setDirections(response);
+                    var route = response.routes[0];
                 } else {
                   window.alert('Directions request failed due to ' + status);
                 }
-              });
-        }
-
-        function cambiarRuta(idRuta) {
-            arrayClientes = arrayRutasClientes[idRuta];
-            //Cambiar el valor de la ruta actual
-            var ruta = document.getElementById('idRuta');
-            ruta.value = idRuta;
-            /*var directionsService = new google.maps.DirectionsService;
-            var directionsDisplay = new google.maps.DirectionsRenderer;
-            calculateAndDisplayRoute(directionsService, directionsDisplay)*/
-            //Cambiar datos de la tabla
-            if (typeof tabla === 'undefined') {
-                tabla = $('#clientes').DataTable( {
-                    data: arrayClientes,
-                    columns: [
-                        {title: "Id."},
-                        {title: "Nombre"},
-                        {title: "Latitud"},
-                        {title: "Longitud"},
-                        {title: "Ver en mapa"}
-                    ]
-                } );
-            }
-            else { 
-                arrayClientes = arrayRutasClientes[idRuta];
-                tabla.clear().draw();
-                if (arrayClientes.length != 0) {
-                    tabla.rows.add(arrayClientes).draw();
-                }
-            }
+            });
         }
     </script>
 
@@ -172,24 +161,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Rutas</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-            <div class="row">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <table id="rutas" 
-                        class="table table-striped table-bordered table-hover" 
-                        width="100%"></table>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Mapa</h1>
-                    <input type="hidden" name="idRuta" id="idRuta" value="">
+                    <h1 class="page-header">Pedidos pendientes</h1>
                     <div id="map" class="map-page"></div>
                     <br>
                 </div>
@@ -197,10 +169,17 @@
             </div>
             <!-- /.row -->
             <div class="row">
+                <select name="idRuta" id="idRuta" class="form-control" onchange="rutaOnChange();">
+                    <option>Seleccione una ruta...</option>
+                </select>
+                <script>
+                    popular("idRuta", arrayRutas, "idRuta", "zona");
+                </script>
+                <br/>
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <table id="clientes" 
-                        class="table table-striped table-bordered table-hover"
+                        <table id="pedidos" 
+                        class="table table-striped table-bordered table-hover" 
                         width="100%"></table>
                     </div>
                 </div>

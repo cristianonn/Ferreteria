@@ -53,10 +53,13 @@
                     <a href="#"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Pedidos<span class="fa arrow"></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="#">Despachar pedido</a>
+                            <a href="despacharpedido.php">Despachar pedido</a>
                         </li>
                         <li>
-                            <a href="#">Ver pedidos</a>
+                            <a href="pedidos.php">Ver pedidos</a>
+                        </li>
+                        <li>
+                            <a href="pedidospendientes.php">Ruta de pedidos pendientes</a>
                         </li>
                     </ul>
                 </li>
@@ -130,7 +133,7 @@
                             <a href="pasillos.php">Pasillos</a>
                         </li>
                         <li>
-                            <a href="estantes.php1">Estantes</a>
+                            <a href="estantes.php">Estantes</a>
                         </li>
                     </ul>
                 </li>

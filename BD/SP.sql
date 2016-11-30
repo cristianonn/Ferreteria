@@ -975,7 +975,7 @@ USE `ferreterias`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ventasRutas`
 (IN fecha1 DATE, IN fecha2 DATE)
 BEGIN
-	SELECT idRuta, zona, SUM(idPedido) as pedidos,
+	SELECT idRuta, zona, SUM(idPedido) as articulos,
 		SUM(pxp.cantidad * p.precioProducto) AS ventas
 	FROM Ruta r, RutaPorCliente rxc, Cliente c, PedidoOnline po,
 		ProductoPorPedido pxp, Producto p, inventarioPorFerreteria ixf
@@ -988,5 +988,92 @@ BEGIN
 	AND po.fechaPedido BETWEEN (fecha1) AND (fecha2)
     GROUP BY idRuta
     ORDER BY ventas DESC;
+END$$
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getPedidosPorRuta
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPedidosPorRuta`
+(IN pIdRuta INT)
+BEGIN
+	SELECT idPedido, nombreCliente, apellidosCliente, estadoPedido,
+		fechaPedido, SUM(pxp.cantidad * precioProducto) AS total
+	FROM Ruta r, RutaPorCliente rxc, Cliente c, PedidoOnline po,
+		ProductoPorPedido pxp, Producto p, inventarioPorFerreteria ixf
+	WHERE pIdRuta = r.idRuta
+	AND r.idRuta = rxc.Ruta_idRuta
+	AND rxc.Cliente_idCliente = c.idCliente
+	AND c.idCliente = po.Cliente_idCliente
+	AND po.idPedido = pxp.Pedido_idPedido
+	AND pxp.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
+	AND ixf.Producto_idProducto = p.idProducto
+	GROUP BY idPedido;
+END$$
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getPedidosPorRutaNoDespachados
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPedidosPorRutaNoDespachados`
+(IN pIdRuta INT)
+BEGIN
+	SELECT idPedido, nombreCliente, apellidosCliente, estadoPedido,
+		fechaPedido, SUM(pxp.cantidad * precioProducto) AS total
+	FROM Ruta r, RutaPorCliente rxc, Cliente c, PedidoOnline po,
+		ProductoPorPedido pxp, Producto p, inventarioPorFerreteria ixf
+	WHERE pIdRuta = r.idRuta
+	AND r.idRuta = rxc.Ruta_idRuta
+	AND rxc.Cliente_idCliente = c.idCliente
+	AND c.idCliente = po.Cliente_idCliente
+	AND po.idPedido = pxp.Pedido_idPedido
+	AND po.estadoPedido = "No despachado"
+	AND pxp.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
+	AND ixf.Producto_idProducto = p.idProducto
+	GROUP BY idPedido;
+END$$
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure despacharPedido
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `despacharPedido`
+(IN pIdPedido INT)
+BEGIN
+	UPDATE `ferreterias`.`pedidoonline`
+	SET
+		`estadoPedido` = "Entregando"
+	WHERE `idPedido` = pIdPedido;
+END$$
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getPedidosPorRutaPendientes
+-- -----------------------------------------------------
+DELIMITER $$
+USE `ferreterias`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPedidosPorRutaPendientes`
+(IN pIdRuta INT)
+BEGIN
+	SELECT idPedido, nombreCliente, apellidosCliente, estadoPedido,
+		fechaPedido, SUM(pxp.cantidad * precioProducto) AS total,
+		c.latitud as latitud, c.longitud as longitud
+	FROM Ruta r, RutaPorCliente rxc, Cliente c, PedidoOnline po,
+		ProductoPorPedido pxp, Producto p, inventarioPorFerreteria ixf
+	WHERE pIdRuta = r.idRuta
+	AND r.idRuta = rxc.Ruta_idRuta
+	AND rxc.Cliente_idCliente = c.idCliente
+	AND c.idCliente = po.Cliente_idCliente
+	AND po.idPedido = pxp.Pedido_idPedido
+	AND po.estadoPedido = "Entregando"
+	AND pxp.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
+	AND ixf.Producto_idProducto = p.idProducto
+	GROUP BY idPedido;
 END$$
 DELIMITER ;

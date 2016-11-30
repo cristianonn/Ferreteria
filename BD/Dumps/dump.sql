@@ -347,7 +347,7 @@ CREATE TABLE `pedidoonline` (
 
 LOCK TABLES `pedidoonline` WRITE;
 /*!40000 ALTER TABLE `pedidoonline` DISABLE KEYS */;
-INSERT INTO `pedidoonline` VALUES (1,'2016-11-10',1500,'entregado','1','17'),(2,'2016-11-11',1000,'entregado','2','16'),(3,'2016-11-12',3000,'entregado','3','17'),(7,'2016-11-29',0,'No despachado','1','15'),(8,'2016-11-29',0,'No despachado','1','24'),(9,'2016-11-29',0,'No despachado','1','22');
+INSERT INTO `pedidoonline` VALUES (1,'2016-11-10',1500,'Entregado','1','17'),(2,'2016-11-11',1000,'Entregado','2','16'),(3,'2016-11-12',3000,'Entregado','3','17'),(7,'2016-11-29',0,'Entregando','1','15'),(8,'2016-11-29',0,'No despachado','1','24'),(9,'2016-11-29',0,'No despachado','1','22');
 /*!40000 ALTER TABLE `pedidoonline` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1062,6 +1062,28 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `despacharPedido` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `despacharPedido`(IN pIdPedido INT)
+BEGIN
+	UPDATE `ferreterias`.`pedidoonline`
+	SET
+		`estadoPedido` = "Entregando"
+	WHERE `idPedido` = pIdPedido;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `eliminarCliente` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1502,6 +1524,99 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `getPedidosPorRuta` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPedidosPorRuta`(IN pIdRuta INT)
+BEGIN
+	SELECT idPedido, nombreCliente, apellidosCliente, estadoPedido,
+		fechaPedido, SUM(pxp.cantidad * precioProducto) AS total
+	FROM Ruta r, RutaPorCliente rxc, Cliente c, PedidoOnline po,
+		ProductoPorPedido pxp, Producto p, inventarioPorFerreteria ixf
+	WHERE pIdRuta = r.idRuta
+	AND r.idRuta = rxc.Ruta_idRuta
+	AND rxc.Cliente_idCliente = c.idCliente
+	AND c.idCliente = po.Cliente_idCliente
+	AND po.idPedido = pxp.Pedido_idPedido
+	AND pxp.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
+	AND ixf.Producto_idProducto = p.idProducto
+	GROUP BY idPedido;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `getPedidosPorRutaNoDespachados` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPedidosPorRutaNoDespachados`(IN pIdRuta INT)
+BEGIN
+	SELECT idPedido, nombreCliente, apellidosCliente, estadoPedido,
+		fechaPedido, SUM(pxp.cantidad * precioProducto) AS total
+	FROM Ruta r, RutaPorCliente rxc, Cliente c, PedidoOnline po,
+		ProductoPorPedido pxp, Producto p, inventarioPorFerreteria ixf
+	WHERE pIdRuta = r.idRuta
+	AND r.idRuta = rxc.Ruta_idRuta
+	AND rxc.Cliente_idCliente = c.idCliente
+	AND c.idCliente = po.Cliente_idCliente
+	AND po.idPedido = pxp.Pedido_idPedido
+	AND po.estadoPedido = "No despachado"
+	AND pxp.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
+	AND ixf.Producto_idProducto = p.idProducto
+	GROUP BY idPedido;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `getPedidosPorRutaPendientes` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPedidosPorRutaPendientes`(IN pIdRuta INT)
+BEGIN
+	SELECT idPedido, nombreCliente, apellidosCliente, estadoPedido,
+		fechaPedido, SUM(pxp.cantidad * precioProducto) AS total,
+		c.latitud as latitud, c.longitud as longitud
+	FROM Ruta r, RutaPorCliente rxc, Cliente c, PedidoOnline po,
+		ProductoPorPedido pxp, Producto p, inventarioPorFerreteria ixf
+	WHERE pIdRuta = r.idRuta
+	AND r.idRuta = rxc.Ruta_idRuta
+	AND rxc.Cliente_idCliente = c.idCliente
+	AND c.idCliente = po.Cliente_idCliente
+	AND po.idPedido = pxp.Pedido_idPedido
+	AND po.estadoPedido = "Entregando"
+	AND pxp.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
+	AND ixf.Producto_idProducto = p.idProducto
+	GROUP BY idPedido;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `getProductoEnFerreteria` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1733,6 +1848,39 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `organizarPasillos` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `organizarPasillos`(IN pIdFerreteria int(11))
+BEGIN
+	Select  q.idProducto, q.nombreProducto, p.idPasillo, f.idEstante, sum(r.cantidad) as cantidad
+    FROM inventarioporferreteria i
+    LEFT JOIN estanteporpasillo e
+    ON i.estanteporpasillo_idestantePorpasillo = e.idestantePorpasillo
+    INNER JOIN estante f
+    ON e.estante_idEstante = f.idEstante
+    INNER JOIN pasillo p
+    ON p.idPasillo = e.pasillo_idPasillo
+    INNER JOIN producto q
+    ON q.idProducto = i.producto_idProducto
+	LEFT JOIN productoporpedido r
+    ON r.inventarioporferreteria_idinventarioPorFerreteria = i.idinventarioPorFerreteria
+    WHERE i.ferreteria_idFerreteria = pIdFerreteria
+    GROUP BY q.idProducto
+    Order BY sum(r.cantidad) DESC, p.idPasillo;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `productosbackorder` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1935,6 +2083,37 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `ventasRutas` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ventasRutas`(IN fecha1 DATE, IN fecha2 DATE)
+BEGIN
+	SELECT idRuta, zona, SUM(idPedido) as articulos,
+		SUM(pxp.cantidad * p.precioProducto) AS ventas
+	FROM Ruta r, RutaPorCliente rxc, Cliente c, PedidoOnline po,
+		ProductoPorPedido pxp, Producto p, inventarioPorFerreteria ixf
+	WHERE r.idRuta = rxc.Ruta_idRuta
+	AND rxc.Cliente_idCliente = c.idCliente
+	AND po.Cliente_idCliente = c.idCliente
+	AND po.idPedido = pxp.Pedido_idPedido
+	AND pxp.inventarioporferreteria_idinventarioPorFerreteria = ixf.idInventarioPorFerreteria
+	AND ixf.Producto_idProducto = p.idProducto
+	AND po.fechaPedido BETWEEN (fecha1) AND (fecha2)
+    GROUP BY idRuta
+    ORDER BY ventas DESC;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `verMejorEmpleado` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -2008,4 +2187,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-29 21:22:35
+-- Dump completed on 2016-11-30  4:51:12

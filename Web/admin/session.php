@@ -183,8 +183,8 @@
         if ($numrows != 0) {
             while($row = mysqli_fetch_assoc($query)) {
                 $arrayDepartamentos[] = [$row['idDepartamento'], $row['nombreDepartamento'],
-                "<a class=\"btn btn-default\" href=\"empleados.php?editar=" . $row['idDepartamento'] . "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></a>",
-                "<a class=\"btn btn-default\" href=\"empleados.php?eliminar=" . $row['idDepartamento'] . "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></a>"];
+                "<a class=\"btn btn-default\" href=\"departamentos.php?editar=" . $row['idDepartamento'] . "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></a>",
+                "<a class=\"btn btn-default\" href=\"departamentos.php?eliminar=" . $row['idDepartamento'] . "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></a>"];
             }
         }
         mysqli_next_result($conn);
@@ -345,8 +345,6 @@
         }
     }
 
-
-
     function getMejorFerreteria() {
         $conn = $_SESSION['conn'];
         $arrayFerreteria = [];
@@ -493,9 +491,8 @@
         if ($numrows != 0) {
             while($row = mysqli_fetch_assoc($query)) {
                 $arrayRutas[] = [$row['idRuta'], $row['zona'],
-                    "<a href=\"#\" data-toggle=\"modal\" data-target=\"#ruta\" id=\"mapa\"
-                        onclick=\"cambiarRuta(" . $row['idRuta'] . ")\">
-                    <i class=\"fa fa-share\" aria-hidden=\"true\"></i> Ver</a>"];
+                    "<a href=\"#\" id=\"aRuta\"onclick=\"cambiarRuta(" . $row['idRuta'] . ")\">
+                    <i class=\"fa fa-share\" aria-hidden=\"true\"></i> Ver ruta en mapa</a>"];
             }
         }
         mysqli_next_result($conn);
@@ -521,7 +518,9 @@
                     $clientes[] = [$row['idCliente'],
                         $row['nombreCliente'] . " " . $row['apellidosCliente'],
                         $row['latitud'],
-                        $row['longitud']];                
+                        $row['longitud'],
+                        "<a href=\"#\">
+                        <i class=\"fa fa-share\" aria-hidden=\"true\"></i> Ver en mapa</a>"];                
                 }
                 $arrayRutasClientes[$idRuta] = $clientes;
             }
@@ -570,5 +569,99 @@
         }
         mysqli_next_result($conn);
         return $arrayRutas;
+    }
+
+    function getPedidosPorRuta() {
+        $conn = $_SESSION['conn'];
+        $arrayRutas = getRutas();
+        $arrayPedidos = [];
+        for ($i = 0; $i < sizeof($arrayRutas); $i++) {
+            $idRuta = $arrayRutas[$i]["idRuta"];
+            $query = mysqli_query($conn, "CALL getPedidosPorRuta('$idRuta')");
+            if (!$query) {
+                die ("Error: " . mysqli_error($conn));
+            }
+            $numrows = mysqli_num_rows($query);
+            if ($numrows != 0) {
+                while($row = mysqli_fetch_assoc($query)) {
+                    $arrayPedidos[$idRuta][] = [$row['idPedido'], 
+                        $row['nombreCliente'] . " " . $row['apellidosCliente'], 
+                        $row['estadoPedido'],
+                        $row['fechaPedido'],
+                        $row['total'],
+                        "<a class=\"btn btn-default\" href=\"pedidos.php?editar=" . $row['idPedido'] . 
+                         "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i> Editar</a>",
+                        "<a class=\"btn btn-default\" href=\"pedidos.php?eliminar=" . $row['idPedido'] . 
+                         "\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i> Eliminar</a>"];
+                }
+            }
+            mysqli_next_result($conn);
+        }
+        return $arrayPedidos;
+    }
+
+    function getPedidosPorRutaNoDespachados() {
+        $conn = $_SESSION['conn'];
+        $arrayRutas = getRutas();
+        $arrayPedidos = [];
+        for ($i = 0; $i < sizeof($arrayRutas); $i++) {
+            $idRuta = $arrayRutas[$i]["idRuta"];
+            $query = mysqli_query($conn, "CALL getPedidosPorRutaNoDespachados('$idRuta')");
+            if (!$query) {
+                die ("Error: " . mysqli_error($conn));
+            }
+            $numrows = mysqli_num_rows($query);
+            if ($numrows != 0) {
+                while($row = mysqli_fetch_assoc($query)) {
+                    $arrayPedidos[$idRuta][] = [$row['idPedido'], 
+                        $row['nombreCliente'] . " " . $row['apellidosCliente'], 
+                        $row['estadoPedido'],
+                        $row['fechaPedido'],
+                        $row['total'],
+                        "<a class=\"btn btn-default\" href=\"despacharpedido.php?despachar=" . 
+                            $row['idPedido'] . 
+                         "\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i> Despachar</a>"];
+                }
+            }
+            mysqli_next_result($conn);
+        }
+        return $arrayPedidos;
+    }
+
+    function despacharPedido($idPedido) {
+        $conn = $_SESSION['conn'];
+        $query = mysqli_query($conn, "CALL despacharPedido('$idPedido');");
+        if (!$query) {
+            die ("Error: " . mysqli_error($conn));
+        }
+        else {
+            echo "Pedido" . $idPedido . " despachado.";
+        }
+    }
+
+    function getPedidosPorRutaPendientes() {
+        $conn = $_SESSION['conn'];
+        $arrayRutas = getRutas();
+        $arrayPedidos = [];
+        for ($i = 0; $i < sizeof($arrayRutas); $i++) {
+            $idRuta = $arrayRutas[$i]["idRuta"];
+            $query = mysqli_query($conn, "CALL getPedidosPorRutaPendientes('$idRuta')");
+            if (!$query) {
+                die ("Error: " . mysqli_error($conn));
+            }
+            $numrows = mysqli_num_rows($query);
+            if ($numrows != 0) {
+                while($row = mysqli_fetch_assoc($query)) {
+                    $arrayPedidos[$idRuta][] = [$row['idPedido'], 
+                        $row['nombreCliente'] . " " . $row['apellidosCliente'], 
+                        $row['latitud'], $row['longitud'],
+                        $row['estadoPedido'],
+                        $row['fechaPedido'],
+                        $row['total']];
+                }
+            }
+            mysqli_next_result($conn);
+        }
+        return $arrayPedidos;
     }
 ?>
